@@ -12,6 +12,7 @@ package potato.modules.dependencies
 	import com.greensock.loading.core.*;
 	import com.greensock.events.LoaderEvent;
 	import flash.display.BitmapData;
+	import com.greensock.loading.DataLoader;
 
 	/**
 	 * Implements IDependencies with GreenSock's LoaderMax.
@@ -29,7 +30,7 @@ package potato.modules.dependencies
 		
 		public function Dependencies(config:IConfig = null)
 		{
-			LoaderMax.activate([ImageLoader, SWFLoader]);
+			LoaderMax.activate([ImageLoader, DataLoader, SWFLoader]);
 			
 			// Create a new LoaderMax instance (an unique name is automatically assigned)
 			_queue = new LoaderMax({onProgress:onLoaderProgress, onComplete:onLoaderComplete, onError:onLoaderError});
@@ -138,7 +139,17 @@ package potato.modules.dependencies
 		public function addItem(url : *, props : Object= null ):void
 		{
 			// Create correct type of loader from the given URL.
-			var itemLoader:LoaderCore = LoaderMax.parse(url, props);
+			
+			var itemLoader:LoaderCore;
+			var ext:String = url.substr(url.lastIndexOf(".") + 1);
+			var dataExtensions:Array = ["yaml", "json"];
+			if (dataExtensions.indexOf(ext) != -1) {
+				itemLoader = new DataLoader(url, props);
+			}
+			else
+			{
+				itemLoader = LoaderMax.parse(url, props);
+			}	
 			_queue.append(itemLoader);
 		}
 		
@@ -165,6 +176,11 @@ package potato.modules.dependencies
 		public function getBitmapData(key:String):BitmapData
 		{
 			return _queue.getContent(key).rawContent.bitmapData;
+		}
+		
+		public function getData(key:String):*
+		{
+			return _queue.getContent(key);
 		}
 		
 		/**

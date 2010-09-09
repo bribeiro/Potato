@@ -129,6 +129,11 @@ package potato.modules.parameters
 			
 		}
 		
+		public function configForKey(key:Object):IConfig
+		{
+			return _parameters.configForKey(key);
+		}	
+		
 		/**
 		 * @private
 		 */
