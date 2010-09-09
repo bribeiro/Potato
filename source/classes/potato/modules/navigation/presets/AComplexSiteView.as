@@ -49,7 +49,7 @@ package potato.modules.navigation.presets
             {
                 var val:* = loaderInfo.parameters[p];
                 if(val == "true" || val == "false")
-				    parameters[p] = Boolean(loaderInfo.parameters[p]);
+				    parameters[p] = (val == "true");
                 else if(!isNaN(val))
 				    parameters[p] = Number(loaderInfo.parameters[p]);
                 else

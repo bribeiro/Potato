@@ -23,7 +23,8 @@ package potato.modules.dependencies
 		// Related to content fetching
 		function getBitmap(key:String):Bitmap;
 		function getBitmapData(key:String):BitmapData;
-			//	
+	
+		function getData(key:String):*;
 			//function getByteArray(key:String):ByteArray;
 			//function getMovieClip(key:String):MovieClip;
 			//function getNetStream(key:String):NetStream;
