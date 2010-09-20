@@ -31,6 +31,13 @@ package potato.modules.navigation.presets
 			Dependencies;
 			I18n;
 			
+			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		}
+		
+		protected function onAddedToStage(e:Event):void
+		{
+			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			
 			//Stage setup
 			if(stage){
 				stage.align = StageAlign.TOP_LEFT;
