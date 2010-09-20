@@ -6,6 +6,7 @@ package potato.modules.navigation.presets
 	
 	// Potato Navigation module namespace
 	import potato.modules.navigation.potato_navigation;
+	import flash.events.Event;
 
 	/**
 	 * Complex view preset (I18n, tracking) configured with YAML syntax.
@@ -22,8 +23,13 @@ package potato.modules.navigation.presets
 		public function YAMLSiteView()
 		{
 			super();
+		}
+		
+		override protected function onAddedToStage(e:Event):void
+		{
+			super.onAddedToStage(e);
 			
-            //Setting default parameters
+			//Setting default parameters
 			parameters.defaults.defaultExtension = "yaml";
 
             //Initialize tracking
