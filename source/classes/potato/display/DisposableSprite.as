@@ -4,6 +4,7 @@ package potato.display
 	import flash.display.Sprite;
 	import potato.core.IDisposable;
 	import potato.control.DisposableGroup;
+	import potato.display.safeRemoveChild;
 	
 	/**
 	 * Provides easier management of disposable child objects.
@@ -18,10 +19,12 @@ package potato.display
 	public class DisposableSprite extends Sprite implements IDisposable
 	{
 		protected var _disposableChildren:DisposableGroup;
+		protected var _removableChildren:Vector.<DisplayObject>;
 	
 		public function DisposableSprite()
 		{
 			_disposableChildren = new DisposableGroup();
+			_removableChildren = new Vector.<DisplayObject>();
 		}
 		
 		/**
@@ -29,9 +32,13 @@ package potato.display
 		 */
 		public function dispose():void
 		{
-			if(_disposableChildren != null) 
-				_disposableChildren.dispose();
+			_disposableChildren.dispose();
 			_disposableChildren = null
+			
+			for each(var displayObject:DisplayObject in _removableChildren)
+				safeRemoveChild(displayObject);
+			
+			_removableChildren = null;
 		}
 	
 		/**
@@ -51,7 +58,10 @@ package potato.display
 	    public function addDisposableChild(obj:IDisposable):DisplayObject
 		{
 	    	_disposableChildren.addElement(obj);
-	    	return addChild(obj as DisplayObject);
+		
+			var displayObject:DisplayObject = obj as DisplayObject;
+			_removableChildren.push(displayObject);
+	    	return addChild(displayObject);
 	    }
 		
 		/**
@@ -61,16 +71,19 @@ package potato.display
 		public function addDisposableChildAt(obj:IDisposable, index:int):DisplayObject
 		{
 			_disposableChildren.addElement(obj);
-	    	return addChildAt(obj as DisplayObject, index);
+			
+			var displayObject:DisplayObject = obj as DisplayObject;
+			_removableChildren.push(displayObject);
+	    	return addChildAt(displayObject, index);
 	    }
 		
 		/**
 		 * Dispose children that have been added to this object through the addDisposable methods.
 		 */
-	    public function disposeChildren():void
-		{
-			_disposableChildren.dispose();
-	    }
+	    //public function disposeChildren():void
+	    //		{
+	    //			_disposableChildren.dispose();
+	    //	    }
 	
 	}
 
