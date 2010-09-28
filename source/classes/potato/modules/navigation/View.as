@@ -202,6 +202,13 @@ package potato.modules.navigation
 				_dependencies = null;
 			}
 			
+			//Cleanup
+			for (var p:String in this){
+				this[p] = null;
+				trace("View::_dispose()", this[p]);
+			}
+				
+			
 			_parameters = null;
 		}
 		
@@ -210,7 +217,7 @@ package potato.modules.navigation
 		 */
 		protected function onViewReadyToAdd(e:NavigationEvent):void
 		{
-			addChildAt(e.view, 0);
+			addChild(e.view);
 			sortViews();
 		}
 		/**
