@@ -133,9 +133,9 @@ package potato.modules.navigation
             return nav.getViewMessenger(view);
         }
 
-        public function addView(id:String):void
+        public function addView(id:String):ViewLoader
 		{
-            nav.root.nav.addView(id);
+            return nav.root.nav.addView(id);
         }
         
 		public function removeView(id:String):void
@@ -143,9 +143,9 @@ package potato.modules.navigation
             nav.root.nav.removeView(id);
         }
         
-		public function changeView(id:String):void
+		public function changeView(id:String):ViewLoader
 		{
-            nav.changeView(id);
+            return nav.changeView(id);
         }
         
 		public function loaderFor(view:String):ViewLoader

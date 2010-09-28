@@ -185,14 +185,14 @@ package potato.modules.navigation
          * Adds a view to the screen
 		 * @param viewOrId * String or View instance
 		 */
-		public function addView(id:String):void
+		public function addView(id:String):ViewLoader
 		{
 
 			//Check if it already exists
 			if (root.nav.findChild(id)) {
 			    trace("[NavigationController] View already on stage", id);
 			    //Nothing else to do...
-			    return;
+			    return null;
 			}
 
 			//Search in Loaded Views
@@ -203,7 +203,7 @@ package potato.modules.navigation
 			        //this line may sound strange but we ned to add the view relative to it's parent
 			        //not to the one who is calling addView
 			        view.nav.parent.nav.onViewReadyToAdd(new NavigationEvent(Event.COMPLETE, view));
-			        return;
+			        return null;
 			    }
 			}
 
@@ -215,7 +215,8 @@ package potato.modules.navigation
 			//dispatchEvent(new Event(NavigationEvent.LOAD_START));
 			//Load!
 			loader.start();
-
+			
+			return loader;
 		}
 		
         /**
@@ -249,13 +250,13 @@ package potato.modules.navigation
         /**
          * Adds a view and remove it's siblings
          * */
-		public function changeView(id:String):void
+		public function changeView(id:String):ViewLoader
 		{
 			//Is there something to do?
 			if (root.nav.findChild(id))
 			{
 				trace("[NavigationController]", id, "already on stage");
-				return;
+				return null;
 			}
 			
 			trace("[NavigationController] changing to", id, " in:", currentView.id);
@@ -264,9 +265,11 @@ package potato.modules.navigation
 			_viewsToHide = _viewsToHide.concat(children);
 			//Asking to add the view we want
             if(findUnloadedChild(id))
-    			addView(id);
+    			return addView(id);
             else
                 trace("    ", id, "could not be found on", currentView.id);
+
+			return null;
 		}
 		
 		public function hideAll():void
