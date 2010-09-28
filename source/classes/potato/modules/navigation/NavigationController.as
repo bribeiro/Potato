@@ -50,7 +50,7 @@ package potato.modules.navigation
 		 */
 		public function loaderFor(id:String):ViewLoader
 		{
-            //Generate the loader
+      //Generate the loader
 			var vl:ViewLoader = root.nav.generateChainedLoader(id);
 			
 			//Add to the list of loaded views when done
@@ -185,50 +185,37 @@ package potato.modules.navigation
          * Adds a view to the screen
 		 * @param viewOrId * String or View instance
 		 */
-		public function addView(viewOrId:Object):void
+		public function addView(id:String):void
 		{
-            if(viewOrId is View){
-                var view:View = viewOrId as View;
-                
-                //Already a view, only adding it
-                view.startup();
-				onViewReadyToAdd(new NavigationEvent(Event.COMPLETE, view));
 
-            }
-			else if (viewOrId is String) {
+			//Check if it already exists
+			if (root.nav.findChild(id)) {
+			    trace("[NavigationController] View already on stage", id);
+			    //Nothing else to do...
+			    return;
+			}
 
-                //View id
-                var id:String = viewOrId + "";
+			//Search in Loaded Views
+			for each (var view:View in viewsLoaded)
+			{
+			    if(view.id == id){
+			        //add it
+			        //this line may sound strange but we ned to add the view relative to it's parent
+			        //not to the one who is calling addView
+			        view.nav.parent.nav.onViewReadyToAdd(new NavigationEvent(Event.COMPLETE, view));
+			        return;
+			    }
+			}
 
-                //Check if it already exists
-                if (root.nav.findChild(id)) {
-                    trace("[NavigationController] View already on stage", id);
-                    //Nothing else to do...
-                    return;
-                }
-                
-                //Search in Loaded Views
-                for each (view in viewsLoaded)
-                {
-                    if(view.id == id){
-                        //add it
-                        //this line may sound strange but we ned to add the view relative to it's parent
-                        //not to the one who is calling addView
-                        view.nav.parent.nav.onViewReadyToAdd(new NavigationEvent(Event.COMPLETE, view));
-                        return;
-                    }
-                }
-			
-                //Get the loader
-                var loader:ViewLoader = loaderFor(id);
-                //Listens for complete
-                loader.addEventListener(Event.COMPLETE, loader.parentView.nav.onViewReadyToAdd);
-                //TODO Notify
-                //dispatchEvent(new Event(NavigationEvent.LOAD_START));
-                //Load!
-                loader.start();
+			//Get the loader
+			var loader:ViewLoader = loaderFor(id);
+			//Listens for complete
+			loader.addEventListener(Event.COMPLETE, loader.parentView.nav.onViewReadyToAdd);
+			//TODO Notify
+			//dispatchEvent(new Event(NavigationEvent.LOAD_START));
+			//Load!
+			loader.start();
 
-            }
 		}
 		
         /**
@@ -262,24 +249,24 @@ package potato.modules.navigation
         /**
          * Adds a view and remove it's siblings
          * */
-		public function changeView(viewOrId:Object):void
+		public function changeView(id:String):void
 		{
 			//Is there something to do?
-			if (root.nav.findChild(viewOrId+""))
+			if (root.nav.findChild(id))
 			{
-				trace("[NavigationController]", viewOrId, "already on stage");
+				trace("[NavigationController]", id, "already on stage");
 				return;
 			}
 			
-			trace("[NavigationController] changeView in:", viewOrId);
+			trace("[NavigationController] changing to", id, " in:", currentView.id);
 			
 			//Setting which views we're going to hide
 			_viewsToHide = _viewsToHide.concat(children);
 			//Asking to add the view we want
-            if(findUnloadedChild(viewOrId + ""))
-    			addView(viewOrId);
+            if(findUnloadedChild(id))
+    			addView(id);
             else
-                trace("    ", viewOrId, "could not be found on", currentView);
+                trace("    ", id, "could not be found on", currentView.id);
 		}
 		
 		public function hideAll():void
