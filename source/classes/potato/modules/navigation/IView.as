@@ -31,9 +31,9 @@ package potato.modules.navigation
 		
 		// Navigation
 		function msg(view:String):ViewMessenger;
-        function addView(view:String):void;
+        function addView(view:String):ViewLoader;
 		function removeView(view:String):void;
-		function changeView(view:String):void;
+		function changeView(view:String):ViewLoader;
 		function loaderFor(view:String):ViewLoader;
 	}
 
