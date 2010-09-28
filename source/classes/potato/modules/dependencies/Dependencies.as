@@ -5,6 +5,7 @@ package potato.modules.dependencies
 	import flash.display.Bitmap;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.ProgressEvent;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
 	
@@ -42,7 +43,7 @@ package potato.modules.dependencies
 		
 		public function onLoaderProgress(e:LoaderEvent):void
 		{
-			
+			dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS, false, false, e.target.bytesLoaded, e.target.bytesTotal));
 		}
 		
 		public function onLoaderComplete(e:LoaderEvent):void
