@@ -133,19 +133,19 @@ package potato.modules.navigation
             return nav.getViewMessenger(view);
         }
 
-        public function addView(viewOrId:Object):void
+        public function addView(id:String):void
 		{
-            nav.root.nav.addView(viewOrId);
+            nav.root.nav.addView(id);
         }
         
-		public function removeView(viewOrId:Object):void
+		public function removeView(id:String):void
 		{
-            nav.root.nav.removeView(viewOrId);
+            nav.root.nav.removeView(id);
         }
         
-		public function changeView(viewOrId:Object):void
+		public function changeView(id:String):void
 		{
-            nav.changeView(viewOrId);
+            nav.changeView(id);
         }
         
 		public function loaderFor(view:String):ViewLoader
