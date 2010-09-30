@@ -2,6 +2,9 @@ package potato.media.soundlib
 {
 	import flash.media.Sound;
 	import flash.utils.Dictionary;
+	import flash.net.SharedObject;
+	import flash.media.SoundTransform;
+	import flash.media.SoundMixer;
 	
 	/**
 	 * SoundLibrary holds many soundClips and groups, and manage them.
@@ -21,6 +24,16 @@ package potato.media.soundlib
 		 */
 		protected var allSounds:SoundClipGroup;
 		
+		/*
+		* Shared Object used to store volume defaults between browsing sessions
+		*/
+		private var _sharedObject:SharedObject;
+		
+		/*
+		* Reference of the globalVolume
+		*/
+		private var _volume:Number;
+		
 		/**
 		 * Construtor.
 		 */
@@ -29,6 +42,12 @@ package potato.media.soundlib
 			_groups = new Dictionary(true);
 			allSounds = new SoundClipGroup("all");
 			_groups["all"] = allSounds;
+			
+			//Retreiving the global volume
+			_sharedObject = SharedObject.getLocal("potato.SoundLib");
+			//Setting values
+			if(!_sharedObject.data.hasOwnProperty("volume")) _sharedObject.data.volume = 1;
+			volume = _sharedObject.data.volume;
 		}
 
 		/**
@@ -93,6 +112,27 @@ package potato.media.soundlib
 		public function get groups():Dictionary
 		{
 			return _groups;
+		}
+		
+		/**
+         *  Get the global volume
+         */
+		public function get volume():Number
+		{
+			return _volume;
+		}
+        
+		/**
+		 *    Sets the global volume, all SoundItems are affected by this property
+		 *    Note: it's persistent between browser sessions
+		 */
+		public function set volume(val:Number):void
+		{
+		    _sharedObject.data.volume = val;
+		    _volume = val;
+		    _sharedObject.flush();
+		    
+		    SoundMixer.soundTransform = new SoundTransform(val);
 		}
 	}
 }
