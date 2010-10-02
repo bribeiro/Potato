@@ -35,6 +35,8 @@ package potato.modules.navigation
 		//Internal: view to be loaded
 		protected var _viewId:String;
 		
+		protected var _loaded:Boolean;
+		
 		//Config to be attached to the view
 		public var _viewConfig:IConfig;
 		
@@ -239,7 +241,16 @@ package potato.modules.navigation
 		public function continueFromChain():void
 		{
             view.nav.parent = parentView;
+			_loaded = true;
 			dispatchEvent(new NavigationEvent(Event.COMPLETE, view));
+		}
+		
+		/*
+		Load finished
+		*/
+		public function get loaded():Boolean
+		{
+			return _loaded;
 		}
 		
 		public function onChainProgress(e:Event):void
