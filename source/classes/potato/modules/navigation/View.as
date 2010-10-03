@@ -217,7 +217,7 @@ package potato.modules.navigation
 		 */
 		protected function onViewReadyToAdd(e:NavigationEvent):void
 		{
-			addChild(e.view);
+			addChildAt(e.view, 0);
 			sortViews();
 		}
 		/**
@@ -231,23 +231,36 @@ package potato.modules.navigation
 		
 		/**
 		 * @private
+		 * Cocktail sorting algorithm
 		 * Put every child view in its correct zIndex.
 		 * (not adding them again to keep other stuff order)
 		 */
 		potato_navigation function sortViews():void
 		{
-			if(nav.children.length <= 1) return;
+			if(nav.children.length < 2) return;
+			trace("View::sortViews()", nav.children);
 			
-			// Sorting
-			var lastView:View = nav.children[0];
-			for each (var view:View in nav.children)
+			var swapped:Boolean, i:int;
+			do
 			{
-				if (view.zIndex > lastView.zIndex)
-				{
-					swapChildren(view, lastView);
-				}
-				lastView = view;
-			}
+				swapped = false;
+				for(i=0; i< nav.children.length-1; i++){
+				      if (nav.children[i].zIndex > nav.children[i+1].zIndex && getChildIndex(nav.children[i]) < getChildIndex(nav.children[i+1])) { // test whether the two elements are in the wrong order
+				        swapChildren(nav.children[i], nav.children[i+1]); // let the two elements change places
+				        swapped = true;
+				      }
+				 }
+				if(!swapped)
+					break;
+					
+				swapped = false;
+				for(i=nav.children.length-1; i<0; i--){
+					if (nav.children[i].zIndex > nav.children[i+1].zIndex && getChildIndex(nav.children[i]) < getChildIndex(nav.children[i+1])){
+						swapChildren(nav.children[i], nav.children[i+1]); // let the two elements change places
+				        swapped = true;
+				    }
+				 }
+			} while (swapped);
 		}
 		
 		public function get id():String
