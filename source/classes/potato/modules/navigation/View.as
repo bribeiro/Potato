@@ -238,7 +238,6 @@ package potato.modules.navigation
 		potato_navigation function sortViews():void
 		{
 			if(nav.children.length < 2) return;
-			trace("View::sortViews()", nav.children);
 			
 			var swapped:Boolean, i:int;
 			do
