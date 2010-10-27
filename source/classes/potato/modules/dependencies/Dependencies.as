@@ -14,6 +14,7 @@ package potato.modules.dependencies
 	import com.greensock.events.LoaderEvent;
 	import flash.display.BitmapData;
 	import com.greensock.loading.DataLoader;
+	import flash.system.SecurityDomain;
 
 	/**
 	 * Implements IDependencies with GreenSock's LoaderMax.
@@ -78,13 +79,13 @@ package potato.modules.dependencies
 					params.type = config.getProperty(key, "type");
 				
 				// Key for choosing an ApplicationDomain (SWFLoader)
-				if (config.hasProperty(key, "domain"))
-				{
-					var customLoaderContext:LoaderContext = new LoaderContext(); 
-					if (config.getProperty(key, "domain") == "current")
-						customLoaderContext.applicationDomain = ApplicationDomain.currentDomain;
-					params.context = customLoaderContext;
-				}
+				//if (config.hasProperty(key, "domain"))
+				//{
+				//	var customLoaderContext:LoaderContext = new LoaderContext(); 
+				//	if (config.getProperty(key, "domain") == "current")
+				//		customLoaderContext.applicationDomain = ApplicationDomain.currentDomain;
+				//	params.context = customLoaderContext;
+				//}
 				
 				// Add additional keys from config
 				mergeProperties(params, config.configForKey(key), ["id", "type", "domain", "url"]);
@@ -139,10 +140,16 @@ package potato.modules.dependencies
 		 */
 		public function addItem(url : *, props : Object= null ):void
 		{
-			// Create correct type of loader from the given URL.
-			
 			var itemLoader:LoaderCore;
 			var ext:String = url.substr(url.lastIndexOf(".") + 1);
+			
+			// Set default LoaderContext for SWFs in the same domain.
+			if(ext == "swf" && !props.hasOwnProperty("context"))
+			{
+				props.context = new LoaderContext(false, ApplicationDomain.currentDomain);
+			}
+			
+			// Create correct type of loader from the given URL.
 			var dataExtensions:Array = ["yaml", "json"];
 			if (dataExtensions.indexOf(ext) != -1) {
 				itemLoader = new DataLoader(url, props);
