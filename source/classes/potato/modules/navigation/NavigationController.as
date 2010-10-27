@@ -91,7 +91,8 @@ package potato.modules.navigation
 
                     //Stop searching
                     if(chainedLoader) {
-                        chainedLoader.parentView = v;
+						//Parent must be relative to the first unloaded view found
+                        chainedLoader.parentView ||= v;
                         return chainedLoader;
                     }
                 }
@@ -99,7 +100,7 @@ package potato.modules.navigation
                 //Not found, check in the config
                 if(haystack.findUnloadedChild(id)) {
                     chainedLoader = configLooper(id, haystack._childrenConfig);
-                    chainedLoader.parentView = haystack.currentView;
+                    chainedLoader.parentView ||= haystack.currentView;
                     return chainedLoader;
                 }
 
