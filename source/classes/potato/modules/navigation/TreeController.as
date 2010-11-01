@@ -122,7 +122,12 @@ package potato.modules.navigation {
 						}
 
 						//Search in the children
-						return miner(search, newHaystack);
+						var searchResult:IConfig;
+
+						searchResult = miner(search, newHaystack);
+						if (searchResult) {
+							return searchResult;
+						}
 					}
 				}
 				return null;
