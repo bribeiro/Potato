@@ -13,10 +13,10 @@ package potato.modules.services
 	 */
 	public class ServiceEvent extends Event
 	{
-		public static const CALL_START:String   = "call_start";
+		public static const CALL_START:String    = "call_start";
 		public static const CALL_COMPLETE:String = "call_complete";
 		public static const CALL_ERROR:String    = "call_error";
-		public static const CALL_RETRY:String   = "call_retry";
+		public static const CALL_RETRY:String    = "call_retry";
 		
 		protected var _content:Object = null;
 		protected var _rawContent:Object = null;
