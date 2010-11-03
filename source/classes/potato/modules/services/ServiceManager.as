@@ -5,6 +5,7 @@ package potato.modules.services
 	import potato.modules.services.ServiceEvent;
 	import flash.events.ProgressEvent;
 	import br.com.stimuli.string.printf;
+	import potato.modules.services.ICallEncoder;
 	
 	/**
 	 * Application service manager.
@@ -17,13 +18,15 @@ package potato.modules.services
 	 */
 	public class ServiceManager extends EventDispatcher
 	{
-		private var _registeredServices:Dictionary;
-		private var _registeredParsers:Dictionary;
+		protected var _registeredServices:Dictionary;
+		protected var _registeredParsers:Dictionary;
+		protected var _registeredEncoders:Dictionary;
 		
 		public function ServiceManager(singleton:SingletonEnforcer)
 		{
 			_registeredServices = new Dictionary();
 			_registeredParsers = new Dictionary();
+			_registeredEncoders = new Dictionary();
 		}
 		
 		public function registerServicesByConfig(parameters:Object):void
@@ -32,10 +35,11 @@ package potato.modules.services
 			{
 				var serviceID:String = serviceConfig.id;
 				var serviceURL:String = printf(serviceConfig.url, {servicePath: parameters.servicePath});
-				var serviceParser:IResponseParser = getParserByID(serviceConfig.serialize);
-				//var serviceParser:IResponseParser = getParserByID(serviceConfig.serialize);
+				var serviceParser:IResponseParser = getParserByID(serviceConfig.parser);
+				var serviceEncoder:ICallEncoder = getEncoderByID(serviceConfig.encoder);
+				
 				var serviceMethod:String = serviceConfig.method || "post";
-				ServiceManager.instance.registerService(serviceID, new Service(serviceURL, serviceParser, null, serviceMethod));
+				ServiceManager.instance.registerService(serviceID, new Service(serviceURL, serviceParser, serviceEncoder, serviceMethod));
 				//trace(serviceURL, serviceID, serviceParser);
 			}
 		}
@@ -49,6 +53,19 @@ package potato.modules.services
 		{
 			if(_registeredParsers.hasOwnProperty(id))
 				return _registeredParsers[id];
+			else
+				return null;
+		}
+		
+		public function registerEncoder(encoder:ICallEncoder):void
+		{
+			_registeredEncoders[encoder.id] = encoder;
+		}
+		
+		public function getEncoderByID(id:String):ICallEncoder
+		{
+			if(_registeredEncoders.hasOwnProperty(id))
+				return _registeredEncoders[id];
 			else
 				return null;
 		}

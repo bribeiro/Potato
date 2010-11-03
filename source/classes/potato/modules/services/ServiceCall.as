@@ -48,12 +48,14 @@ package potato.modules.services
 			var urlRequest:URLRequest = new URLRequest(printf(_service.url, _parameters));
 			
 			if(_parameters)
-			{	
+			{
 				var urlVariables:URLVariables = new URLVariables();
 				for(var key:String in _parameters)
 				{
-					urlVariables[key] = _parameters[key];//_service.encoder.encode(_parameters[key]);
-					//trace("[0xffff00]", key, urlVariables[key]);
+					if(_service.encoder)
+						urlVariables[key] = _service.encoder.encode(_parameters[key]);
+					else
+						urlVariables[key] = _parameters[key];
 				}
 				urlRequest.data = urlVariables;
 			}
