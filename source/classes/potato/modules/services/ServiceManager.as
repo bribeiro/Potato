@@ -34,13 +34,12 @@ package potato.modules.services
 			for each(var serviceConfig:Dictionary in parameters.services)
 			{
 				var serviceID:String = serviceConfig.id;
-				var serviceURL:String = printf(serviceConfig.url, {servicePath: parameters.servicePath});
+				var serviceURL:String = printf(serviceConfig.url, parameters);
 				var serviceParser:IResponseParser = getParserByID(serviceConfig.parser);
 				var serviceEncoder:ICallEncoder = getEncoderByID(serviceConfig.encoder);
-				
 				var serviceMethod:String = serviceConfig.method || "post";
+				
 				ServiceManager.instance.registerService(serviceID, new Service(serviceURL, serviceParser, serviceEncoder, serviceMethod));
-				//trace(serviceURL, serviceID, serviceParser);
 			}
 		}
 		
