@@ -157,7 +157,7 @@ package potato.media.soundlib
 		 * @param pan The panning of the playback.
 		 * @default 0
 		 */
-		public function play2(volume:int = -1, loops:int = 0, startTime:Number = 0, pan:Number = 0):void
+		public function play2(volume:Number= -1, loops:int = 0, startTime:Number = 0, pan:Number = 0):void
 		{
 			this.volume = volume >= 0 ? volume : _volume;
 			this.startTime = startTime;
