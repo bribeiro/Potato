@@ -31,7 +31,7 @@ package potato.modules.services
 		
 		public function registerServicesByConfig(parameters:Object):void
 		{
-			for each(var serviceConfig:Dictionary in parameters.services)
+			for each(var serviceConfig:* in parameters.services)
 			{
 				var serviceID:String = serviceConfig.id;
 				var serviceURL:String = printf(serviceConfig.url, parameters);

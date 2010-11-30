@@ -5,7 +5,7 @@ import flash.net.URLLoader;
 import flash.net.URLRequest;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
-import org.as3yaml.YAML;
+import dupin.parsers.yaml.YAML;
 import potato.core.config.ObjectConfig;
 import potato.core.dsl.ConditionalParser;
 
