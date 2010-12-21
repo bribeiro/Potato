@@ -8,7 +8,7 @@ package potato.modules.services
 	import potato.modules.services.ICallEncoder;
 	
 	/**
-	 * Application service manager.
+	 * Application services manager.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 10.0.0
@@ -39,7 +39,7 @@ package potato.modules.services
 				var serviceEncoder:ICallEncoder = getEncoderByID(serviceConfig.encoder);
 				var serviceMethod:String = serviceConfig.method || "post";
 				
-				ServiceManager.instance.registerService(serviceID, new Service(serviceURL, serviceParser, serviceEncoder, serviceMethod));
+				registerService(serviceID, new Service(serviceURL, serviceParser, serviceEncoder, serviceMethod));
 			}
 		}
 		

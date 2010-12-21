@@ -39,10 +39,10 @@ package potato.media.sound
 		/**
 		 * Begins the load operation, using the SoundStream instance.
 		 */
-		public function load(url:String):void
-		{
+		public function load(url:String, bufferTime:Number = 1000, checkPolicyFile:Boolean = false):void
+ 		{
 			_state = MediaState.STOPPED;
-			_stream.load(url);
+			_stream.load(url, bufferTime, checkPolicyFile);
 			sound = stream.sound;
 		}
 		

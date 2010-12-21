@@ -2,7 +2,7 @@ package potato.media.interfaces
 {
 	public interface IStream
 	{
-		function load(url:String):void;
+		function load(url:String, bufferTime:Number = 1000, checkPolicyFile:Boolean = false):void;
 		
 		function close():void;
 		

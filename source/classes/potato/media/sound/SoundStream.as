@@ -75,12 +75,14 @@ package potato.media.sound
 		 * Starts the file load operation.
 		 * 
 		 * @param url The url of file that will be loaded. 
+		 * @param bufferTime The number of milliseconds to preload a streaming sound into a buffer before the sound starts to stream.
+     * @param checkPolicyFile Specifies whether Flash Player should try to download a URL policy file from the loaded sound's server before beginning to load the sound.
 		 */
-		public function load(url:String):void
+		public function load(url:String, bufferTime:Number = 1000, checkPolicyFile:Boolean = false):void
 		{
 			reset();
 			_url = url;
-			_sound.load(new URLRequest(url), new SoundLoaderContext());
+			_sound.load(new URLRequest(url), new SoundLoaderContext(bufferTime, checkPolicyFile));
 		}
 
 		/**
