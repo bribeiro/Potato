@@ -1,8 +1,8 @@
 ﻿/**
- * VERSION: 1.38
- * DATE: 2010-05-24
+ * VERSION: 1.6
+ * DATE: 2010-12-20
  * AS3 (AS2 version is also available)
- * UPDATES AND DOCUMENTATION AT: http://www.TweenLite.com
+ * UPDATES AND DOCS AT: http://www.greensock.com
  **/
 package com.greensock.core {
 /**
@@ -35,12 +35,14 @@ package com.greensock.core {
 			if (tween.gc) {
 				tween.setEnabled(true, true);
 			}
-			if (_firstChild) {
-				_firstChild.prevNode = tween;	
-			} 
-			tween.nextNode = _firstChild;
-			_firstChild = tween;
-			tween.prevNode = null;
+			if (_lastChild) {
+				_lastChild.nextNode = tween;
+			} else {
+				_firstChild = tween;
+			}
+			tween.prevNode = _lastChild;
+			_lastChild = tween;
+			tween.nextNode = null;
 			tween.cachedOrphan = false;
 		}
 		
@@ -84,7 +86,6 @@ package com.greensock.core {
 				}
 				tween = next;
 			}
-			
 		}
 		
 //---- GETTERS / SETTERS ------------------------------------------------------------------------------

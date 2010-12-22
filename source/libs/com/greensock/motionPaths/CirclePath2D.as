@@ -6,7 +6,9 @@
  **/
 package com.greensock.motionPaths {
 	import flash.display.Graphics;
+	import flash.events.Event;
 	import flash.geom.Matrix;
+
 /**
  * A CirclePath2D defines a circular path on which a PathFollower can be placed, making it simple to tween objects
  * along a circle or oval (make an oval by altering the width/height/scaleX/scaleY properties). A PathFollower's 
@@ -84,8 +86,8 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 			super.y = y;
 		}
 		
-		/** @private **/
-		override protected function renderAll():void {
+		/** @inheritDoc**/
+		override public function update(event:Event=null):void {
 			var angle:Number, px:Number, py:Number;
 			var m:Matrix = this.transform.matrix;
 			var a:Number = m.a, b:Number = m.b, c:Number = m.c, d:Number = m.d, tx:Number = m.tx, ty:Number = m.ty;
@@ -234,7 +236,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		public function set radius(value:Number):void {
 			_radius = value;
 			_redrawLine = true;
-			renderAll();
+			update();
 		}
 		
 		

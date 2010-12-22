@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.3
- * DATE: 2010-08-09
+ * VERSION: 1.77
+ * DATE: 2010-12-21
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -77,8 +77,11 @@ package com.greensock.loading.core {
 			
 			if (this.vars.context is LoaderContext) {
 				_context = this.vars.context;
-			} else if (_context == null && !_isLocal) {
-				_context = new LoaderContext(true, new ApplicationDomain(ApplicationDomain.currentDomain), SecurityDomain.currentDomain); //avoids some security sandbox headaches that plague many users.
+			} else if (_context == null) {
+				_context = (LoaderMax.defaultContext != null) ? LoaderMax.defaultContext : new LoaderContext(true, new ApplicationDomain(ApplicationDomain.currentDomain), SecurityDomain.currentDomain); //avoids some security sandbox headaches that plague many users.
+				if (_isLocal) {
+					_context.securityDomain = null;
+				}
 			}
 			if (Capabilities.playerType != "Desktop") { //AIR apps will choke on Security.allowDomain()
 				Security.allowDomain(_url); 
@@ -143,8 +146,9 @@ package com.greensock.loading.core {
 			if (_gcCycles == 0) {
 				_gcDispatcher.removeEventListener(Event.ENTER_FRAME, _forceGCHandler);
 				_gcDispatcher = null;
+			} else {
+				_gcCycles--;
 			}
-			_gcCycles--;
 			try {
 				new LocalConnection().connect("FORCE_GC");
 				new LocalConnection().connect("FORCE_GC");

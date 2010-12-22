@@ -1,8 +1,8 @@
 /**
- * VERSION: 0.21 (beta)
- * DATE: 2010-04-21
- * ACTIONSCRIPT VERSION: 3.0 
- * UPDATES AND DOCUMENTATION AT: http://www.GreenSock.com
+ * VERSION: 0.3 (beta)
+ * DATE: 2010-12-10
+ * AS3
+ * UPDATES AND DOCS AT: http://www.greensock.com
  **/
 package com.greensock.motionPaths {
 	import flash.display.Shape;
@@ -106,7 +106,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		
 		/** @private **/
 		protected function onAddedToStage(event:Event):void {
-			renderAll();
+			update();
 		}
 		
 		/**
@@ -242,8 +242,11 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 			return null;
 		}
 		
-		/** @private **/
-		protected function renderAll():void {
+		/** 
+		 * Forces the MotionPath to re-render itself and all of its followers.
+		 * 
+		 * @param event An optional Event that is accepted just to make it easier for use as an event handler (to have it update automatically on every frame, for example, you could add an ENTER_FRAME listener and point it to this method).  **/
+		public function update(event:Event=null):void {
 			
 		}
 		
@@ -302,7 +305,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 			_miterLimit = miterLimit;
 			_redrawLine = true;
 			if (!skipRedraw) {
-				renderAll();
+				update();
 			}
 		}
 		
@@ -312,7 +315,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		}
 		override public function set rotation(value:Number):void {
 			super.rotation = value;
-			renderAll();
+			update();
 		}
 		
 		/** @inheritDoc **/
@@ -321,7 +324,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		}
 		override public function set scaleX(value:Number):void {
 			super.scaleX = value;
-			renderAll();
+			update();
 		}
 		
 		/** @inheritDoc **/
@@ -330,7 +333,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		}
 		override public function set scaleY(value:Number):void {
 			super.scaleY = value;
-			renderAll();
+			update();
 		}
 		
 		/** @inheritDoc **/
@@ -339,7 +342,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		}
 		override public function set x(value:Number):void {
 			super.x = value;
-			renderAll();
+			update();
 		}
 		
 		/** @inheritDoc **/
@@ -348,7 +351,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		}
 		override public function set y(value:Number):void {
 			super.y = value;
-			renderAll();
+			update();
 		}
 		
 		/** @inheritDoc **/
@@ -357,7 +360,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		}
 		override public function set width(value:Number):void {
 			super.width = value;
-			renderAll();
+			update();
 		}
 		
 		/** @inheritDoc **/
@@ -366,7 +369,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		}
 		override public function set height(value:Number):void {
 			super.height = value;
-			renderAll();
+			update();
 		}
 		
 		/** @inheritDoc **/
@@ -376,7 +379,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 		override public function set visible(value:Boolean):void {
 			super.visible = value;
 			_redrawLine = true;
-			renderAll();
+			update();
 		}
 		
 		/** 
@@ -415,7 +418,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 				f = f.cachedNext;
 			}
 			_progress = value;
-			renderAll();
+			update();
 		}
 		
 		/** Returns an array of all PathFollower instances associated with this path **/
