@@ -1,6 +1,7 @@
 package potato.modules.services
 {
 	import flash.events.Event;
+	import potato.modules.services.ServiceCall;
 	
 	/**
 	 * Service event implementation. Simplified service error handling is available through this class.
@@ -18,32 +19,32 @@ package potato.modules.services
 		public static const CALL_ERROR:String    = "call_error";
 		public static const CALL_RETRY:String    = "call_retry";
 		
-		protected var _content:Object = null;
-		protected var _rawContent:Object = null;
+		protected var _serviceCall:ServiceCall;
 		
-		public function ServiceEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function ServiceEvent(type:String, serviceCall:ServiceCall = null, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
+		  _serviceCall = serviceCall;
 			super(type, bubbles, cancelable);
+		}
+		
+		public function get serviceCall():ServiceCall
+		{
+		  return _serviceCall;
+		}
+		
+		public function get service():Service
+		{
+		  return _serviceCall? _serviceCall.service : null;
 		}
 		
 		public function get content():Object
 		{
-			return _content;
+			return _serviceCall.content;
 		}
-		
-		public function set content(value:Object):void
-		{
-			_content = value;
-		}
-		
+
 		public function get rawContent():Object
 		{
-			return _rawContent;
-		}
-		
-		public function set rawContent(value:Object):void
-		{
-			_rawContent = value;
+			return _serviceCall.rawContent;
 		}
 		
 	}

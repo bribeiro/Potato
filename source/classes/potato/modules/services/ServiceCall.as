@@ -11,6 +11,8 @@ package potato.modules.services
 	import br.com.stimuli.string.printf;
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	/**
 	 * Service call implementation. Any given service can have an unlimited number of calls.
@@ -28,6 +30,10 @@ package potato.modules.services
 		protected var _content:Object;
 		protected var _rawContent:String;
 		protected var _urlLoader:URLLoader;
+		protected var _urlRequest:URLRequest;
+		
+		protected var _timer:Timer;
+		protected var _tries:Number;
 		
 		public function ServiceCall(service:Service, parameters:Object = null, urlParameters:Object = null)
 		{
@@ -35,17 +41,32 @@ package potato.modules.services
 			_parameters = parameters;
 		}
 		
+		public function get service():Service
+		{
+		  return _service;
+		}
+		
+		public function get content():Object
+		{
+		  return _content;
+		}
+		
+		public function get rawContent():String
+		{
+		  return _rawContent;
+		}
+		
 		public function start():void
 		{
-			_urlLoader = new URLLoader();
-			_urlLoader.addEventListener(Event.COMPLETE, onComplete);
-         _urlLoader.addEventListener(Event.OPEN, onOpen);
-         _urlLoader.addEventListener(ProgressEvent.PROGRESS, onProgress);
-         _urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
-         _urlLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, onHttpStatus);
-         _urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
-			
-			var urlRequest:URLRequest = new URLRequest(printf(_service.url, _parameters));
+      _urlLoader = new URLLoader();
+      _urlLoader.addEventListener(Event.COMPLETE, onComplete);
+      _urlLoader.addEventListener(Event.OPEN, onOpen);
+      _urlLoader.addEventListener(ProgressEvent.PROGRESS, onProgress);
+      _urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
+      _urlLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, onHttpStatus);
+      _urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onIOError);
+      
+			_urlRequest = new URLRequest(printf(_service.url, _parameters));
 			
 			if(_parameters)
 			{
@@ -57,50 +78,96 @@ package potato.modules.services
 					else
 						urlVariables[key] = _parameters[key];
 				}
-				urlRequest.data = urlVariables;
+				_urlRequest.data = urlVariables;
 			}
 			//trace(urlRequest.url + "?" + urlVariables.toString())
-			urlRequest.method = _service.requestMethod;
+			_urlRequest.method = _service.requestMethod;
+			
+			// Timer setup
+			_tries = 0;
+			_timer = new Timer(_service.timeout, 1);
+			_timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimeout, false, 0, true);
 			
 			try {
-				_urlLoader.load(urlRequest);
+        _timer.reset();
+		    _timer.start();
+				_urlLoader.load(_urlRequest);
 			}
 			catch (error:Error) {
-         	trace("[ServiceCall] Unable to load requested document.");
-				dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR));
+			  _timer.reset();
+        trace("[ServiceCall] Unable to load requested document.");
+				dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR, this));
 			}
+		}
+		
+		public function retry():void
+		{
+		  _tries++;
+		  try {
+		    _timer.reset();
+		    _timer.start();
+				_urlLoader.load(_urlRequest);
+			}
+			catch (error:Error) {
+			  _timer.reset();
+        trace("[ServiceCall] Unable to load requested document.");
+				dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR, this));
+			}
+		}
+		
+		public function onTimeout(e:TimerEvent):void
+		{
+		  _urlLoader.close();
+		  
+		  if(_tries < _service.retries)
+		  {
+		    trace("[ServiceCall] Timeout", _tries)
+		    retry();
+		  }
+		  else
+		  {
+		    trace("[ServiceCall] Timeout ocurred too many times.");
+		    dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR, this));
+		  }
+		  
 		}
 		
 		protected function onComplete(e:Event):void
 		{
-			_rawContent = URLLoader(e.target).data;
+		  _timer.stop();
+			_rawContent = _urlLoader.data;
 			_content = _service.parser.parse(_rawContent);
-			var serviceEvent:ServiceEvent = new ServiceEvent(ServiceEvent.CALL_COMPLETE);
-			serviceEvent.rawContent = _rawContent;
-			serviceEvent.content = _content;
-			dispatchEvent(serviceEvent);
+			dispatchEvent(new ServiceEvent(ServiceEvent.CALL_COMPLETE, this));
 		}
 
 		protected function onOpen(e:Event):void {
-		   //trace("[ServiceCall] Open");
+       //trace("[ServiceCall] Open");
 		}
 
-		protected function onProgress(e:ProgressEvent):void {
-			dispatchEvent(e);
+		protected function onProgress(e:ProgressEvent):void
+		{
+		  _timer.reset();
+	    _timer.start();
+		  dispatchEvent(e);
 		}
 
-		protected function onSecurityError(e:SecurityErrorEvent):void {
-		   trace("[ServiceCall] Security Error", e);
-			dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR));
+		protected function onSecurityError(e:SecurityErrorEvent):void
+		{
+		  _timer.stop();
+		  trace("[ServiceCall] Security Error", e);
+			dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR, this));
 		}
 
-		protected function onHttpStatus(e:HTTPStatusEvent):void {
-		   //trace("[ServiceCall] HTTP Status:", e);
+		protected function onHttpStatus(e:HTTPStatusEvent):void
+		{
+      //trace("[ServiceCall] HTTP Status:", e);
 		}
 
-		protected function onIOError(e:IOErrorEvent):void {
+		protected function onIOError(e:IOErrorEvent):void
+		{
+		  _timer.stop();
 			trace("[ServiceCall] IO Error", e);
-			dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR));
+			dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR, this));
 		}
 		
 	}

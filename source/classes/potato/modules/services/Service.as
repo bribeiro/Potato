@@ -11,21 +11,28 @@ package potato.modules.services
 	 */
 	public class Service
 	{
+	  protected var _id:String;
 		protected var _url:String;
 		protected var _parser:IResponseParser;
 		protected var _encoder:ICallEncoder;
-		protected var _timeout:int;
+		protected var _timeout:Number;
 		protected var _retries:int;
 		protected var _requestMethod:String;
 		
-		public function Service(url:String, parser:IResponseParser, encoder:ICallEncoder, requestMethod:String, timeout:int = 10000, retries:int = 3)
+		public function Service(id:String, url:String, parser:IResponseParser, encoder:ICallEncoder, requestMethod:String, timeout:Number = 10000, retries:int = 3)
 		{
+		  _id = id;
 			_url = url;
 			_parser = parser;
 			_encoder = encoder;
 			_requestMethod = requestMethod;
 			_timeout = timeout;
 			_retries = retries;
+		}
+		
+		public function get id():String
+		{
+		  return _id;
 		}
 		
 		public function get url():String
@@ -48,7 +55,7 @@ package potato.modules.services
 			return _requestMethod;
 		}
 		
-		public function get timeout():int
+		public function get timeout():Number
 		{
 			return _timeout;
 		}

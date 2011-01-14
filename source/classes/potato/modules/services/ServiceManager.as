@@ -39,7 +39,7 @@ package potato.modules.services
 				var serviceEncoder:ICallEncoder = getEncoderByID(serviceConfig.encoder);
 				var serviceMethod:String = serviceConfig.method || "post";
 				
-				registerService(serviceID, new Service(serviceURL, serviceParser, serviceEncoder, serviceMethod));
+				registerService(new Service(serviceID, serviceURL, serviceParser, serviceEncoder, serviceMethod));
 			}
 		}
 		
@@ -69,19 +69,19 @@ package potato.modules.services
 				return null;
 		}
 		
-		public function registerService(serviceName:String, service:Service):void
+		public function registerService(service:Service):void
 		{
-			_registeredServices[serviceName] = service;
+			_registeredServices[service.id] = service;
 		}
 		
-		public function getServiceByName(serviceName:String):Service
+		public function getServiceByID(serviceID:String):Service
 		{
-			return _registeredServices[serviceName];
+			return _registeredServices[serviceID];
 		}
 		
-		public function call(serviceName:String, callParameters:Object = null, callConfiguration:Object = null):void
+		public function call(serviceID:String, callParameters:Object = null, callConfiguration:Object = null):void
 		{
-			var serviceCall:ServiceCall = new ServiceCall(getServiceByName(serviceName), callParameters);
+			var serviceCall:ServiceCall = new ServiceCall(getServiceByID(serviceID), callParameters);
 			
 			// Handy configuration of listeners
 			if(callConfiguration != null)
