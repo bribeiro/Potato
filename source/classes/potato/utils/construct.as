@@ -1,18 +1,18 @@
 package potato.utils
 {
 	/**
+	 * Utility method for constructing a class instance dynamically.
+	 * This method is a work-around for the absence of <code>Function.apply()</code> for class constructors.
+	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 10.0.0
 	 * 
 	 * @author Fernando França
 	 * @since  05.08.2010
-	 *  
-	 * Utility method for constructing a class instance dynamically.
-	 * This method is a work-around for the absence of Function.apply() for class constructors.
 	 * 
-	 * @param	aClass	 The Class you want to instantiate.
-	 * @param	args	 (optional) One or more arguments for the class constructor (warning: this method is not type safe at compile time!)
-	 * @return  the instance
+	 * @param	aClass The class you want to instantiate.
+	 * @param	args [optional] Up to ten more arguments to be applied to the class constructor. <b>Warning:</b> this method is not type safe at compile time!
+	 * @return A new instance of the specified class.
 	 */
 	public function construct(aClass:Class, ...args):*
 	{

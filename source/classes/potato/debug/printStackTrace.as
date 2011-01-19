@@ -2,7 +2,8 @@ package potato.debug
 {
 	/**
 	 * Prints the stack trace anywhere in your code.
-	 * <b>Warning:</b> This method is really slow and extensive use is not recommended.
+	 * 
+	 * <p><b>Warning:</b> This method is really slow and extensive use is not recommended.</p>
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 10.0.0

@@ -28,7 +28,7 @@ package potato.display
 		}
 		
 		/**
-		 * Automatically disposes children.
+		 * Disposes children by calling their <code>dispose()</code> method and removing the ones registered as <code>DisplayObjects</code>.
 		 */
 		public function dispose():void
 		{
@@ -36,7 +36,9 @@ package potato.display
 			_disposableChildren = null
 			
 			for each(var displayObject:DisplayObject in _removableChildren)
-				safeRemoveChild(displayObject);
+			{
+			  safeRemoveChild(displayObject);
+			}
 			
 			_removableChildren = null;
 		}
@@ -45,46 +47,40 @@ package potato.display
 		 * Registers a disposable object.
 		 * @param obj IDisposable 
 		 */
-		public function addDisposable(obj:IDisposable):IDisposable
-		{
-	    	_disposableChildren.addElement(obj);
-			return obj;
-	    }
+    public function addDisposable(obj:IDisposable):IDisposable
+    {
+      _disposableChildren.addElement(obj);
+      return obj;
+    }
 		
 		/**
 		 * Adds and registers a disposable child DisplayObject.
 		 * @param obj IDisposable 
 		 */
 	    public function addDisposableChild(obj:IDisposable):DisplayObject
-		{
-	    	_disposableChildren.addElement(obj);
-		
-			var displayObject:DisplayObject = obj as DisplayObject;
-			_removableChildren.push(displayObject);
-	    	return addChild(displayObject);
-	    }
+    {
+      _disposableChildren.addElement(obj);
+
+      var displayObject:DisplayObject = obj as DisplayObject;
+      _removableChildren.push(displayObject);
+      
+      return addChild(displayObject);
+    }
 		
 		/**
 		 * Adds and registers a disposable child DisplayObject at the given index.
 		 * @param obj IDisposable
 		 */
-		public function addDisposableChildAt(obj:IDisposable, index:int):DisplayObject
-		{
-			_disposableChildren.addElement(obj);
-			
-			var displayObject:DisplayObject = obj as DisplayObject;
-			_removableChildren.push(displayObject);
-	    	return addChildAt(displayObject, index);
-	    }
-		
-		/**
-		 * Dispose children that have been added to this object through the addDisposable methods.
-		 */
-	    //public function disposeChildren():void
-	    //		{
-	    //			_disposableChildren.dispose();
-	    //	    }
-	
-	}
+    public function addDisposableChildAt(obj:IDisposable, index:int):DisplayObject
+    {
+      _disposableChildren.addElement(obj);
 
+      var displayObject:DisplayObject = obj as DisplayObject;
+      _removableChildren.push(displayObject);
+      
+      return addChildAt(displayObject, index);
+    }
+    
+	}
+	
 }
