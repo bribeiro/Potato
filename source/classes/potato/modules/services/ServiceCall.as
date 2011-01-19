@@ -117,7 +117,12 @@ package potato.modules.services
 		
 		public function onTimeout(e:TimerEvent):void
 		{
-		  _urlLoader.close();
+		  try {
+		    _urlLoader.close();
+	    }
+	    catch(error:Error) {
+	      
+	    }
 		  
 		  if(_tries < _service.retries)
 		  {

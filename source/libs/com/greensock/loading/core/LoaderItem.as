@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.74
- * DATE: 2010-11-21
+ * VERSION: 1.777
+ * DATE: 2011-01-15
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -22,7 +22,7 @@ package com.greensock.loading.core {
  * Please see the documentation for the other classes.
  * <br /><br />
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	
@@ -90,7 +90,7 @@ package com.greensock.loading.core {
 				var pair:Array;
 				while (--i > -1) {
 					pair = a[i].split("=");
-					data[pair[0]] = pair[1];
+					data[pair.shift()] = pair.join("=");
 				}
 				request.data = data;
 			}

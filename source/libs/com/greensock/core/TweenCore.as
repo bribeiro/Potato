@@ -1,23 +1,22 @@
 /**
- * VERSION: 1.5
- * DATE: 2010-12-12
+ * VERSION: 1.64
+ * DATE: 2011-01-06
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCS AT: http://www.greensock.com
  **/
-
 package com.greensock.core {
 	import com.greensock.*;
 /**
  * TweenCore is the base class for all TweenLite, TweenMax, TimelineLite, and TimelineMax classes and 
  * provides core functionality and properties. There is no reason to use this class directly.<br /><br />
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */
 	public class TweenCore {
 		/** @private **/
-		public static const version:Number = 1.5;
+		public static const version:Number = 1.64;
 		
 		/** @private **/
 		protected static var _classInitted:Boolean;
@@ -90,8 +89,7 @@ package com.greensock.core {
 			}
 			
 			var tl:SimpleTimeline = (this.vars.timeline is SimpleTimeline) ? this.vars.timeline : (this.vars.useFrames) ? TweenLite.rootFramesTimeline : TweenLite.rootTimeline;
-			this.cachedStartTime = tl.cachedTotalTime + _delay;
-			tl.addChild(this);
+			tl.insert(this, tl.cachedTotalTime);
 			if (this.vars.reversed) {
 				this.cachedReversed = true;
 			}
@@ -213,7 +211,7 @@ package com.greensock.core {
 			if (enabled) {
 				this.active = Boolean(!this.cachedPaused && this.cachedTotalTime > 0 && this.cachedTotalTime < this.cachedTotalDuration);
 				if (!ignoreTimeline && this.cachedOrphan) {
-					this.timeline.addChild(this);
+					this.timeline.insert(this, this.cachedStartTime - _delay);
 				}
 			} else {
 				this.active = false;
@@ -258,7 +256,7 @@ package com.greensock.core {
 		 **/
 		protected function setTotalTime(time:Number, suppressEvents:Boolean=false):void {
 			if (this.timeline) {
-				var tlTime:Number = (this.cachedPauseTime || this.cachedPauseTime == 0) ? this.cachedPauseTime : this.timeline.cachedTotalTime;
+				var tlTime:Number = (this.cachedPaused) ? this.cachedPauseTime : this.timeline.cachedTotalTime;
 				if (this.cachedReversed) {
 					var dur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration;
 					this.cachedStartTime = tlTime - ((dur - time) / this.cachedTimeScale);
@@ -369,10 +367,10 @@ package com.greensock.core {
 		}
 		
 		public function set startTime(n:Number):void {
-			var adjust:Boolean = Boolean(this.timeline != null && (n != this.cachedStartTime || this.gc));
-			this.cachedStartTime = n;
-			if (adjust) {
-				this.timeline.addChild(this); //ensures that any necessary re-sequencing of TweenCores in the timeline occurs to make sure the rendering order is correct.
+			if (this.timeline != null && (n != this.cachedStartTime || this.gc)) {
+				this.timeline.insert(this, n - _delay); //ensures that any necessary re-sequencing of TweenCores in the timeline occurs to make sure the rendering order is correct.
+			} else {
+				this.cachedStartTime = n;
 			}
 		}
 		

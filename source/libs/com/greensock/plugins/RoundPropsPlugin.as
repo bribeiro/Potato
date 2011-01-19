@@ -1,6 +1,6 @@
 /**
- * VERSION: 2.0
- * DATE: 2010-12-16
+ * VERSION: 2.01
+ * DATE: 2010-12-24
  * AS3
  * UPDATES AND DOCS AT: http://www.TweenMax.com
  **/
@@ -25,7 +25,7 @@ package com.greensock.plugins {
  * 		TweenMax.to(mc, 2, {x:300, y:200, alpha:0.5, roundProps:["x","y"]}); <br /><br />
  * </code>
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */
@@ -40,7 +40,7 @@ package com.greensock.plugins {
 		public function RoundPropsPlugin() {
 			super();
 			this.propName = "roundProps";
-			this.overwriteProps = [];
+			this.overwriteProps = ["roundProps"];
 			this.round = true;
 			this.priority = -1;
 			this.onInitAllProps = _initAllProps;
@@ -49,6 +49,7 @@ package com.greensock.plugins {
 		/** @private **/
 		override public function onInitTween(target:Object, value:*, tween:TweenLite):Boolean {
 			_tween = tween;
+			this.overwriteProps = this.overwriteProps.concat(value as Array);
 			return true;
 		}
 		
@@ -66,7 +67,7 @@ package com.greensock.plugins {
 						} else {
 							add(pt.target, prop, pt.start, pt.change);
 							_removePropTween(pt);
-							_tween.propTweenLookup[prop] = this;
+							_tween.propTweenLookup[prop] = _tween.propTweenLookup.roundProps;
 						}
 					} else if (pt.isPlugin && pt.name == "_MULTIPLE_" && !pt.target.round) {
 						multiProps = " " + pt.target.overwriteProps.join(" ") + " ";

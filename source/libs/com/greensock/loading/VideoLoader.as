@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.767
- * DATE: 2010-12-17
+ * VERSION: 1.776
+ * DATE: 2011-01-11
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -169,7 +169,7 @@ function errorHandler(event:LoaderEvent):void {
 }
  </listing>
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @see com.greensock.loading.data.VideoLoaderVars
  * 
@@ -469,12 +469,11 @@ function errorHandler(event:LoaderEvent):void {
 					if (_ns.bufferLength > 0) {
 						_cachedBytesLoaded = (_ns.bufferLength / _ns.bufferTime) * _cachedBytesTotal;
 					}
-					if (_cachedBytesTotal <= _cachedBytesLoaded) {
-						_cachedBytesTotal = (this.metaData == null || !_renderedOnce) ? int(1.01 * _cachedBytesLoaded) + 1 : _cachedBytesLoaded;
-					}
-					
 				} else {
 					_cachedBytesTotal = _ns.bytesTotal;
+				}
+				if (_cachedBytesTotal <= _cachedBytesLoaded) {
+					_cachedBytesTotal = ((this.metaData != null && _renderedOnce && _initted) || (getTimer() - _time >= 10000)) ? _cachedBytesLoaded : int(1.01 * _cachedBytesLoaded) + 1; //make sure the metaData has been received because if the NetStream file is cached locally sometimes the bytesLoaded == bytesTotal BEFORE the metaData arrives. Or timeout after 10 seconds.
 				}
 				if (!_auditedSize) {
 					_auditedSize = true;
@@ -720,8 +719,8 @@ function errorHandler(event:LoaderEvent):void {
 		
 		/** @private **/
 		protected function _forceInit():void {
-			if (_ns.bufferTime > _duration) {
-				_ns.bufferTime = _duration;
+			if (_ns.bufferTime >= _duration) {
+				_ns.bufferTime = uint(_duration - 1);
 			}
 			_initted = true;
 			if (!_bufferFull && _ns.bufferLength >= _ns.bufferTime) { 
@@ -828,11 +827,11 @@ function errorHandler(event:LoaderEvent):void {
 		protected function _enterFrameHandler(event:Event):void {
 			var bl:uint = _cachedBytesLoaded;
 			var bt:uint = _cachedBytesTotal;
-			_calculateProgress();
 			if (!_bufferFull && _ns.bufferLength >= _ns.bufferTime) {
 				_onBufferFull();
 			}
-			if (_cachedBytesLoaded == _cachedBytesTotal && _ns.bytesTotal > 5 && ((_initted && _renderedOnce) || getTimer() - _time >= 10000)) { //make sure the metaData has been received because if the NetStream file is cached locally sometimes the bytesLoaded == bytesTotal BEFORE the metaData arrives. Or timeout after 10 seconds.
+			_calculateProgress();
+			if (_cachedBytesLoaded == _cachedBytesTotal) { 
 				_sprite.removeEventListener(Event.ENTER_FRAME, _enterFrameHandler);
 				if (!_bufferFull) {
 					_onBufferFull();
@@ -1018,6 +1017,9 @@ function errorHandler(event:LoaderEvent):void {
 			_bufferMode = value;
 			_preferEstimatedBytesInAudit = _bufferMode;
 			_calculateProgress();
+			if (_cachedBytesLoaded < _cachedBytesTotal && _status == LoaderStatus.COMPLETED) {
+				_status = LoaderStatus.READY;
+			}
 		}
 		
 	}

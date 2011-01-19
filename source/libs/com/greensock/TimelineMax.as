@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.6
- * DATE: 2010-12-20
+ * VERSION: 1.64
+ * DATE: 2011-01-06
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCS AT: http://www.greensock.com/timelinemax/
  **/
@@ -139,13 +139,13 @@ package com.greensock {
  * 	<li> TimelineMax adds about 4.9k to your SWF (not including OverwriteManager).</li>
  * </ul>
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  **/
 	public class TimelineMax extends TimelineLite implements IEventDispatcher {
 		/** @private **/
-		public static const version:Number = 1.6;
+		public static const version:Number = 1.64;
 		
 		/** @private **/
 		protected var _repeat:int;
@@ -473,7 +473,7 @@ package com.greensock {
 				this.cachedTotalTime = this.cachedTime = time;
 			}
 			_rawPrevTime = time;
-				
+			
 			if (_repeat != 0) {
 				var cycleDuration:Number = this.cachedDuration + _repeatDelay;
 				var prevCycles:int = _cyclesComplete;
@@ -500,6 +500,8 @@ package com.greensock {
 					if (this.cachedTime < 0) {
 						this.cachedTime = 0;
 					}
+				} else {
+					_cyclesComplete = 0;
 				}
 				
 				if (repeated && !isComplete && (this.cachedTime != prevTime || force)) {

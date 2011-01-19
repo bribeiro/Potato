@@ -1,6 +1,33 @@
 CHANGE LOG : GREENSOCK TWEENING PLATFORM
 ----------------------------------------
 
+2011-01-06
+---------------------------------------------
+TweenMax			1.64
+TimelineLite		1.64
+TimelineMax			1.64
+SimpleTimeline		1.64
+TweenCore			1.64
+	- Fixed issue that could cause a TweenMax or TimelineMax to call its onRepeat after it ran once and then was restarted (with restart() or gotoAndPlay(0)) 
+	- Fixed issue that could cause a paused tween's resume() to pick up at the wrong time if it was paused and then reparented into another TimelineLite/Max instance before being resumed.
+
+2010-12-30
+---------------------------------------------
+TimelineLite		1.63
+TimelineMax			1.63
+SimpleTimeline		1.63
+	- Fixed issue that could cause a tween that was paused while it was in one timeline but resumed after being inserted into a different timeline to not honor the correct startTime.
+	- When a new tween/timeline is inserted into a completed timeline, the timeline's new end time will be analyzed and if it exceeds the parent timeline's currentTime, the timeline (and any anscestors) will automatically be re-enabled.
+
+2010-12-24
+---------------------------------------------
+TimelineLite		1.62
+TimelineMax			1.62
+TweenMax			11.62
+SimpleTimeline		1.62
+TweenCore			1.62
+	- Consolidated the addChild() method into insert() which helped clean up the API a bit (addChild() really wasn't meant for anyone to use). This also accommodates inserting tweens into the TweenLite.rootTimeline and TweenLite.rootFramesTimeline (not a common task, but it could come in handy in some rare scenarios)
+
 2010-12-21
 ---------------------------------------------
 TweenLite			11.61

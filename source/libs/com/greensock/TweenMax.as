@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.61
- * DATE: 2010-12-21
+ * VERSION: 11.641
+ * DATE: 2011-01-10
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCS AT: http://www.greensock.com 
  **/
@@ -290,13 +290,13 @@ package com.greensock {
  * 	  to members. Learn more at <a href="http://www.greensock.com/club/">http://www.greensock.com/club/</a></li>
  * 	</ul>
  * 	  
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */
 	public class TweenMax extends TweenLite implements IEventDispatcher {
 		/** @private **/
-		public static const version:Number = 11.61;
+		public static const version:Number = 11.641;
 		
 		TweenPlugin.activate([
 			
@@ -474,7 +474,7 @@ package com.greensock {
 				if (this.gc) {
 					this.setEnabled(true, false);
 				} else {
-					this.timeline.addChild(this); //ensures that any necessary re-sequencing of TweenCores in the timeline occurs to make sure the rendering order is correct.
+					this.timeline.insert(this, this.cachedStartTime - _delay); //ensures that any necessary re-sequencing of TweenCores in the timeline occurs to make sure the rendering order is correct.
 				}
 			}
 			for (var p:String in vars) {
@@ -609,7 +609,9 @@ package com.greensock {
 						this.cachedTime = this.ratio = 0;
 						setRatio = false;
 					}
-				}	
+				} else {
+					_cyclesComplete = 0;
+				}
 				
 			}
 			
@@ -1035,11 +1037,11 @@ package com.greensock {
 		 * 
 		 * But if you want to kill only the tweens but allow the delayedCalls to continue, you'd do:<br /><br /><code>
 		 * 
-		 * TweenMax.killAll(false, false, true);<br /><br /></code>
+		 * TweenMax.killAll(false, true, false);<br /><br /></code>
 		 * 
 		 * And if you want to kill only the delayedCalls but not the tweens, you'd do:<br /><br /><code>
 		 * 
-		 * TweenMax.killAll(false, true, false);<br /></code>
+		 * TweenMax.killAll(false, false, true);<br /></code>
 		 *  
 		 * @param complete Determines whether or not the tweens/delayedCalls/callbacks should be forced to completion before being killed.
 		 * @param tweens If true, all tweens will be killed

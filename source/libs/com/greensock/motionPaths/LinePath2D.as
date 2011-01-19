@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.3 (beta)
- * DATE: 2010-12-10
+ * VERSION: 0.41 (beta)
+ * DATE: 2010-12-24
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com
  **/
@@ -68,7 +68,7 @@ TweenMax.to(path, 3, {rotation:180, x:550, y:400, ease:Back.easeOut, delay:3});
 function createSquare(size:Number, color:uint=0xFF0000):Shape {
 	var s:Shape = new Shape();
 	s.graphics.beginFill(color, 1);
-	s.graphics.drawRect(-size ~~ 0.5, -size ~~ 0.5, size, size);
+	s.graphics.drawRect(-size / 2, -size / 2, size, size);
 	s.graphics.endFill();
 	this.addChild(s);
 	return s;
@@ -82,7 +82,7 @@ function createSquare(size:Number, color:uint=0xFF0000):Shape {
  * 			property which will provide better performance than tweening each follower independently.</li>
  * </ul>
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	
@@ -309,7 +309,7 @@ function createSquare(size:Number, color:uint=0xFF0000):Shape {
 				
 				f = f.cachedNext;
 			}
-			if (_redrawLine && this.visible && this.parent) {
+			if (_redrawLine) {
 				var g:Graphics = this.graphics;
 				g.clear();
 				g.lineStyle(_thickness, _color, _lineAlpha, _pixelHinting, _scaleMode, _caps, _joints, _miterLimit);
@@ -490,6 +490,8 @@ function createSquare(size:Number, color:uint=0xFF0000):Shape {
 		public function set points(value:Array):void {
 			_points = [];
 			insertMultiplePoints(value, 0);
+			_redrawLine = true;
+			update(null);
 		}
 		
 	}

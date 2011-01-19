@@ -1,8 +1,8 @@
 /**
- * VERSION: 0.21 (beta)
- * DATE: 2010-04-21
- * ACTIONSCRIPT VERSION: 3.0 
- * UPDATES AND DOCUMENTATION AT: http://www.GreenSock.com
+ * VERSION: 0.4 (beta)
+ * DATE: 2010-12-22
+ * AS3
+ * UPDATES AND DOCS AT: http://www.GreenSock.com
  **/
 package com.greensock.motionPaths {
 	import flash.display.Graphics;
@@ -64,7 +64,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
  * 			property which will provide better performance than tweening each follower independently.</li>
  * </ul>
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	
@@ -108,7 +108,7 @@ TweenLite.to(follower, 2, {progress:circle.followerTween(follower, 200, Directio
 				
 				f = f.cachedNext;
 			}
-			if (_redrawLine && this.visible && this.parent) {
+			if (_redrawLine) {
 				var g:Graphics = this.graphics;
 				g.clear();
 				g.lineStyle(_thickness, _color, _lineAlpha, _pixelHinting, _scaleMode, _caps, _joints, _miterLimit);

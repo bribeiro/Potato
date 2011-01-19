@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.3 (beta)
- * DATE: 2010-12-10
+ * VERSION: 0.4 (beta)
+ * DATE: 2010-12-22
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com
  **/
@@ -50,7 +50,7 @@ TweenLite.to(follower, 2, {progress:-1});
  * 			property which will provide better performance than tweening each follower independently.</li>
  * </ul>
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	
@@ -127,7 +127,7 @@ TweenLite.to(follower, 2, {progress:-1});
 				
 				f = f.cachedNext;
 			}
-			if (_redrawLine && this.visible && this.parent) {
+			if (_redrawLine) {
 				var g:Graphics = this.graphics;
 				g.clear();
 				g.lineStyle(_thickness, _color, _lineAlpha, _pixelHinting, _scaleMode, _caps, _joints, _miterLimit);

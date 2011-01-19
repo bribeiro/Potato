@@ -5,7 +5,7 @@
 #       extra: -use-network=false -static-link-runtime-shared-libraries
 #     
 library-path:
-    - source/swc
+    - swc
 
 source-path:
     - classes

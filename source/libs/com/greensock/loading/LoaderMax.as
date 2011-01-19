@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 1.77
- * DATE: 2010-12-21
+ * VERSION: 1.781
+ * DATE: 2011-01-18
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
 package com.greensock.loading {
@@ -135,7 +135,7 @@ function errorHandler(event:LoaderEvent):void {
  * instead of a generic object to define your <code>vars</code> is a bit more verbose but provides 
  * code hinting and improved debugging because it enforces strict data typing. Use whichever one you prefer.<br /><br />
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @see com.greensock.loading.data.LoaderMaxVars
  * 
@@ -143,7 +143,7 @@ function errorHandler(event:LoaderEvent):void {
  */	
 	public class LoaderMax extends LoaderCore {		
 		/** @private **/
-		public static const version:Number = 1.77;
+		public static const version:Number = 1.781;
 		/** The default value that will be used for the <code>estimatedBytes</code> on loaders that don't declare one in the <code>vars</code> parameter of the constructor. **/
 		public static var defaultEstimatedBytes:uint = 20000;
 		/** Controls the default value of <code>auditSize</code> in LoaderMax instances (normally <code>true</code>). For most situations, the auditSize feature is very convenient for ensuring that the overall progress of LoaderMax instances is reported accurately, but when working with very large quantities of files that have no <code>estimatedBytes</code> defined, some developers prefer to turn auditSize off by default. Of course you can always override the default for individual LoaderMax instances by defining an <code>auditSize</code> value in the <code>vars</code> parameter of the constructor. **/
@@ -501,7 +501,7 @@ function completeHandler(event:LoaderEvent):void {
 		 * 
 		 * loader.getChildrenByStatus(LoaderStatus.LOADING, false); </code>
 		 * 
-		 * @param status Status code like <code>LoaderStatus.READY, LoaderStatus.LOADING, LoaderStatus.COMPLETE, LoaderStatus.PAUSED,</code> or <code>LoaderStatus.FAILED</code>.
+		 * @param status Status code like <code>LoaderStatus.READY, LoaderStatus.LOADING, LoaderStatus.COMPLETED, LoaderStatus.PAUSED,</code> or <code>LoaderStatus.FAILED</code>.
 		 * @param includeNested If <code>true</code>, loaders that are nested inside other loaders (like LoaderMax instances or XMLLoaders or SWFLoaders) will be returned in the array.
 		 * @return An array of loaders that match the defined <code>status</code>. 
 		 * @see #getChildren()
@@ -718,6 +718,7 @@ function completeHandler(event:LoaderEvent):void {
 		protected function _auditSize(event:Event=null):void {
 			if (event != null) {
 				event.target.removeEventListener("auditedSize", _auditSize);
+				event.target.removeEventListener(LoaderEvent.FAIL, _auditSize);
 			}
 			var l:uint = _loaders.length;
 			var maxStatus:int = (this.skipPaused) ? LoaderStatus.COMPLETED : LoaderStatus.PAUSED;
@@ -727,6 +728,7 @@ function completeHandler(event:LoaderEvent):void {
 				if (!loader.auditedSize && loader.status <= maxStatus) {
 					if (!found) {
 						loader.addEventListener("auditedSize", _auditSize, false, 0, true);
+						loader.addEventListener(LoaderEvent.FAIL, _auditSize, false, 0, true);
 					}
 					found = true;
 					loader.auditSize();
@@ -749,6 +751,7 @@ function completeHandler(event:LoaderEvent):void {
 				delete _activeLoaders[event.target];
 				_removeLoaderListeners(LoaderCore(event.target), false);
 			}
+			
 			if (_status == LoaderStatus.LOADING) {
 				
 				var audit:Boolean = ("auditSize" in this.vars) ? Boolean(this.vars.auditSize) : LoaderMax.defaultAuditSize;
@@ -792,11 +795,13 @@ function completeHandler(event:LoaderEvent):void {
 		
 		/** @private **/
 		override protected function _progressHandler(event:Event):void {
-			if (_dispatchProgress) {
+			if (_dispatchProgress && _status != LoaderStatus.DISPOSED) {
 				var bl:uint = _cachedBytesLoaded;
 				var bt:uint = _cachedBytesTotal;
 				_calculateProgress();
-				if ((_cachedBytesLoaded != _cachedBytesTotal || _status != LoaderStatus.LOADING) && (bl != _cachedBytesLoaded || bt != _cachedBytesTotal)) { //note: added _status != LoaderStatus.LOADING because it's possible for all the children to load independently (without the LoaderMax actively loading), so in those cases, the progress would never reach 1 since LoaderMax's _completeHandler() won't be called to dispatch the final PROGRESS event.
+				if (bl == 0 && _cachedBytesLoaded == 0) {
+					//do nothing
+				} else if ((_cachedBytesLoaded != _cachedBytesTotal || _status != LoaderStatus.LOADING) && (bl != _cachedBytesLoaded || bt != _cachedBytesTotal)) { //note: added _status != LoaderStatus.LOADING because it's possible for all the children to load independently (without the LoaderMax actively loading), so in those cases, the progress would never reach 1 since LoaderMax's _completeHandler() won't be called to dispatch the final PROGRESS event.
 					dispatchEvent(new LoaderEvent(LoaderEvent.PROGRESS, this));
 				}
 			} else {

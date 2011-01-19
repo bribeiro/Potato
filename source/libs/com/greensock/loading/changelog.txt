@@ -1,6 +1,63 @@
 CHANGE LOG : GREENSOCK LOADERMAX SYSTEM
 ----------------------------------------
 
+2011-01-18
+--------------------------------------------
+LoaderMax			1.781
+SWFLoader			1.781
+LoaderCore			1.781
+	- Fixed issue that could cause nested loaders discovered in a SWFLoader that had requireWithRoot set to that swf's root to prevent the parent LoaderMax from dispatching a COMPLETE or FAIL event if on of those nested loaders failed. 
+	- Fixed issue that could cause the auditing process to stall on a LoaderMax when it had a nested LoaderMax as a child that failed during its auditing process.
+
+2011-01-17
+--------------------------------------------
+LoaderMax			1.78
+LoaderCore			1.78
+	- Fixed issue that could cause an error if "requireWithRoot" was set to a DisplayObject that wasn't actually a root and was not in the display list
+
+2011-01-15
+--------------------------------------------
+LoaderMax			1.777
+LoaderItem			1.777
+	- Fixed issue that could cause part of the URL query string to be lost if more than one "=" sign was used in a single value pair (extremely rare), like http://www.greensock.com/?prop1=value1=extraValue&prop2=value2 - the extraValue would be dropped in some previous versions (that's fixed now obviously). 
+	- Fixed typo in ASDocs that mentioned LoaderStatus.COMPLETE instead of LoaderStatus.COMPLETED (missing the "D").
+	
+2011-01-11
+--------------------------------------------
+LoaderMax			1.776
+VideoLoader			1.776
+	- Fixed issue that could cause VERY short videos whose duration is equal to or less than the bufferTime (defaults to 5 seconds) not to play correctly. This would only happen if the duration reported in the metaData was slightly inflated which sometimes happens when videos are encoded.
+
+2011-01-10
+--------------------------------------------
+LoaderMax			1.775
+VideoLoader			1.775
+	- Fixed issue that could cause a LoaderMax instance to dispatch a PROGRESS event after being disposed
+	- Fixed issue in VideoLoader that could cause it to report its "progress" as 1 before the metaData has been received (very rare, and only in situations where the file is already completely cached).
+
+2011-01-06
+--------------------------------------------
+LoaderMax			1.773
+VideoLoader			1.773
+DisplayObjectLoader	1.773
+	- Fixed an issue that could cause a LoaderMax not to dispatch its COMPLETE event if it has a VideoLoader that changes its bufferMode from true to false upon its completion while the LoaderMax is loading
+	- Fixed issue that would cause a LoaderMax to dispatch a PROGRESS event when a child loader is appended/inserted. 
+	- Added a very small amount of code to DisplayObjectLoader to make it easier to use it in a standalone fashion (typically it is used only as a base class for SWFLoader and ImageLoader). Again, it isn't recommended to use DisplayObjectLoader on its own, but if you need absolute minimum file size and can do without the bells & whistles of SWFLoader and ImageLoader, you could do it. 
+
+2010-12-28
+--------------------------------------------
+SWFLoader			1.772
+LoaderMax			1.772
+SWFLoaderVars		1.12
+	- Changed the default suppressInitReparentEvents value in SWFLoader to true instead of false because some users had coded their swfs in a way that required ADDED_TO_STAGE to fire which shouldn't be necessary when the swf is run on its own or in a Loader that has already been added to the stage before it started loading, but nevertheless after mulling it over it did seem better not to suppress events unless specifically requested.
+
+2010-12-23
+--------------------------------------------
+SWFLoader			1.771
+LoaderMax			1.771
+DisplayObjectLoader		1.771
+	- Fixed issue introduced in version 1.77 that could cause a Type Coercion failure with SecurityDomains
+
 2010-12-21
 --------------------------------------------
 LoaderMax			1.77

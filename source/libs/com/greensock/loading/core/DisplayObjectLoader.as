@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.77
- * DATE: 2010-12-21
+ * VERSION: 1.773
+ * DATE: 2011-01-06
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -27,7 +27,7 @@ package com.greensock.loading.core {
  * Please refer to the documentation for the other classes.
  * <br /><br />
  * 
- * <b>Copyright 2010, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */	
@@ -78,9 +78,13 @@ package com.greensock.loading.core {
 			if (this.vars.context is LoaderContext) {
 				_context = this.vars.context;
 			} else if (_context == null) {
-				_context = (LoaderMax.defaultContext != null) ? LoaderMax.defaultContext : new LoaderContext(true, new ApplicationDomain(ApplicationDomain.currentDomain), SecurityDomain.currentDomain); //avoids some security sandbox headaches that plague many users.
-				if (_isLocal) {
-					_context.securityDomain = null;
+				if (LoaderMax.defaultContext != null) {
+					_context = LoaderMax.defaultContext;
+					if (_isLocal) {
+						_context.securityDomain = null;
+					}
+				} else if (!_isLocal) {
+					_context = new LoaderContext(true, new ApplicationDomain(ApplicationDomain.currentDomain), SecurityDomain.currentDomain); //avoids some security sandbox headaches that plague many users.
 				}
 			}
 			if (Capabilities.playerType != "Desktop") { //AIR apps will choke on Security.allowDomain()
@@ -203,6 +207,9 @@ package com.greensock.loading.core {
 		protected function _initHandler(event:Event):void {
 			if (!_initted) {
 				_initted = true;
+				if (_content == null) { //_content is set in ImageLoader or SWFLoader (subclasses), but we put this here just in case someone wants to use DisplayObjectLoader on its own as a lighter weight alternative without the bells & whistles of SWFLoader/ImageLoader.
+					_content = (_scriptAccessDenied) ? _loader : _loader.content;
+				}
 				(_sprite as Object).rawContent = (_content as DisplayObject);
 				dispatchEvent(new LoaderEvent(LoaderEvent.INIT, this));
 			}
