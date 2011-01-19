@@ -1,47 +1,49 @@
 package potato.modules.i18n
 {	
-import flash.display.DisplayObjectContainer;
+  import flash.display.DisplayObjectContainer;
 	
 	/**
-	* Searches for TextFields in the haystack using the miner function
+	* Searches for TextFields in a DisplayObjectContainer using a custom miner function.
 	* 
-	* The miner function always receives the TextField as a parameter and should return an String
+	* <p>The miner function always receives the <code>TextField</code> as a parameter and should return a <code>String</code> 
 	* which is the id of the localized string in the I18n locale file, other miner function parameters
-	* can be passed using the rest parameters
+	* can be passed using the rest parameters.</p>
 	* 
-	* Ex matching by instance:
+	* <p>Here is an example, matching by instance name:</p>
+	* 
+	* <listing>
+	* 
 	* function(s:TextField):String {
 	* 	return s.name;
 	* }
+	* </listing>
 	* 
-	* @param haystack DisplayObjectContainer Where to search
-	* @param miner Function How to search
-	* @param ... Array Miner parameters
-	* @private 
+	* @param haystack The container that will be searched.
+	* @param miner Specifies how to search the container.
+	* @param ... minerParams [optional] Miner function parameters.
 	* 
-	* @example
+	* @example <listing>
 	* 
-	* <b>Default mining function (MATCH_BY_TEXT):</b><br />
+	* // Default mining function (MATCH_BY_TEXT):
 	* fillWithLocale(this);
 	* 
-	* <b>Function with no parameters:</b><br />
+	* // Function with no parameters:
 	* fillWithLocale(this, I18nMatch.MATCH_BY_TEXT);
 	* 
-	* <b>Functions with parameters:</b><br />
+	* // Functions with parameters:
 	* fillWithLocale(this, I18nMatch.MATCH_BY_INSTANCE_WITH_PREFIX, "prefix_");
 	* fillWithLocale(this, I18nMatch.MATCH_BY_INSTANCE_WITH_SUFFIX, "_suf");
+	* </listing>
 	* 
-	* <b>Important note:<b><br />
-	* MATCH_BY_TEXT searches for {my_text}, between braces
+	* <p><b>Important note:</b> MATCH_BY_TEXT searches for {my_text}, between braces.</p>
 	* 
-	* @see	potato.modules.i18n.I18nMatch
-	* 
+	* @see potato.modules.i18n.I18nMatch
 	**/
 	
-	public function fillWithLocale(haystack:DisplayObjectContainer, miner:Function = null, ...rest):void
+	public function fillWithLocale(haystack:DisplayObjectContainer, miner:Function = null, ...minerParams):void
 	{
-		if(rest.length > 0){	
-			I18nMatch.fillWithLocale(haystack, miner, rest);
+		if(minerParams.length > 0){	
+			I18nMatch.fillWithLocale(haystack, miner, minerParams);
 		}
 		else
 		{

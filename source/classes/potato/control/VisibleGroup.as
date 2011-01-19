@@ -15,6 +15,7 @@ package potato.control
 	 */
 	public class VisibleGroup implements IVisible, IDisposable
 	{
+	  /** @private */
 		protected var _elements:Vector.<IVisible>;
 	
 		public function VisibleGroup()

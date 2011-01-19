@@ -11,7 +11,21 @@ package potato.modules.parameters
 	use namespace flash_proxy;
 	
 	/**
-	 * Description
+	 * Basic parameters implementation.
+	 * 
+	 * <p>Each parameter can have a default value defined as a fallback.</p>
+	 * 
+	 * <p><b>EXAMPLE:</b></p>
+	 * <listing>
+	 * 
+	 * parameters.defaults.username = "Visitor";
+	 * 
+	 * trace(parameters.username); // Prints the default value, "Visitor".
+	 * 
+	 * parameters.username = "Bozo";
+	 * 
+	 * trace(parameters.username); // Prints "Bozo" instead of the default.
+	 * </listing>
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 10.0.0
@@ -21,21 +35,25 @@ package potato.modules.parameters
 	 */
 	dynamic public class Parameters extends Proxy implements IDisposable
 	{
-		
-		//My config
-		protected var _parameters:IConfig;
-		//Defaults
-		protected var _defaults:Dictionary;
-		//Inheritance
+	  //Inheritance
 		public var inherit:Parameters;
+	  
+		/** @private */
+		protected var _parameters:IConfig;
+		/** @private */
+		protected var _defaults:Dictionary;
 		
-		//Cached parameter keys
+		/** @private */
 		protected var _allKeys:Array=[];
+		
+		/** @private */
 		protected var _updateKeys:Boolean = true;
 		
+		/**
+		 * @constructor
+		 */
 		public function Parameters(config:IConfig=null)
 		{
-			
 			_parameters = config ? config : new ObjectConfig();
 			_parameters.init();
 			
@@ -43,7 +61,7 @@ package potato.modules.parameters
 		}
 	
 		/**
-		 * Gets the value in the config, if there is none, fallbacks to defaults
+		 * Gets the value in the config, if there is none, uses <code>defaults</code> as a fallback.
 		 */
 		override flash_proxy function getProperty(name:*):*
 		{
@@ -63,7 +81,7 @@ package potato.modules.parameters
 		}
 		
 		/**
-		 * adds a value to the view parameters config
+		 * Adds a value to the view parameters config.
 		 */
 		override flash_proxy function setProperty(name:*, value:*):void
 		{
@@ -74,22 +92,30 @@ package potato.modules.parameters
 			//	inherit[name] = value;
 			////No.. only set
 			//else
-				_parameters.setProperty(name, value);
+			_parameters.setProperty(name, value);
 			
 			return;
 		}
 		
-		/*
-		Functions used for iteration
-		*/
+		/**
+		 * @private
+		 */
 		flash_proxy override function nextNameIndex(index:int):int
 		{
 			return (index+1) % keys.length;
-		}  
+		} 
+		
+		/**
+		 * @private
+		 */
 		flash_proxy override function nextName(index:int):String
 		{
 			return keys[index-1];
 		}
+		
+		/**
+		 * The keys defined by defaults and parameters.
+		 */
 		public function get keys():Array
 		{
 			if (_updateKeys)
@@ -104,7 +130,7 @@ package potato.modules.parameters
 		}
 		
 		/**
-		 * Defaults are values which will be overwritten whem parameters are set
+		 * Defaults are values which will be overwritten when parameters are set.
 		 */
 		public function get defaults():Dictionary
 		{
@@ -113,10 +139,11 @@ package potato.modules.parameters
 		}
 		
 		/**
-		 * @param otherConfig IConfig 
-		 * Adds another config to parameters.
-		 * Using this method, you can load or create configs and later add them to the parameters
-		 */
+		* Adds another config to parameters. Using this method, you can load or create configs and later add them to the parameters.
+		* 
+    * @param otherConfig IConfig 
+    * 
+    */
 		public function inject(otherConfig:IConfig):void
 		{
 			for each (var key:Object in otherConfig.keys)
@@ -129,6 +156,9 @@ package potato.modules.parameters
 			
 		}
 		
+		/**
+		 * @private
+		 */
 		public function configForKey(key:Object):IConfig
 		{
 			return _parameters.configForKey(key);

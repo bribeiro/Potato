@@ -9,15 +9,28 @@ library-path:
 
 source-path:
     - classes
+    # - classes/potato/core
+    # - classes/potato/control
+    # - classes/potato/debug
+    # - classes/potato/display
+    # - classes/potato/media
+    # - classes/potato/utils
+    # - classes/potato/modules/dependencies
+    # - classes/potato/modules/i18n
+    # - classes/potato/modules/log
+    # - classes/potato/modules/navigation
+    # - classes/potato/modules/parameters
+    # - classes/potato/modules/services
+    # - classes/potato/modules/tracking
     - libs
 #     
 # applications:
 #     - class: source/classes/Main.as
 #       output: public/Main.swf
 
-# asdoc:
-#     - title: "My ActionScript project"
-#       footer: "My ActionScript project footer"
-#       output: docs/
-#       exclude-dirs: 
-#         - source/classes/caurina/
+asdoc:
+    - title: "Potato Framework"
+      footer: "Licensed under the MIT License. http://gringo-nu.github.com/Potato/"
+      output: ../docs/
+      exclude-dirs: 
+        - libs/

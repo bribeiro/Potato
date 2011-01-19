@@ -93,7 +93,7 @@ package potato.media.video
 		* @param url The url of video that will be loaded.
 		* @see close
 		*/ 
-		public function load(url:String):void
+		public function load(url:String, bufferTime:Number = 1000, checkPolicyFile:Boolean = false):void
 		{
 			close();
 			_url = url;

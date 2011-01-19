@@ -1,134 +1,147 @@
-package potato.modules.tracking {
+package potato.modules.tracking
+{
+  import flash.events.Event;
+  import potato.core.config.IConfig;
+  import flash.external.ExternalInterface;
+  import br.com.stimuli.string.printf;
 
-    import flash.events.*;
-    import potato.core.config.*;
-    import flash.external.ExternalInterface;
-    import br.com.stimuli.string.printf;
+  /**
+  * Configurable tracking implementation.
+  * 
+  * @langversion ActionScript 3
+  * @playerversion Flash 10.0.0
+  * 
+  * @author Lucas Dupin, Fernando França
+  * @since  26.07.2010
+  */
+  public class Tracker
+  {
+    /**
+    * External Javascript tracking function name.
+    */
+    public var functionName:String = "track";
     
-	/**
-	 * Default tracking implementation
-	 * 
-	 * @langversion ActionScript 3
-	 * @playerversion Flash 10.0.0
-	 * 
-	 * @author Lucas Dupin, Fernando França
-	 * @since  26.07.2010
-	 */
-    public class Tracker{
+    /**
+    * Tracking call queue.
+    * @private
+    */
+    public var _trackQueue:Array = [];
 
-        /**
-         * Tracking call queue
-         */
-        public var trackQueue:Array = [];
-		
-        /**
-         * External Javascript tracking function name
-         */
-        public var functionName:String = "track";
-       	
-		/**
-		 * Tracking configuration
-		 * @private
-		 */
-        public var config:IConfig;
-        
-		/**
-		 * Flag
-		 * @private
-		 */
-        private var configLoaded:Boolean;
-		
-		/**
-		 * Singleton instance 
-		 * @private
-		 */
-        private static var _instance:Tracker;
+    /**
+    * Tracking configuration.
+    * @private
+    */
+    private var _config:IConfig;
 
-		
-		
-		/**
-		 * Get Tracker instance (Singleton)
-		 */
-        public static function get instance():Tracker
-		{
-            if(!_instance)
-                _instance = new Tracker(new SingletonEnforcer());
+    /**
+    * Simple flag.
+    * @private
+    */
+    private var _configLoaded:Boolean;
 
-            return _instance;
-        }
+    /**
+    * Singleton instance.
+    * @private
+    */
+    private static var _instance:Tracker;
 
-		/**
-		 * Constructor (Singleton, access is only allowed through the Tracker.instance)
-		 */
-		public function Tracker(singleton:SingletonEnforcer){}
-		
-		/**
-		* Creates a new tracking call and pushes it to the queue.
-		* @param	id	 The id of the tracking call.
-		* @param	replace	 Optional arguments of the tracking call.
-		*/
-        public function track(id:String, ...replace):void{
+    /**
+    * Tracker's instance (Singleton).
+    */
+    public static function get instance():Tracker
+    {
+      if(!_instance)
+        _instance = new Tracker(new SingletonEnforcer());
 
-            //Adding to the trackQueue
-            trackQueue.push({id: id, replace: replace});
-
-            //Check if it's loaded
-            if(!configLoaded) {
-                loadConfig();
-            }
-			else {
-				processQueue();
-			}
-        }
-
-       	/**
-       	 * Process next queued tracking calls.
-       	 */
-        public function processQueue():void{
-            
-            // Tracking sequence
-            while (trackQueue.length)
-            {
-                var o:Object = trackQueue.shift();
-
-                //Getting the value of this key in the config
-                var val:String = config.getProperty(o.id);
-                
-				//String interpolation
-                val = printf.apply(null, [val].concat(o.replace));
-
-                //Calling
-                ExternalInterface.call(functionName, val);
-            }
-            
-        }
-
-        /**
-         * Load configuration file.
-         * @private
-         */
-        protected function loadConfig():void
-		{
-			if(!config) {
-                trace("[Tracker] no config");
-                return;
-            }
-            config.addEventListener(Event.INIT, onConfigInit);
-            config.init();
-        }
-		
-		/**
-		 * Setup tracker after configuration has been loaded.
-		 * @param e Event 
-		 * @private
-		 */
-		protected function onConfigInit(e:Event):void
-		{
-			e.target.removeEventListener(Event.INIT, onConfigInit);
-            configLoaded = true;
-            processQueue();
-		}
+      return _instance;
     }
+
+    /**
+    * Constructor (Singleton, access is only allowed through the Tracker.instance).
+    * 
+    * @constructor
+    * @private
+    */
+    public function Tracker(singleton:SingletonEnforcer){}
+
+    /**
+     * Tracking configuration.
+     */
+    public function set config(value:IConfig):void
+    {
+      _config = value;
+    }
+
+    /**
+    * Creates a new tracking call and pushes it to the queue.
+    * @param	id	 The id of the tracking call.
+    * @param	replace	 Optional arguments of the tracking call.
+    */
+    public function track(id:String, ...replace):void
+    {
+      // Adding to the _trackQueue
+      _trackQueue.push({id: id, replace: replace});
+
+      // Check if it's loaded
+      if(!_configLoaded) {
+        loadConfig();
+      }
+      else {
+        processQueue();
+      }
+    }
+
+    /**
+    * Process next queued tracking calls.
+    */
+    public function processQueue():void
+    {
+      // Tracking sequence
+      while (_trackQueue.length)
+      {
+        var o:Object = _trackQueue.shift();
+
+        //Getting the value of this key in the config
+        var val:String = _config.getProperty(o.id);
+
+        //String interpolation
+        val = printf.apply(null, [val].concat(o.replace));
+
+        //Calling
+        ExternalInterface.call(functionName, val);
+      }
+
+    }
+
+    /**
+    * Load configuration file.
+    * @private
+    */
+    protected function loadConfig():void
+    {
+      if(!_config)
+      {
+        trace("[Tracker] no config");
+        return;
+      }
+      
+      _config.addEventListener(Event.INIT, onConfigInit);
+      _config.init();
+    }
+
+    /**
+    * Configures tracker after configuration has been loaded.
+    * @param e Event 
+    * @private
+    */
+    protected function onConfigInit(e:Event):void
+    {
+      e.target.removeEventListener(Event.INIT, onConfigInit);
+      _configLoaded = true;
+      processQueue();
+    }
+    
+  }
 }
 
 /**

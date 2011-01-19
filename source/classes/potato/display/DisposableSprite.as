@@ -18,9 +18,12 @@ package potato.display
 	 */
 	public class DisposableSprite extends Sprite implements IDisposable
 	{
+	  /** @private */
 		protected var _disposableChildren:DisposableGroup;
+		
+		/** @private */
 		protected var _removableChildren:Vector.<DisplayObject>;
-	
+	  
 		public function DisposableSprite()
 		{
 			_disposableChildren = new DisposableGroup();

@@ -1,12 +1,12 @@
-package potato.modules.i18n {
-
+package potato.modules.i18n
+{
 	import flash.events.EventDispatcher;
 	import potato.core.config.IConfig;
 	import flash.events.Event;
 	import flash.text.TextField;
 	
 	/**
-	 * Default i18n implementation
+	 * Default i18n implementation.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 10.0.0
@@ -16,20 +16,19 @@ package potato.modules.i18n {
 	 */
 	public class I18n extends EventDispatcher {
 		
-		private var configs:Vector.<IConfig> = new Vector.<IConfig>();
+		/** @private */
+		private var _configs:Vector.<IConfig> = new Vector.<IConfig>();
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		private static var _instance:I18n;
 
-        /**
-         * Class used to parse configs
-         * */
-        public static var parser:Class;
+    /**
+     * Class used to parse configurations.
+     **/
+    public static var parser:Class;
 
 		/**
-		 * Get I18n instance (Singleton)
+		 * The I18n instance (Singleton).
 		 */
 		public static function get instance():I18n
 		{
@@ -40,30 +39,8 @@ package potato.modules.i18n {
 		}
 		
 		/**
-		 * Constructor (Singleton, access is only allowed through the I18n.instance)
-		 */
-		public function I18n(singleton:SingletonEnforcer):void {}
-		
-		/**
-		 * @param config IConfig config with localization text
-		 */
-		public function inject(config:IConfig):void
-		{
-			config.addEventListener(Event.INIT, onConfigInit);
-			config.init();
-		}
-		
-		protected function onConfigInit(e:Event):void
-		{
-			var config:IConfig = e.target as IConfig;
-			config.removeEventListener(Event.INIT, onConfigInit);
-			configs.push(config);
-			dispatchEvent(new Event(Event.COMPLETE));
-		}
-		
-		/**
-		 * Shortcut
-		 * @see inject
+		 * Injects (merges) new definitions into the current configuration.
+		 * @param config IConfig config with localization text.
 		 */
 		public static function inject(config:IConfig):void
 		{
@@ -73,15 +50,56 @@ package potato.modules.i18n {
 		/**
 		 * Clears all config references.
 		 */
-		public function flush():void
+		public static function flush():void
 		{
-			configs.length = 0;
+		  instance.flush();
 		}
 		
+		/**
+		 * Constructor (Singleton, access is only allowed through the I18n.instance).
+		 * @constructor
+		 * @private
+		 */
+		public function I18n(singleton:SingletonEnforcer):void {}
+		
+		/**
+		 * @private
+		 */
+		public function inject(config:IConfig):void
+		{
+			config.addEventListener(Event.INIT, onConfigInit);
+			config.init();
+		}
+		
+    /**
+     * @private
+     */
+		protected function onConfigInit(e:Event):void
+		{
+			var config:IConfig = e.target as IConfig;
+			config.removeEventListener(Event.INIT, onConfigInit);
+			_configs.push(config);
+			dispatchEvent(new Event(Event.COMPLETE));
+		}
+				
+		/**
+		 * @private
+		 */
+		public function flush():void
+		{
+			_configs.length = 0;
+		}
+		
+		/**
+		 * Retrieves the desired localized String.
+		 * 
+		 * @param id The ID of the String to be localized.
+		 * @return String The localized String.
+		 */
 		public function textFor(id:String):String
 		{
 			//Revese to enable override
-			for each (var config:IConfig in configs.reverse())
+			for each (var config:IConfig in _configs.reverse())
 			{
 				if (config.hasProperty(id))
 				{
@@ -93,12 +111,12 @@ package potato.modules.i18n {
 		}
 		
 		/**
-		 * Generates a proxy for acessing config properties...
-		 * This makes our life much easier
+		 * A proxy for acessing config properties.
+		 * This makes our life much easier.
 		 */
 		public function get proxy():ConfigProxy
 		{
-			return new ConfigProxy(configs);
+			return new ConfigProxy(_configs);
 		}
 	
 	}
@@ -110,30 +128,33 @@ import flash.utils.Proxy;
 import flash.utils.flash_proxy;
 import potato.core.config.IConfig;
 use namespace flash_proxy;
+
 internal class ConfigProxy extends Proxy
 {
-	private var configs:Vector.<IConfig>;
+	private var _configs:Vector.<IConfig>;
+	
 	public function ConfigProxy(configs:Vector.<IConfig>)
 	{
-		this.configs = configs;
+		_configs = configs;
 	}
+	
 	override flash_proxy function getProperty(name:*):*
 	{
-		for each (var config:IConfig in configs.reverse())
+		for each (var config:IConfig in _configs.reverse())
 			if (config.hasProperty(name))
 				return config.getProperty(name);
 				
 		return undefined
 	}
+	
 	override flash_proxy function hasProperty(name:*):Boolean
 	{
-		for each (var config:IConfig in configs)
+		for each (var config:IConfig in _configs)
 			if (config.hasProperty(name))
 				return true
 
 		return false;
 	}
-
 }
 
 /**

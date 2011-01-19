@@ -9,7 +9,7 @@ package potato.core.dsl
  * </p>
  * 
  * <p>
- * <b>Variables type:</b>
+ * <b>Variable types:</b>
  * <code>Number, String, null, RegEx, Object</code>
  * </p>
  * 

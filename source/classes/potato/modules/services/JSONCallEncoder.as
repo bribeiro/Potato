@@ -23,6 +23,7 @@ package potato.modules.services
 				trace("JSONCallEncoder::encode() error", e.message);
 				return null;
 			}
+			return null;
 		}
 	}
 }

@@ -1,24 +1,20 @@
 package potato.modules.dependencies
 {
 	import potato.core.config.IConfig;
-	
 	import flash.display.Bitmap;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.ProgressEvent;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
-	
 	import com.greensock.loading.*
 	import com.greensock.loading.core.*;
 	import com.greensock.events.LoaderEvent;
 	import flash.display.BitmapData;
 	import com.greensock.loading.DataLoader;
-	import flash.system.SecurityDomain;
 
 	/**
 	 * Implements IDependencies with GreenSock's LoaderMax.
-	 * 
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 10.0.0
@@ -28,8 +24,13 @@ package potato.modules.dependencies
 	 */
 	public class Dependencies extends EventDispatcher implements IDependencies
 	{
+	  /** @private */
 		protected var _queue:LoaderMax;
 		
+		/**
+		 * @param config An optional configuration object describing items to load.
+		 * @constructor
+		 */
 		public function Dependencies(config:IConfig = null)
 		{
 			LoaderMax.activate([ImageLoader, DataLoader, SWFLoader]);
@@ -58,8 +59,9 @@ package potato.modules.dependencies
 		}
 		
 		/**
-		 * Adds configuration items to the loading queue.
-		 * @param config IConfig 
+		 * Merges new items into the loading queue.
+		 * 
+		 * @param config A configuration object containing items to be merged.
 		 */
 		public function inject(config:IConfig):void
 		{
@@ -136,7 +138,7 @@ package potato.modules.dependencies
 		 * Adds a new item to the loading queue.
 		 * 
 		 * @param url * The item's URL.
-		 * @param props Object (optional) Properties object for LoaderMax's item loader (useful!).
+		 * @param props [optional] Properties object for LoaderMax's item loader (useful!).
 		 */
 		public function addItem(url : *, props : Object= null ):void
 		{
@@ -157,7 +159,7 @@ package potato.modules.dependencies
 			else
 			{
 				itemLoader = LoaderMax.parse(url, props);
-			}	
+			}
 			_queue.append(itemLoader);
 		}
 		

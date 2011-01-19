@@ -14,6 +14,7 @@ package potato.control
 	 */
 	public class DisposableGroup implements IDisposable
 	{
+	  /** @private */
 		protected var _elements:Vector.<IDisposable>;
 	
 		public function DisposableGroup()
