@@ -6,8 +6,15 @@ package potato.core.config
 	import potato.core.dsl.ConditionalParser;
 	import br.com.stimuli.string.printf;
 
+  /**
+   *  Dispatched after the Object initialization has been completed (automatically after calling <code>init()</code>).
+   *
+   *  @eventType flash.events.Event.INIT
+   */
+  [Event(name="init", type="flash.events.Event")]
+
 	/**
-	 * Main config implementation
+	 * Base configuration Object implementation.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 10.0.0
@@ -17,13 +24,16 @@ package potato.core.config
 	 */
 	public class ObjectConfig extends EventDispatcher implements IConfig
 	{
-		// Source object
+		/** @private Source object */
 		internal var _config:Object;
-		//Interpolation values
+		
+		/** @private */
 		protected var _interpolationValues:Object;
-		//Conditional parser
+		
+		/** @private */
 		protected var _conditionalParser:ConditionalParser;
-		//Magic word for creating conditionals
+		
+		/** @private Magic word for creating conditionals. */
 		public const CONDITIONAL_KEYWORD:String = "when";
 		
 		public function ObjectConfig(source:Object=null):void
@@ -34,6 +44,9 @@ package potato.core.config
 			_conditionalParser = new ConditionalParser();
 		}
 		
+		/**
+		 * Initializes the configuration object. After the object has finished initializing, an <code>Event.INIT</code> is dispatched.
+		 */
 		public function init():void
 		{
 			//Notify we're done
@@ -56,7 +69,10 @@ package potato.core.config
 
 			return lastVal;
 		}
-
+    
+		/**
+		 * @inheritDoc
+		 */
 		public function hasProperty(...props):Boolean
 		{
 			//Start from the config
@@ -110,9 +126,8 @@ package potato.core.config
 		}
 		
 		/**
-		 * Inserts or modifies a property
-		 * If it contains a valid conditional syntax,
-		 * the conditional will be used
+		 * Inserts or modifies a property.
+		 * If it contains a valid conditional syntax, the conditional will be used.
 		 */
 		public function setProperty(name:Object, value:Object):void
 		{
@@ -134,7 +149,6 @@ package potato.core.config
 					k.push(s);
 			}
 			
-			
 			return k;
 		}
 		
@@ -150,6 +164,9 @@ package potato.core.config
 			return o;
 		}
 		
+		/**
+		 * Object containing the interpolation values for properties' configuration.
+		 */
 		public function set interpolationValues(value:Object):void
 		{
 			_interpolationValues = value;

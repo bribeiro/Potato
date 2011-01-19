@@ -1,7 +1,7 @@
 package potato.core
 {
 	/**
-	 * Core Interface
+	 * Interface for visible objects, methods: <code>show()</code> and <code>hide()</code>.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 10.0.0

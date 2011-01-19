@@ -3,8 +3,9 @@ package potato.core.config
 	import flash.events.IEventDispatcher;
 
 	/**
-	 * Default interface for all Potato configurations
-	 * Mainly used for lazy config evaluation (conditionals)
+	 * Default interface for all Potato configurations.
+	 * 
+	 * <p>Mainly used for lazy config evaluation (conditionals).</p>
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 10.0.0

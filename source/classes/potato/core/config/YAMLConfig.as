@@ -17,7 +17,7 @@ import potato.core.dsl.ConditionalParser;
 [Event(name="init", type="flash.events.Event")]
 
 /**
- * Configuration based on YAML files
+ * Configuration based on YAML files.
  * 
  * @langversion ActionScript 3
  * @playerversion Flash 10.0.0
@@ -34,7 +34,7 @@ public class YAMLConfig extends ObjectConfig implements IConfig
 	protected var _url:String;
 	
 	/**
-	 * @param	url	 The URL of the YAML configuration file
+	 * @param	url	 The URL of the YAML configuration file.
 	 * @constructor
 	 */
 	public function YAMLConfig(url:String)
@@ -43,7 +43,7 @@ public class YAMLConfig extends ObjectConfig implements IConfig
 	}
 	
 	/**
-	 * Starts loading the YAML file
+	 * Starts loading the YAML file.
 	 */
 	override public function init():void
 	{
@@ -62,6 +62,10 @@ public class YAMLConfig extends ObjectConfig implements IConfig
 		urlLoader.addEventListener(Event.COMPLETE, onConfigLoaded);
 	}
 	
+	
+	/**
+	 * @private
+	 */
 	protected function onLoadError(e:IOErrorEvent):void
 	{
 		e.target.removeEventListener(IOErrorEvent.IO_ERROR, onLoadError);
@@ -71,7 +75,7 @@ public class YAMLConfig extends ObjectConfig implements IConfig
 	}
 	
 	/**
-	 * Parses the YAML file after it has been loaded and dispatches the INIT event
+	 * Parses the YAML file after it has been loaded and dispatches the INIT event.
 	 * @private
 	 */
 	protected function onConfigLoaded(e:Event):void

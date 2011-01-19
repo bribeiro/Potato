@@ -1,7 +1,7 @@
 package potato.core
 {
 	/**
-	 * Core interface
+	 * Interface for resizable objects, methods: <code>resize()</code>.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 9.0.0

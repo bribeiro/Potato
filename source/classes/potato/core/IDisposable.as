@@ -1,7 +1,7 @@
 package potato.core
 {
 	/**
-	 * Core Interface
+	 * Interface for disposable objects, methods: <code>dispose()</code>.
 	 * 
 	 * @langversion ActionScript 3
 	 * @playerversion Flash 10.0.0
