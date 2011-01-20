@@ -2,8 +2,13 @@
 # default:
 #     - debug: false
 #       open: public/Main.swf
-#       extra: -use-network=false -static-link-runtime-shared-libraries
+#       extras: -use-network=false -static-link-runtime-shared-libraries
 #     
+#     
+# applications:
+#     - class: source/classes/Main.as
+#       output: public/Main.swf
+
 library-path:
     - swc
 
@@ -23,14 +28,29 @@ source-path:
     # - classes/potato/modules/services
     # - classes/potato/modules/tracking
     - libs
-#     
-# applications:
-#     - class: source/classes/Main.as
-#       output: public/Main.swf
 
 asdoc:
-    - title: "Potato Framework"
+    - title: "Potato API Documentation"
       footer: "Licensed under the MIT License. http://gringo-nu.github.com/Potato/"
       output: ../docs/
       exclude-dirs: 
         - libs/
+              
+      packages:
+        - potato.control:                    "Control structures for core interfaces."
+        - potato.core:                       "Core interfaces."
+        - potato.core.config:                "Configuration object interface and implementations."
+        - potato.debug:                      "Debugging methods and utilities."
+        - potato.display:                    "Structures and methods that mimetize the flash.display package."
+        - potato.media:                      "Media managers with audio and video support."
+        - potato.utils:                      "Common utility methods."
+        - potato.modules.dependencies:       "Defines and implements dependencies used by the navigation module."
+        - potato.modules.i18n:               "Internationalization support."
+        - potato.modules.log:                "Custom logging mechanisms."
+        - potato.modules.navigation:         "Implements View navigation."
+        - potato.modules.navigation.presets: "View presets with extra modules and configuration types included." 
+        - potato.modules.parameters:         "Parameters with built-in value substitution and defaults."
+        - potato.modules.services:           "Services management with modular parsers and encoders."
+        - potato.modules.tracking:           "Configurable tracking mechanism."
+        
+      extras: -warnings=false -left-frameset-width=250

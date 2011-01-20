@@ -50,19 +50,17 @@ desc "Documentation generator"
 task :doc do
 	
   doc = config["asdoc"][0]
-  sources = config["source-path"].map{|v| "-doc-sources+=" + escape(v)}.join(" ")
-
-  lib_path = config["library-path"].map{|v| "-library-path+=" + escape(v)}.join(" ")
+  sources = (config["source-path"] || []).map{|v| "-doc-sources+=" + escape(v)}.join(" ")
+  lib_path = (config["library-path"] || []).map{|v| "-library-path+=" + escape(v)}.join(" ")
+  exclude = (doc["exclude-dirs"] || []).map {|i| Dir[File.join(i, "**", "*.as")].map{|d| "-exclude-classes+=" + d.sub(i, '').gsub(/^\/?/, '').gsub(/\//, '.').gsub(/\.as$/, '')}.join(' ')}.join(' ')
+  packages = (doc["packages"] || []).map {|v| v.map {|key,value| "-package " + escape(key) + " " + escape(value)}}.join(" ")
+  extras = doc["extras"] rescue ""
   
-  exclude = doc["exclude-dirs"].map {|i| Dir[File.join(i, "**", "*.as")].map{|d| "-exclude-classes+=" + d.sub(i, '').gsub(/^\/?/, '').gsub(/\//, '.').gsub(/\.as$/, '')}.join(' ')}.join(' ')
-  command = "asdoc -footer #{escape doc['footer']} -main-title #{escape doc['title']} -output #{escape doc['output']} #{lib_path} #{sources} #{exclude} -warnings=false"
-  
-  # puts command
-  # puts sources
+  command = "asdoc -footer #{escape doc['footer']} -main-title #{escape doc['title']} -window-title #{escape doc['title']} -output #{escape doc['output']} #{lib_path} #{sources} #{exclude} #{packages} #{extras}"
   
   task_logger.info "Generating asdocs: #{command}"
   system command
-
+  
 end
 
 desc "Listens to flashlog"
