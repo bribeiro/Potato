@@ -32,6 +32,31 @@ task :build do
   end
 end
 
+desc "Compiles components"
+task :components do
+  puts "Compiling components..."
+  
+  what = config["components"].map do |v|
+      get_component_compile_line(v)
+  end
+  
+  # TODO: use COMPC within FCSH
+end
+
+def get_component_compile_line(component)
+  output = escape(File.join(current_path, component["output"]))
+  libs_path    = (config["library-path"] || []).map{ |lib| "-library-path+=#{escape(File.join(current_path, lib))}"}.join(" ")
+  sources_path = (config["source-path"] || []).map{ |lib| "-sp+=#{escape(File.join(current_path, lib))}"}.join(" ")
+  extras = component['extras'] rescue ""
+  debug = config['default'][0]['debug'] rescue "false"
+  
+  include_classes = (component["classes"] || []).map {|i| Dir[File.join(i, "**", "*.as")].map{|d| d.sub(i, '').gsub(/^\/?/, '').gsub(/\//, '.').gsub(/\.as$/, '')}.join(' ')}.join(' ')
+  
+  # Generate compilation line
+  command = "sh compc -include-classes #{include_classes} -o=#{output} -debug=#{debug} #{libs_path} #{sources_path} #{extras}"
+  system command
+end
+
 desc "Opens default file"
 task :open do
 	
@@ -120,7 +145,7 @@ def get_compile_line(input, output, exclude)
     sources_path = (config["source-path"] || []).map{ |lib| "-sp+=#{escape(File.join(current_path, lib))}"}.join(" ")
     #Params
     extras = (config['default'][0]['extras'] rescue "")
-    debug = (config['default'][0]['debug'] rescue "")
+    debug = (config['default'][0]['debug'] rescue "false")
     # Generate compilation line
     line = "mxmlc #{escape(File.join(current_path, input))} -o=#{escape(File.join(current_path, output))} -debug=#{debug} #{libs_path} #{sources_path} #{extras}"
 
