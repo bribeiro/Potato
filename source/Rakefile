@@ -43,20 +43,6 @@ task :components do
   # TODO: use COMPC within FCSH
 end
 
-def get_component_compile_line(component)
-  output = escape(File.join(current_path, component["output"]))
-  libs_path    = (config["library-path"] || []).map{ |lib| "-library-path+=#{escape(File.join(current_path, lib))}"}.join(" ")
-  sources_path = (config["source-path"] || []).map{ |lib| "-sp+=#{escape(File.join(current_path, lib))}"}.join(" ")
-  extras = component['extras'] rescue ""
-  debug = config['default'][0]['debug'] rescue "false"
-  
-  include_classes = (component["classes"] || []).map {|i| Dir[File.join(i, "**", "*.as")].map{|d| d.sub(i, '').gsub(/^\/?/, '').gsub(/\//, '.').gsub(/\.as$/, '')}.join(' ')}.join(' ')
-  
-  # Generate compilation line
-  command = "sh compc -include-classes #{include_classes} -o=#{output} -debug=#{debug} #{libs_path} #{sources_path} #{extras}"
-  system command
-end
-
 desc "Opens default file"
 task :open do
 	
@@ -122,10 +108,10 @@ task :stop_server do
   begin
     FCSHDServer.new.stop
     puts "server has stopped"
-	task_logger.info "Server stopped..."
+	  task_logger.info "Server stopped..."
   rescue Errno::ECONNREFUSED => e
     puts "server is down"
-	task_logger.info "Server was already down"
+	  task_logger.info "Server was already down"
   end
 end
 
@@ -167,6 +153,20 @@ def get_compile_line(input, output, exclude)
     line
 end
 
+def get_component_compile_line(component)
+  output = escape(File.join(current_path, component["output"]))
+  libs_path    = (config["library-path"] || []).map{ |lib| "-library-path+=#{escape(File.join(current_path, lib))}"}.join(" ")
+  sources_path = (config["source-path"] || []).map{ |lib| "-sp+=#{escape(File.join(current_path, lib))}"}.join(" ")
+  extras = component['extras'] rescue ""
+  debug = config['default'][0]['debug'] rescue "false"
+  
+  include_classes = (component["classes"] || []).map {|i| Dir[File.join(i, "**", "*.as")].map{|d| d.sub(i, '').gsub(/^\/?/, '').gsub(/\//, '.').gsub(/\.as$/, '')}.join(' ')}.join(' ')
+  
+  # Generate compilation line
+  command = "sh compc -include-classes #{include_classes} -o=#{output} -debug=#{debug} #{libs_path} #{sources_path} #{extras}"
+  system command
+end
+
 # Checks if input needs to generate a report file
 def require_report(input)
   config["applications"].each do |app|
@@ -183,7 +183,7 @@ def current_path
 end
 
 def escape path
-    path.gsub ' ', '\ '
+  path.gsub ' ', '\ '
 end
 
 def config
@@ -191,20 +191,19 @@ def config
 	@config ||= YAML.load_file(current_path + "/build.yaml")
 end
 
-
-
-
-
-
+# 
+# FCSHDServer
+# Implements a FCSH Server, runs as a daemonized process
+# 
 class FCSHDServer
-        PORT = 6924
-        HOST = "localhost"
-        ASSIGNED_REGEXP = /^ fcsh: Assigned (\d+) as the compile target id/
+    PORT = 6924
+    HOST = "localhost"
+    ASSIGNED_REGEXP = /^ fcsh: Assigned (\d+) as the compile target id/
 
 		attr_accessor :commands
 
-        def start
-	
+    def start
+	    
 			return if status == "up"
 			
 			fcsh = IO.popen("fcsh  2>&1", "w+")
@@ -212,125 +211,118 @@ class FCSHDServer
 	
 			server_logger.info "\nStarting Webrick at http://#{HOST}:#{PORT}"
         
-			#remembering wich swfs we asked for compiling
+			#remembering which swfs we asked for compiling
 			@commands ||= Hash.new
 
 			#Creating the HTTP Server  
-            s = WEBrick::HTTPServer.new(
-                :Port => PORT,
-                :Logger => WEBrick::Log.new(nil, WEBrick::BasicLog::WARN),
-                :AccessLog => []
-            )
+      s = WEBrick::HTTPServer.new(
+          :Port => PORT,
+          :Logger => WEBrick::Log.new(nil, WEBrick::BasicLog::WARN),
+          :AccessLog => []
+      )
 
-            #giving it an action
-            s.mount_proc("/build"){|req, res|
+      #giving it an action
+      s.mount_proc("/build"){|req, res|
 
-                #response variable
-                output = ""
+        #response variable
+        output = ""
 
-                #Searching for an id for this command
-                if @commands.has_key?(req.body)
-                    # Exists, incremental
-					server_logger.info "[Build] Target #{@commands[req.body]} is: #{req.body}"
-                    fcsh.puts "compile #{@commands[req.body]}"
-                    output = read_to_prompt(fcsh)
-                else
-                    # Does not exist, compile for the first time
-					server_logger.info "[Build] #{req.body}"
-                    fcsh.puts req.body
-                    output = read_to_prompt(fcsh)
-                    @commands[req.body] = $1 if output.match(ASSIGNED_REGEXP)
-                end
-
-                res.body = output
-                res['Content-Type'] = "text/html"
-            }
-
-            s.mount_proc("/stop"){|req, res|
-                s.shutdown
-                fcsh.close
-				server_logger.info "Stopping server"
-                exit
-            }
-
-			s.mount_proc("/status"){|req, res|
-	      	  begin
-	      	    fcsh.puts("info 0")
-	      	    output = read_to_prompt(fcsh)
-	      	    res.body = "up"
-	      	  rescue Exception => e
-	      	    res.body = "down"
-	      	  end
-
-			  server_logger.info("Getting status: #{res.body}")
-	      	  exit
-	      	}
-
-            trap("INT"){
-                s.shutdown 
-                fcsh.close
-            }
-
-            #Starting webrick
-            s.start
-
-			# #Do not show error if we're trying to start the server more than once
-            # if e.message =~ /Address already in use/ < 0
-            #   puts e.message
-            # end
-
+        #Searching for an id for this command
+        if @commands.has_key?(req.body)
+          # Exists, incremental
+  				server_logger.info "[Build] Target #{@commands[req.body]} is: #{req.body}"
+          fcsh.puts "compile #{@commands[req.body]}"
+          output = read_to_prompt(fcsh)
+        else
+          # Does not exist, compile for the first time
+  				server_logger.info "[Build] #{req.body}"
+          fcsh.puts req.body
+          output = read_to_prompt(fcsh)
+          @commands[req.body] = $1 if output.match(ASSIGNED_REGEXP)
         end
+
+        res.body = output
+        res['Content-Type'] = "text/html"
+      }
+
+      s.mount_proc("/stop"){|req, res|
+        s.shutdown
+        fcsh.close
+		    server_logger.info "Stopping server"
+        exit
+      }
+
+		  s.mount_proc("/status"){|req, res|
+    	  begin
+    	    fcsh.puts("info 0")
+    	    output = read_to_prompt(fcsh)
+    	    res.body = "up"
+    	  rescue Exception => e
+    	    res.body = "down"
+    	  end
+
+	      server_logger.info("Getting status: #{res.body}")
+        exit
+      }
+
+      trap("INT"){
+        s.shutdown 
+        fcsh.close
+      }
+
+      #Starting webrick
+      s.start
+    end
  
-        def daemon
-			Daemons.daemonize
-            start
-        end
-
-        def build(what)
-            what.each{ |arg|
-					#puts arg
-                    http = Net::HTTP.new(HOST, PORT)
-                    resp, date = http.post('/build', arg)
-                    puts resp.body
-             }
-        end
-
-        def stop
-                http = Net::HTTP.new(HOST, PORT)
-                resp, date = http.get('/stop')
-                puts resp.body
-        end
-
+    def daemon
+		  Daemons.daemonize
+      start
+    end
+    
+    def build(what)
+      what.each { |arg|
+        http = Net::HTTP.new(HOST, PORT)
+        resp, date = http.post('/build', arg)
+        puts resp.body
+      }
+    end
+    
+    def stop
+      http = Net::HTTP.new(HOST, PORT)
+      resp, date = http.get('/stop')
+      puts resp.body
+    end
+    
+    # Returns the current server status
 		def status
-			begin
-				http = Net::HTTP.new(HOST, PORT)
-                resp, date = http.get('/status	')
-                resp.body
-			rescue Exception => e
-				"down"
-			end
-        end
-
-        private
-        #Helper method to read the output
-        def read_to_prompt(f)
-            f.flush
-            output = ""
-            while chunk = f.read(1)
-                STDOUT.write chunk
-                output << chunk
-                if output =~ /^\(fcsh\)/
-                    break
-                end
+  		begin
+  			http = Net::HTTP.new(HOST, PORT)
+        resp, date = http.get('/status	')
+        resp.body
+  		rescue Exception => e
+  			"down"
+  		end
+    end
+    
+    private
+    
+    #Helper method to read the output
+    def read_to_prompt(f)
+        f.flush
+        output = ""
+        while chunk = f.read(1)
+            STDOUT.write chunk
+            output << chunk
+            if output =~ /^\(fcsh\)/
+                break
             end
-            STDOUT.write ">"
-            output
         end
+        STDOUT.write ">"
+        output
+    end
 
 		def server_logger
 			@server_logger ||= Logger.new File.join(LOG_PATH, "server.log")
 			@server_logger
 		end
-
-
 end
