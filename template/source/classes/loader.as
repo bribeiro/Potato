@@ -9,7 +9,7 @@ package
 		override public function init():void
 		{
 			var vl:ViewLoader = loaderFor("main");
-			vl.addEventListener(Event.COMPLETE, onMainLoadComplete, false, 0, true);
+			vl.addEventListener(Event.COMPLETE, onMainLoadComplete);
 			vl.start();
 		}
 		
