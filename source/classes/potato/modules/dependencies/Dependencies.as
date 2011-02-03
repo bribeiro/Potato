@@ -12,6 +12,7 @@ package potato.modules.dependencies
 	import com.greensock.events.LoaderEvent;
 	import flash.display.BitmapData;
 	import com.greensock.loading.DataLoader;
+	import com.greensock.loading.XMLLoader;
 
 	/**
 	 * Implements IDependencies with GreenSock's LoaderMax.
@@ -33,7 +34,7 @@ package potato.modules.dependencies
 		 */
 		public function Dependencies(config:IConfig = null)
 		{
-			LoaderMax.activate([ImageLoader, DataLoader, SWFLoader]);
+			LoaderMax.activate([ImageLoader, DataLoader, SWFLoader, XMLLoader]);
 			
 			// Create a new LoaderMax instance (an unique name is automatically assigned)
 			_queue = new LoaderMax({onProgress:onLoaderProgress, onComplete:onLoaderComplete, onError:onLoaderError});
