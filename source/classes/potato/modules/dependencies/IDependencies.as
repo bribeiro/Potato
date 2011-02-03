@@ -36,7 +36,7 @@ package potato.modules.dependencies
     //function getByteArray(key:String):ByteArray;
     //function getMovieClip(key:String):MovieClip;
     //function getNetStream(key:String):NetStream;
-    //getXML
+    function getXML(key:String):XML;
 	}
 
 }
