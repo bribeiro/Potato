@@ -163,7 +163,7 @@ def get_component_compile_line(component)
   include_classes = (component["classes"] || []).map {|i| Dir[File.join(i, "**", "*.as")].map{|d| d.sub(i, '').gsub(/^\/?/, '').gsub(/\//, '.').gsub(/\.as$/, '')}.join(' ')}.join(' ')
   
   # Generate compilation line
-  command = "sh compc -include-classes #{include_classes} -o=#{output} -debug=#{debug} #{libs_path} #{sources_path} #{extras}"
+  command = "compc -include-classes #{include_classes} -o=#{output} -debug=#{debug} #{libs_path} #{sources_path} #{extras}"
   system command
 end
 
