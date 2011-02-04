@@ -141,7 +141,7 @@ package potato.modules.services
 		{
 		  _timer.stop();
 			_rawContent = _urlLoader.data;
-			_content = _service.parser.parse(_rawContent);
+			_content = _service.parser ? _service.parser.parse(_rawContent) : rawContent;
 			dispatchEvent(new ServiceEvent(ServiceEvent.CALL_COMPLETE, this));
 		}
 

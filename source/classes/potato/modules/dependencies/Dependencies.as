@@ -144,8 +144,7 @@ package potato.modules.dependencies
 		public function addItem(url : *, props : Object= null ):void
 		{
 			var itemLoader:LoaderCore;
-			var extIndex:int = url.lastIndexOf(".");
-			var ext:String = url.substr(extIndex + 1);
+			var ext:String = url.substr(url.lastIndexOf(".") + 1);
 			
 			// Set default LoaderContext for SWFs in the same domain.
 			if(ext == "swf" && !props.hasOwnProperty("context"))
@@ -155,7 +154,7 @@ package potato.modules.dependencies
 			
 			// Create correct type of loader from the given URL.
 			var dataExtensions:Array = ["yaml", "json"];
-			if (extIndex == -1 || dataExtensions.indexOf(ext) != -1) {
+			if (props.type == 'data' || dataExtensions.indexOf(ext) != -1) {
 				itemLoader = new DataLoader(url, props);
 			}
 			else
