@@ -81,7 +81,12 @@ package potato.modules.services
 		
 		public function call(serviceID:String, callParameters:Object = null, callConfiguration:Object = null):void
 		{
-			var serviceCall:ServiceCall = new ServiceCall(getServiceByID(serviceID), callParameters);
+		  var service:Service = getServiceByID(serviceID);
+		  if(!service){
+		    trace("[ServiceManager] No service called '" + serviceID + "' found");
+		    return;
+		  }
+			var serviceCall:ServiceCall = new ServiceCall(service, callParameters);
 			
 			// Handy configuration of listeners
 			if(callConfiguration != null)
