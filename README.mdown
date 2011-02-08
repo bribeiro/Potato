@@ -7,11 +7,9 @@ Showcase
 --------
 _All projects showcased here are property of their respective owners._
 
-*  Idade Interior
-   http://www.idadeinterior.com.br/
+*  [Idade Interior](http://www.idadeinterior.com.br/)
 
-*  Máquina de Profissões
-   http://www.maquinadeprofissoes.com.br/
+*  [Máquina de Profissões](http://www.maquinadeprofissoes.com.br/)
 
 License
 -------	
