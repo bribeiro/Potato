@@ -1,9 +1,9 @@
 package
 {	
-	import potato.modules.navigation.presets.YAMLSiteView;
+	import potato.modules.navigation.presets.YAMLLoaderView;
 	import potato.modules.navigation.ViewLoader;
 	import flash.events.Event;
-	public class {project_name}_loader extends YAMLSiteView
+	public class {project_name}_loader extends YAMLLoaderView
 	{
 
 		override public function init():void
