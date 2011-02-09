@@ -157,8 +157,9 @@ package potato.modules.dependencies
 			if (props.type == 'data' || dataExtensions.indexOf(ext) != -1) {
 				itemLoader = new DataLoader(url, props);
 			}
-			else
-			{
+			else if (props.type == 'xml') {
+			  itemLoader = new XMLLoader(url, props);
+			}	else {
 				itemLoader = LoaderMax.parse(url, props);
 			}
 			_queue.append(itemLoader);
