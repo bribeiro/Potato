@@ -1,11 +1,14 @@
 package potato.modules.dependencies
 {
+  import flash.events.IEventDispatcher;
   import flash.display.Bitmap;
   import flash.display.BitmapData;
-  import flash.utils.ByteArray;
   import flash.display.DisplayObject;
   import flash.display.Loader;
-  import flash.
+  import flash.display.Loader;
+  import flash.media.Sound;
+  import flash.utils.ByteArray;
+  import flash.utils.ByteArray;
   
 	import potato.core.IDisposable;
 	import potato.core.config.IConfig;

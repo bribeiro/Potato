@@ -1,19 +1,27 @@
 package potato.modules.dependencies
 {
-	import potato.core.config.IConfig;
+  
+  import flash.display.BitmapData;	
 	import flash.display.Bitmap;
+	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import flash.display.Loader;
 	import flash.events.EventDispatcher;
 	import flash.events.ProgressEvent;
+	import flash.media.Sound;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
-	import com.greensock.loading.*
-	import com.greensock.loading.core.*;
+	import flash.utils.ByteArray;
+	
 	import com.greensock.events.LoaderEvent;
-	import flash.display.BitmapData;
 	import com.greensock.loading.DataLoader;
 	import com.greensock.loading.XMLLoader;
-	import flash.media.Sound;
+	import com.greensock.loading.LoaderMax;
+	import com.greensock.loading.ImageLoader;
+	import com.greensock.loading.SWFLoader;
+	import com.greensock.loading.core.LoaderCore;
+	
+	import potato.core.config.IConfig;
 
 	/**
 	 * Implements IDependencies with GreenSock's LoaderMax.
@@ -195,7 +203,7 @@ package potato.modules.dependencies
 		
 		public function getByteArray(key:String):ByteArray
 		{
-		  _queue.getContent(key).rawContent as ByteArray;
+		  return _queue.getContent(key).rawContent as ByteArray;
 		}
 		
 		public function getContent(key:String):*
@@ -215,7 +223,7 @@ package potato.modules.dependencies
 		
 		public function getSound(key:String):Sound
 		{
-		  return _queue.getSound(key).content;
+		  return _queue.getContent(key).content;
 		}
 		
 		public function getString(key:String):String
