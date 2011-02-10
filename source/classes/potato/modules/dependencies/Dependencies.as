@@ -13,6 +13,7 @@ package potato.modules.dependencies
 	import flash.display.BitmapData;
 	import com.greensock.loading.DataLoader;
 	import com.greensock.loading.XMLLoader;
+	import flash.media.Sound;
 
 	/**
 	 * Implements IDependencies with GreenSock's LoaderMax.
@@ -56,7 +57,7 @@ package potato.modules.dependencies
 		
 		public function onLoaderError(e:LoaderEvent):void
 		{
-			trace("error");
+			trace("Dependencies::onLoaderError()");
 		}
 		
 		/**
@@ -177,11 +178,13 @@ package potato.modules.dependencies
 			}		
 		}
 		
-		// ----------------------- Content getters -------------------------
+		//---------------------------------------
+		// IDEPENDENCIES IMPLEMENTATION
+		//---------------------------------------
 		
 		public function getBitmap(key:String):Bitmap
 		{
-			return _queue.getContent(key).rawContent;
+			return _queue.getContent(key).rawContent as Bitmap;
 		}
 		
 		public function getBitmapData(key:String):BitmapData
@@ -189,9 +192,34 @@ package potato.modules.dependencies
 			return _queue.getContent(key).rawContent.bitmapData;
 		}
 		
-		public function getData(key:String):*
+		public function getByteArray(key:String):ByteArray
+		{
+		  _queue.getContent(key).rawContent as ByteArray;
+		}
+		
+		public function getContent(key:String):*
 		{
 			return _queue.getContent(key);
+		}
+		
+		public function getDisplayObject(key:String):DisplayObject
+		{
+		  return _queue.getContent(key).content;
+		}
+		
+		public function getLoader(key:String):Loader
+		{
+		  return _queue.getContent(key).rawContent as Loader;
+		}
+		
+		public function getSound(key:String):Sound
+		{
+		  return _queue.getSound(key).content;
+		}
+		
+		public function getString(key:String):String
+		{
+		  return _queue.getContent(key).rawContent as String;
 		}
 		
 		public function getXML(key:String):XML

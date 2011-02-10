@@ -20,7 +20,7 @@ components:
   #     - libs
 
 library-path:
-    - swc
+  #  - swc
 
 source-path:
     - classes
