@@ -25,6 +25,8 @@ class ProjectCreator
     #Creating project structure
     puts "Project structure...".yellow
     FileUtils.cp_r TEMPLATE_PATH + "/.", project_destination, :verbose => true
+    FileUtils.mkdir File.join(project_destination, 'source', 'swc')
+    FileUtils.mkdir File.join(project_destination, 'source', 'fla')
 
     #Copying libs..
     puts "Project dependencies".yellow
