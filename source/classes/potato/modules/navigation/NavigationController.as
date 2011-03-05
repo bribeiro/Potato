@@ -194,7 +194,7 @@ package potato.modules.navigation
         log("[NavigationController] View already on stage", id);
         //Nothing else to do...
         return null;
-			} else if (findUnloadedChild(id)) {
+			} else if (!findUnloadedChild(id)) {
 			  log("    ", id, "could not be found on", currentView.id);
 			  return null;
 			}
