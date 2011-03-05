@@ -30,8 +30,6 @@ package potato.modules.navigation.events
 		
 		public static const TRANSITION_START:String = "transitionStart";
 		public static const TRANSITION_COMPLETE:String = "transitionComplete";
-        public static const LOAD_START:String = "loadStart";
-        public static const LOAD_COMPLETE:String = "loadComplete";
 	
 		public var view:View;
 	
