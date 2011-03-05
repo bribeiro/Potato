@@ -296,7 +296,6 @@ package potato.modules.navigation
 			dispatchEvent(new NavigationEvent(NavigationEvent.TRANSITION_START));
 			
 			//Make theses views available to the messenger
-			trace("NavigationController::doTransition()", "will show:", _viewsToShow);
 			for each (v in _viewsToShow)
 			{
 			  //Remove from queue
