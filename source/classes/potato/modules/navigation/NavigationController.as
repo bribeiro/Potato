@@ -245,9 +245,9 @@ package potato.modules.navigation
 
 		}
 		
-        /**
-         * Adds a view and remove it's siblings
-         * */
+    /**
+     * Adds a view and remove it's siblings
+     * */
 		public function changeView(id:String):ViewLoader
 		{
 			//Is there something to do?
