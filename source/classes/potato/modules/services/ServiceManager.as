@@ -6,6 +6,7 @@ package potato.modules.services
 	import flash.events.ProgressEvent;
 	import br.com.stimuli.string.printf;
 	import potato.modules.services.ICallEncoder;
+	import potato.modules.log.log;
 	
 	/**
 	 * Application services manager.
@@ -83,7 +84,7 @@ package potato.modules.services
 		{
 		  var service:Service = getServiceByID(serviceID);
 		  if(!service){
-		    trace("[ServiceManager] No service called '" + serviceID + "' found");
+		    log("[ServiceManager] No service called '" + serviceID + "' found");
 		    return;
 		  }
 			var serviceCall:ServiceCall = new ServiceCall(service, callParameters);

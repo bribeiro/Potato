@@ -3,6 +3,7 @@ package potato.modules.i18n
 	import flash.text.TextField;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import potato.modules.log.log;
 	
 	/**
 	 * Contains the fillWithLocale function and related functionalities.
@@ -108,7 +109,7 @@ package potato.modules.i18n
 					if (strings[id])
 						where["text"] = strings[id];
 					else
-						trace("ID NOT FOUND:", id)
+						log("ID NOT FOUND:", id)
 
 				} 
 				//No let's loop through the children

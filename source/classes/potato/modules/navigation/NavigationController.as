@@ -6,6 +6,7 @@ package potato.modules.navigation
 	import potato.modules.navigation.View;
 	import potato.core.config.IConfig;
 	import potato.core.config.ObjectConfig;
+	import potato.modules.log.log;
 	
 	// Potato Navigation module namespace
 	import potato.modules.navigation.potato_navigation;
@@ -61,7 +62,7 @@ package potato.modules.navigation
 			}
 			
 			//None found
-			trace("[NavigationController] no view named", id, "found");
+			log("[NavigationController] no view named", id, "found");
 			return null;
 		}
 		
@@ -190,7 +191,7 @@ package potato.modules.navigation
 
 			//Check if it already exists
 			if (root.nav.findChild(id)) {
-			    trace("[NavigationController] View already on stage", id);
+			    log("[NavigationController] View already on stage", id);
 			    //Nothing else to do...
 			    return null;
 			}
@@ -241,7 +242,7 @@ package potato.modules.navigation
                 parentNav.doTransition();
             } else {
                 //None found...
-                trace("[NavigationController] No view name", viewOrId, "found.");
+                log("[NavigationController] No view name", viewOrId, "found.");
                 return;
             }
 
@@ -255,11 +256,11 @@ package potato.modules.navigation
 			//Is there something to do?
 			if (root.nav.findChild(id))
 			{
-				trace("[NavigationController]", id, "already on stage");
+				log("[NavigationController]", id, "already on stage");
 				return null;
 			}
 			
-			trace("[NavigationController] changing to", id, " in:", currentView.id);
+			log("[NavigationController] changing to", id, " in:", currentView.id);
 			
 			//Setting which views we're going to hide
 			_viewsToHide = _viewsToHide.concat(children);
@@ -267,7 +268,7 @@ package potato.modules.navigation
             if(findUnloadedChild(id))
     			return addView(id);
             else
-                trace("    ", id, "could not be found on", currentView.id);
+                log("    ", id, "could not be found on", currentView.id);
 
 			return null;
 		}

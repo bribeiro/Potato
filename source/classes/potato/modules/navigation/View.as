@@ -205,9 +205,7 @@ package potato.modules.navigation
 			//Cleanup
 			for (var p:String in this){
 				this[p] = null;
-				trace("View::_dispose()", this[p]);
 			}
-				
 			
 			_parameters = null;
 		}

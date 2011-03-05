@@ -1,5 +1,6 @@
 package potato.modules.services
 {
+  import potato.modules.log.log;
 	/**
 	 * Parser for general xml content.
 	 * 
@@ -30,7 +31,7 @@ package potato.modules.services
 			}
 			catch(e : TypeError)
 			{
-				trace("XMLResponseParser::get error = ", e.message);
+				log("XMLResponseParser::get error = ", e.message);
 				return <xml>
 					<error>
 						<id>{e.errorID}</id>

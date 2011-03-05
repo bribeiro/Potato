@@ -8,6 +8,7 @@ import flash.events.IOErrorEvent;
 import dupin.parsers.yaml.YAML;
 import potato.core.config.ObjectConfig;
 import potato.core.dsl.ConditionalParser;
+import potato.modules.log.log;
 
 /**
  *  Dispatched after the YAML file has been loaded and parsed.
@@ -55,7 +56,7 @@ public class YAMLConfig extends ObjectConfig implements IConfig
 		} 
 		catch (e:SecurityError)
 		{
-			trace("[YAMLConfig] Security error : " + e.errorID + " " + e.message);
+			log("[YAMLConfig] Security error : " + e.errorID + " " + e.message);
 		}
 		
 		urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onLoadError);
@@ -71,7 +72,7 @@ public class YAMLConfig extends ObjectConfig implements IConfig
 		e.target.removeEventListener(IOErrorEvent.IO_ERROR, onLoadError);
 		e.target.removeEventListener(Event.COMPLETE, onConfigLoaded);
 		
-		trace("[YAMLConfig] IO error:  " + e.text);
+		log("[YAMLConfig] IO error:  " + e.text);
 	}
 	
 	/**

@@ -4,6 +4,7 @@ package potato.modules.tracking
   import potato.core.config.IConfig;
   import flash.external.ExternalInterface;
   import br.com.stimuli.string.printf;
+  import potato.modules.log.log;
 
   /**
   * Configurable tracking implementation.
@@ -121,7 +122,7 @@ package potato.modules.tracking
     {
       if(!_config)
       {
-        trace("[Tracker] no config");
+        log("[Tracker] no config");
         return;
       }
       

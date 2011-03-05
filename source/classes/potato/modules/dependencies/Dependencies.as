@@ -22,6 +22,7 @@ package potato.modules.dependencies
 	import com.greensock.loading.core.LoaderCore;
 	
 	import potato.core.config.IConfig;
+	import potato.modules.log.log;
 
 	/**
 	 * Implements IDependencies with GreenSock's LoaderMax.
@@ -65,7 +66,7 @@ package potato.modules.dependencies
 		
 		public function onLoaderError(e:LoaderEvent):void
 		{
-			trace("Dependencies::onLoaderError()");
+			log("Dependencies::onLoaderError()");
 		}
 		
 		/**

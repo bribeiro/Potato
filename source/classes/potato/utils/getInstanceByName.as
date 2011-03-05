@@ -2,6 +2,7 @@ package potato.utils
 {
 	import potato.utils.construct;
 	import flash.utils.getDefinitionByName;
+	import potato.modules.log.log;
 	
 	/** 
 	 * Utility method for <code>flash.utils.getDefinitionByName</code>.
@@ -23,7 +24,7 @@ package potato.utils
 			var classDefinition:Class = getDefinitionByName(className) as Class;
 		}
 		catch (e:ReferenceError) {
-			trace("[getInstanceByName] Error, "+ className +" was not found.");
+			log("[getInstanceByName] Error, "+ className +" was not found.");
 			return null;
 		}
 		

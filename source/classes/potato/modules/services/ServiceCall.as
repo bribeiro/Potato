@@ -13,6 +13,7 @@ package potato.modules.services
 	import flash.net.URLVariables;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
+	import potato.modules.log.log;
 	
 	/**
 	 * Service call implementation. Any given service can have an unlimited number of calls.
@@ -80,7 +81,6 @@ package potato.modules.services
 				}
 				_urlRequest.data = urlVariables;
 			}
-			//trace(urlRequest.url + "?" + urlVariables.toString())
 			_urlRequest.method = _service.requestMethod;
 			
 			// Timer setup
@@ -95,7 +95,7 @@ package potato.modules.services
 			}
 			catch (error:Error) {
 			  _timer.reset();
-        trace("[ServiceCall] Unable to load requested document.");
+        log("[ServiceCall] Unable to load requested document.");
 				dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR, this));
 			}
 		}
@@ -110,7 +110,7 @@ package potato.modules.services
 			}
 			catch (error:Error) {
 			  _timer.reset();
-        trace("[ServiceCall] Unable to load requested document.");
+        log("[ServiceCall] Unable to load requested document.");
 				dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR, this));
 			}
 		}
@@ -126,12 +126,12 @@ package potato.modules.services
 		  
 		  if(_tries < _service.retries)
 		  {
-		    trace("[ServiceCall] Timeout", _tries)
+		    log("[ServiceCall] Timeout", _tries)
 		    retry();
 		  }
 		  else
 		  {
-		    trace("[ServiceCall] Timeout ocurred too many times.");
+		    log("[ServiceCall] Timeout ocurred too many times.");
 		    dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR, this));
 		  }
 		  
@@ -146,7 +146,7 @@ package potato.modules.services
 		}
 
 		protected function onOpen(e:Event):void {
-       //trace("[ServiceCall] Open");
+       //log("[ServiceCall] Open");
 		}
 
 		protected function onProgress(e:ProgressEvent):void
@@ -159,19 +159,19 @@ package potato.modules.services
 		protected function onSecurityError(e:SecurityErrorEvent):void
 		{
 		  _timer.stop();
-		  trace("[ServiceCall] Security Error", e);
+		  log("[ServiceCall] Security Error", e);
 			dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR, this));
 		}
 
 		protected function onHttpStatus(e:HTTPStatusEvent):void
 		{
-      //trace("[ServiceCall] HTTP Status:", e);
+      //log("[ServiceCall] HTTP Status:", e);
 		}
 
 		protected function onIOError(e:IOErrorEvent):void
 		{
 		  _timer.stop();
-			trace("[ServiceCall] IO Error", e);
+			log("[ServiceCall] IO Error", e);
 			dispatchEvent(new ServiceEvent(ServiceEvent.CALL_ERROR, this));
 		}
 		

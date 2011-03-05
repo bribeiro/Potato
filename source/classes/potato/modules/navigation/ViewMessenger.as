@@ -3,6 +3,7 @@ package potato.modules.navigation
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
 	import potato.modules.navigation.View;
+	import potato.modules.log.log;
 	use namespace flash_proxy;
 
 	/**
@@ -36,7 +37,7 @@ package potato.modules.navigation
 			if (view.hasOwnProperty(name))
 				view[name] = value;
             else
-                trace("[ViewMessenger]", view.id, "does not respond to", name);
+                log("[ViewMessenger]", view.id, "does not respond to", name);
 		}
 		
         override flash_proxy function callProperty(name:*, ... rest):*
@@ -44,7 +45,7 @@ package potato.modules.navigation
 			if (view.hasOwnProperty(name))
 				return view[name].apply(view, rest);
             else
-                trace("[ViewMessenger]", view.id, "does not respond to", name);
+                log("[ViewMessenger]", view.id, "does not respond to", name);
 		}
 		
 		override flash_proxy function hasProperty(name:*):Boolean

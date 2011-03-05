@@ -1,5 +1,7 @@
 package potato.debug
 {
+  import potato.modules.log.log;
+  
 	/**
 	 * Prints the stack trace anywhere in your code.
 	 * 
@@ -22,7 +24,7 @@ package potato.debug
 			var str:String = e.getStackTrace();
 			str = str.split("\n").slice(2).join("\n");
 			str = str.replace(/\[.*\//g,"\n\twarning:[");
-			trace("Error:\n" + str);
+			log("Error:\n" + str);
 		}
 	}
 }
