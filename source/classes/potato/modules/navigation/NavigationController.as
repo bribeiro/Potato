@@ -296,6 +296,7 @@ package potato.modules.navigation
 			dispatchEvent(new NavigationEvent(NavigationEvent.TRANSITION_START));
 			
 			//Make theses views available to the messenger
+			trace("NavigationController::doTransition()", "will show:", _viewsToShow);
 			for each (v in _viewsToShow)
 			{
 			  //Remove from queue
@@ -337,7 +338,7 @@ package potato.modules.navigation
 			var v:View;
 			if(_viewsToShow.length > 0)
 			{
-				for each (v in _viewsToShow)
+			  for each (v in _viewsToShow)
 				{
 					//Prepare to show
 					v.addEventListener(NavigationEvent.VIEW_SHOWN, onViewShown);					
@@ -346,7 +347,7 @@ package potato.modules.navigation
 				}
 			} else
 			{
-				finishTransition();
+			  finishTransition();
 			}
 			
 		}
@@ -364,7 +365,7 @@ package potato.modules.navigation
 		 */
 		protected function onViewHidden(e:NavigationEvent):void
 		{
-			//Remove from stage
+		  //Remove from stage
 			dispatchEvent(new NavigationEvent(NavigationEvent.REMOVE_VIEW, e.view));
 			
 			//Remove from list of views
@@ -383,6 +384,7 @@ package potato.modules.navigation
 		 */
 		protected function onViewShown(e:NavigationEvent):void
 		{
+		  e.view.removeEventListener(NavigationEvent.VIEW_SHOWN, onViewShown);
 			_viewsToShow.splice(_viewsToShow.indexOf(e.view),1);
 			if (_viewsToShow.length == 0)
 				finishTransition();
