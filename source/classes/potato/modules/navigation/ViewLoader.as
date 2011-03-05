@@ -13,6 +13,7 @@ package potato.modules.navigation
 	import potato.core.IDisposable;
 	import potato.modules.navigation.events.NavigationEvent;
 	import potato.utils.getInstanceByName;
+	import potato.modules.log.log;
 
 	// Potato Navigation module namespace
 	import potato.modules.navigation.potato_navigation;
@@ -67,13 +68,13 @@ package potato.modules.navigation
 			if (viewOrConfig is View)
 			{
 				_viewId = viewOrConfig.id;
-				trace("[ViewLoader] ", _viewId, " load start");
+				log("[ViewLoader] ", _viewId, " load start");
 				handleViewLoading(viewOrConfig as View)
 			} 
 			else if (viewOrConfig is IConfig)
 			{
 				_viewId = viewOrConfig.getProperty("id");
-				trace("[ViewLoader] ", _viewId, " load start");
+				log("[ViewLoader] ", _viewId, " load start");
 				handleConfigLoading(viewOrConfig as IConfig)
 			} else
 			{
@@ -196,7 +197,11 @@ package potato.modules.navigation
 		 */
 		protected function onViewReadyToCreate(e:Event=null):void
 		{
-			view = getInstanceByName(_viewConfig.getProperty("class") || "potato.modules.navigation.View");
+		  var viewType:String = _viewConfig.getProperty("class") || "potato.modules.navigation.View";
+			view = getInstanceByName(viewType);
+			if(view == null) {
+			  log("[ViewLoader] error: Could not create an instance for: ", viewType)
+			}
 			view.startup(_viewConfig);
 			
 			if(e)
@@ -214,7 +219,7 @@ package potato.modules.navigation
 		protected function onViewLoadComplete(e:Event=null):void
 		{
 			if(e) e.target.removeEventListener(Event.COMPLETE, onViewLoadComplete);
-			trace("[ViewLoader] ", _viewId, " load complete:", view);
+			log("[ViewLoader] ", _viewId, " load complete:", view);
 			
 			if(chain) {
 				chain.addEventListener(Event.COMPLETE, view.nav.onViewLoaded, false, 0, true);
