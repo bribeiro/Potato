@@ -10,7 +10,7 @@ class ProjectCreator
 
   def initialize(project_path, project_name)
     @project_path = project_path
-    @project_name = project_name
+    @project_name = project_name.downcase
 
     puts
 
@@ -25,8 +25,8 @@ class ProjectCreator
     #Creating project structure
     puts "Project structure...".yellow
     FileUtils.cp_r TEMPLATE_PATH + "/.", project_destination, :verbose => true
-    FileUtils.mkdir File.join(project_destination, 'source', 'swc')
-    FileUtils.mkdir File.join(project_destination, 'source', 'fla')
+    FileUtils.mkdir File.join(project_destination, 'source', 'swc') rescue nil
+    FileUtils.mkdir File.join(project_destination, 'source', 'fla') rescue nil
 
     #Copying libs..
     puts "Project dependencies".yellow
@@ -43,7 +43,7 @@ class ProjectCreator
     Dir.glob(File.join project_destination, '**/*').each do |file_name|
       if File.file? file_name
         text = File.read(file_name)
-        File.open(file_name, "w") {|file| file.puts text.gsub(/\{project_name\}/, @project_name.downcase)} 
+        File.open(file_name, "w") {|file| file.puts text.gsub(/\{project_name\}/, @project_name)} 
       end
     end
 
