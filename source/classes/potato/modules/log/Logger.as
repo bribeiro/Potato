@@ -36,6 +36,11 @@ package potato.modules.log
 		 *	show the stack trace.
 		 */
 		public static var callStackFlags:uint = ERROR;
+		
+		/**
+		* List of all messages
+		*/
+		public var history:Array=[];
 
 		/**
 		 *	@constructor
@@ -57,6 +62,9 @@ package potato.modules.log
 			if (callStackFlags & LOG) {
 				msg.push(callStack);
 			}
+			
+			//History
+			history.push(msg);
 
 			// Sends the message to the output
 			output.apply(this, msg);
@@ -78,6 +86,9 @@ package potato.modules.log
 
 			// Adds a [WARNING] message at the beginning
 			msg.splice(0, 0, "[WARNING]");
+			
+			//History
+			history.push(msg);
 
 			// Sends the message to the output
 			output.apply(this, msg);
@@ -99,6 +110,9 @@ package potato.modules.log
 
 			// Adds a [ERROR] message at the beginning
 			msg.splice(0, 0, "[ERROR]");
+			
+			//History
+			history.push(msg);
 
 			// Sends the message to the output
 			output.apply(this, msg);
