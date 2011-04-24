@@ -5,6 +5,7 @@ package potato.modules.dependencies
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import flash.events.ErrorEvent;
 	import flash.display.Loader;
 	import flash.events.EventDispatcher;
 	import flash.events.ProgressEvent;
@@ -38,6 +39,9 @@ package potato.modules.dependencies
 	  /** @private */
 		protected var _queue:LoaderMax;
 		
+		/** @private flag */
+		protected var _error:Boolean;
+		
 		/**
 		 * @param config An optional configuration object describing items to load.
 		 * @constructor
@@ -61,12 +65,15 @@ package potato.modules.dependencies
 		
 		public function onLoaderComplete(e:LoaderEvent):void
 		{
-			dispatchEvent(new Event(Event.COMPLETE));
+		  if(!_error)
+			  dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
 		public function onLoaderError(e:LoaderEvent):void
 		{
 			log("Dependencies::onLoaderError()");
+			_error = true;
+			dispatchEvent(new ErrorEvent(ErrorEvent.ERROR))
 		}
 		
 		/**
@@ -90,15 +97,6 @@ package potato.modules.dependencies
 				// Get the type
 				if (config.hasProperty(key, "type"))
 					params.type = config.getProperty(key, "type");
-				
-				// Key for choosing an ApplicationDomain (SWFLoader)
-				//if (config.hasProperty(key, "domain"))
-				//{
-				//	var customLoaderContext:LoaderContext = new LoaderContext(); 
-				//	if (config.getProperty(key, "domain") == "current")
-				//		customLoaderContext.applicationDomain = ApplicationDomain.currentDomain;
-				//	params.context = customLoaderContext;
-				//}
 				
 				// Add additional keys from config
 				mergeProperties(params, config.configForKey(key), ["id", "type", "domain", "url"]);
@@ -181,6 +179,7 @@ package potato.modules.dependencies
 		 */
 		public function load():void
 		{
+		  _error = false;
 			if(_queue.numChildren > 0){
 				_queue.load();
 			}
