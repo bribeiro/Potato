@@ -19,7 +19,7 @@ package potato.modules.navigation {
 	 */
     public class TreeController extends EventDispatcher
 	{
-		protected var _childrenConfig:Vector.<IConfig> = new Vector.<IConfig>();
+		protected var _childrenConfig:Vector.<Config> = new Vector.<Config>();
 		
 		/**
 		 * List of visible children
@@ -57,7 +57,7 @@ package potato.modules.navigation {
 			for each(var raw:Object in viewsConfig)
 			{
 				//Creating a config from the raw data
-				var config:IConfig = new ObjectConfig(raw);
+				var config:Config = new ObjectConfig(raw);
 				config.interpolationValues = _interpolationValues;
 				//No need to wait for the INIT event in ObjectConfigs
 				config.init();
@@ -99,10 +99,10 @@ package potato.modules.navigation {
 		 * @return Boolean 
 		 * Checks if this view has a referente to <code>id</code> in the CONFIGs (_childrenConfig list)
 		 */
-		protected function findUnloadedChild(id:String):IConfig
+		protected function findUnloadedChild(id:String):Config
 		{
-			var miner:Function = function(search:String, haystack:Vector.<IConfig>):IConfig {
-				for each (var c:IConfig in haystack)
+			var miner:Function = function(search:String, haystack:Vector.<Config>):Config {
+				for each (var c:Config in haystack)
 				{
 					//Did we find our view?
 					if(c.getProperty("id") == search) return c;
@@ -111,10 +111,10 @@ package potato.modules.navigation {
 					if(c.hasProperty("views"))
 					{
 						//List of children views
-						var views:IConfig = c.configForKey("views");
+						var views:Config = c.configForKey("views");
 						
 						//Generate a new haystack
-						var newHaystack:Vector.<IConfig> = new Vector.<IConfig>();
+						var newHaystack:Vector.<Config> = new Vector.<Config>();
 						var keys:Array = views.keys;
 						for (var i:int = 0; i < keys.length; i++)
 						{
@@ -122,7 +122,7 @@ package potato.modules.navigation {
 						}
 
 						//Search in the children
-						var searchResult:IConfig;
+						var searchResult:Config;
 
 						searchResult = miner(search, newHaystack);
 						if (searchResult) {

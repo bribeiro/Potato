@@ -24,7 +24,7 @@ package potato.core.config
 	 * @author Lucas Dupin
 	 * @since  15.06.2010
 	 */
-	public class JSONConfig extends ObjectConfig implements IConfig
+	public class JSONConfig extends ObjectConfig implements Config
 	{
 		/**
 		 * URL for the JSON file

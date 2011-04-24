@@ -2,7 +2,7 @@ package potato.modules.navigation
 {
 
 	import flash.events.EventDispatcher;
-	import potato.core.config.IConfig;
+	import potato.core.config.Config;
 	import potato.modules.navigation.View;
 	import flash.events.ProgressEvent;
 	import flash.events.Event;
@@ -39,7 +39,7 @@ package potato.modules.navigation
 		protected var _loaded:Boolean;
 		
 		//Config to be attached to the view
-		public var _viewConfig:IConfig;
+		public var _viewConfig:Config;
 		
 		//View loaded
 		public var view:View;
@@ -51,7 +51,7 @@ package potato.modules.navigation
 		public var chain:ViewLoader;
 		
 		/**
-		 * Receives a view to load or an IConfig.
+		 * Receives a view to load or an Config.
 		 * The second parameter is a chain we must load before
 		 * @return  
 		 */
@@ -71,11 +71,11 @@ package potato.modules.navigation
 				log("[ViewLoader] ", _viewId, " load start");
 				handleViewLoading(viewOrConfig as View)
 			} 
-			else if (viewOrConfig is IConfig)
+			else if (viewOrConfig is Config)
 			{
 				_viewId = viewOrConfig.getProperty("id");
 				log("[ViewLoader] ", _viewId, " load start");
-				handleConfigLoading(viewOrConfig as IConfig)
+				handleConfigLoading(viewOrConfig as Config)
 			} else
 			{
 				throw new Error("[ViewLoader] doesn't know how to load " + viewOrConfig);
@@ -122,10 +122,10 @@ package potato.modules.navigation
 		}
 		
 		/**
-		 * @param viewConfig Object Default object from IConfig
+		 * @param viewConfig Object Default object from Config
 		 * Setup listeners, create dependencies and start to load
 		 */
-		protected function handleConfigLoading(viewConfig:IConfig):void
+		protected function handleConfigLoading(viewConfig:Config):void
 		{
 			//Reference
 			_viewConfig = viewConfig;
@@ -148,7 +148,7 @@ package potato.modules.navigation
 		/**
 		 * @param e Event 
 		 * Runs after i18n verifications
-		 * (Loading IConfig instance)
+		 * (Loading Config instance)
 		 */
 		public function continueConfigLoading(e:Event=null):void
 		{
@@ -173,7 +173,7 @@ package potato.modules.navigation
 			}
 		}
 		
-		protected function getDependenciesInstance(config:IConfig):IDependencies
+		protected function getDependenciesInstance(config:Config):IDependencies
 		{
 			var dependencies:IDependencies = getInstanceByName("potato.modules.dependencies.Dependencies", config);
 			

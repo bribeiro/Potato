@@ -26,7 +26,7 @@ import potato.modules.log.log;
  * @author Lucas Dupin, Fernando França
  * @since  15.06.2010
  */
-public class YAMLConfig extends ObjectConfig implements IConfig
+public class YAMLConfig extends ObjectConfig implements Config
 {
 	/**
 	 * URL for the YAML file

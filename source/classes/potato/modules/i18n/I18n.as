@@ -1,7 +1,7 @@
 package potato.modules.i18n
 {
 	import flash.events.EventDispatcher;
-	import potato.core.config.IConfig;
+	import potato.core.config.Config;
 	import flash.events.Event;
 	import flash.text.TextField;
 	
@@ -17,7 +17,7 @@ package potato.modules.i18n
 	public class I18n extends EventDispatcher {
 		
 		/** @private */
-		private var _configs:Vector.<IConfig> = new Vector.<IConfig>();
+		private var _configs:Vector.<Config> = new Vector.<Config>();
 		
 		/** @private */
 		private static var _instance:I18n;
@@ -40,9 +40,9 @@ package potato.modules.i18n
 		
 		/**
 		 * Injects (merges) new definitions into the current configuration.
-		 * @param config IConfig config with localization text.
+		 * @param config Config config with localization text.
 		 */
-		public static function inject(config:IConfig):void
+		public static function inject(config:Config):void
 		{
 			instance.inject(config);
 		}
@@ -65,7 +65,7 @@ package potato.modules.i18n
 		/**
 		 * @private
 		 */
-		public function inject(config:IConfig):void
+		public function inject(config:Config):void
 		{
 			config.addEventListener(Event.INIT, onConfigInit);
 			config.init();
@@ -76,7 +76,7 @@ package potato.modules.i18n
      */
 		protected function onConfigInit(e:Event):void
 		{
-			var config:IConfig = e.target as IConfig;
+			var config:Config = e.target as Config;
 			config.removeEventListener(Event.INIT, onConfigInit);
 			_configs.push(config);
 			dispatchEvent(new Event(Event.COMPLETE));
@@ -99,7 +99,7 @@ package potato.modules.i18n
 		public function textFor(id:String):String
 		{
 			//Revese to enable override
-			for each (var config:IConfig in _configs.reverse())
+			for each (var config:Config in _configs.reverse())
 			{
 				if (config.hasProperty(id))
 				{
@@ -126,21 +126,21 @@ package potato.modules.i18n
 
 import flash.utils.Proxy;
 import flash.utils.flash_proxy;
-import potato.core.config.IConfig;
+import potato.core.config.Config;
 use namespace flash_proxy;
 
 internal class ConfigProxy extends Proxy
 {
-	private var _configs:Vector.<IConfig>;
+	private var _configs:Vector.<Config>;
 	
-	public function ConfigProxy(configs:Vector.<IConfig>)
+	public function ConfigProxy(configs:Vector.<Config>)
 	{
 		_configs = configs;
 	}
 	
 	override flash_proxy function getProperty(name:*):*
 	{
-		for each (var config:IConfig in _configs.reverse())
+		for each (var config:Config in _configs.reverse())
 			if (config.hasProperty(name))
 				return config.getProperty(name);
 				
@@ -149,7 +149,7 @@ internal class ConfigProxy extends Proxy
 	
 	override flash_proxy function hasProperty(name:*):Boolean
 	{
-		for each (var config:IConfig in _configs)
+		for each (var config:Config in _configs)
 			if (config.hasProperty(name))
 				return true
 

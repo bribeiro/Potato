@@ -3,7 +3,7 @@ package potato.modules.parameters
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
 	import potato.core.config.ObjectConfig;
-	import potato.core.config.IConfig;
+	import potato.core.config.Config;
 	import flash.utils.Dictionary;
 	import br.com.stimuli.string.printf;
 	import potato.core.IDisposable;
@@ -39,7 +39,7 @@ package potato.modules.parameters
 		public var inherit:Parameters;
 	  
 		/** @private */
-		protected var _parameters:IConfig;
+		protected var _parameters:Config;
 		/** @private */
 		protected var _defaults:Dictionary;
 		
@@ -52,7 +52,7 @@ package potato.modules.parameters
 		/**
 		 * @constructor
 		 */
-		public function Parameters(config:IConfig=null)
+		public function Parameters(config:Config=null)
 		{
 			_parameters = config ? config : new ObjectConfig();
 			_parameters.init();
@@ -141,10 +141,10 @@ package potato.modules.parameters
 		/**
 		* Adds another config to parameters. Using this method, you can load or create configs and later add them to the parameters.
 		* 
-    * @param otherConfig IConfig 
+    * @param otherConfig Config 
     * 
     */
-		public function inject(otherConfig:IConfig):void
+		public function inject(otherConfig:Config):void
 		{
 			for each (var key:Object in otherConfig.keys)
 			{
@@ -159,7 +159,7 @@ package potato.modules.parameters
 		/**
 		 * @private
 		 */
-		public function configForKey(key:Object):IConfig
+		public function configForKey(key:Object):Config
 		{
 			return _parameters.configForKey(key);
 		}	

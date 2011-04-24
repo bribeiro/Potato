@@ -11,12 +11,12 @@ package potato.modules.dependencies
   import flash.utils.ByteArray;
   
 	import potato.core.IDisposable;
-	import potato.core.config.IConfig;
+	import potato.core.config.Config;
   
 	public interface IDependencies extends IEventDispatcher, IDisposable
 	{
 		
-		function inject(config:IConfig):void;
+		function inject(config:Config):void;
 		
 		function addItem(url:*, props:Object = null):void;
 		

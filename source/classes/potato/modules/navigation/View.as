@@ -3,7 +3,7 @@ package potato.modules.navigation
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
-	import potato.core.config.IConfig;
+	import potato.core.config.Config;
 	import flash.utils.Proxy;
 	import potato.modules.dependencies.IDependencies;
 	import potato.core.IDisposable;
@@ -57,7 +57,7 @@ package potato.modules.navigation
 		// (dependencies and parameters modules are not included by default)
 		protected var _parameters:Object;
 		protected var _dependencies:IDependencies;
-		protected var _config:IConfig;
+		protected var _config:Config;
 		
 		/**
 		 * @constructor
@@ -68,11 +68,11 @@ package potato.modules.navigation
 		public function View() {}
 		
 		/**
-		 * @param value IConfig View configuration
+		 * @param value Config View configuration
 		 * 
 		 * Prepares the view to receive interaction.
 		 */
-		potato_navigation final function startup(value:IConfig=null):void
+		potato_navigation final function startup(value:Config=null):void
 		{
 			_config = value || new ObjectConfig();
 			
@@ -263,7 +263,7 @@ package potato.modules.navigation
 		{
 			return _zIndex;
 		}
-		public function get config():IConfig
+		public function get config():Config
 		{
 			return _config;
 		}

@@ -21,7 +21,7 @@ package potato.modules.dependencies
 	import com.greensock.loading.SWFLoader;
 	import com.greensock.loading.core.LoaderCore;
 	
-	import potato.core.config.IConfig;
+	import potato.core.config.Config;
 	import potato.modules.log.log;
 
 	/**
@@ -42,7 +42,7 @@ package potato.modules.dependencies
 		 * @param config An optional configuration object describing items to load.
 		 * @constructor
 		 */
-		public function Dependencies(config:IConfig = null)
+		public function Dependencies(config:Config = null)
 		{
 			LoaderMax.activate([ImageLoader, DataLoader, SWFLoader, XMLLoader]);
 			
@@ -74,7 +74,7 @@ package potato.modules.dependencies
 		 * 
 		 * @param config A configuration object containing items to be merged.
 		 */
-		public function inject(config:IConfig):void
+		public function inject(config:Config):void
 		{
 			var keys:Array = config.keys;
 			
@@ -118,12 +118,12 @@ package potato.modules.dependencies
 		 * Merges properties of an object and a configuration. Ignores some keys if necessary.
 		 * 
 		 * @param obj Object 
-		 * @param config IConfig 
+		 * @param config Config 
 		 * @param ignoreKeys Array An Array containing keys to be ignored from the merge.
 		 * 
 		 * @private
 		 */
-		protected function mergeProperties(obj:Object, config:IConfig, ignoreKeys:Array):void
+		protected function mergeProperties(obj:Object, config:Config, ignoreKeys:Array):void
 		{			
 			var keys:Array = config.keys;
 			
