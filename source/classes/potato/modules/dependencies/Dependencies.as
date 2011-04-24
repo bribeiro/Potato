@@ -155,6 +155,7 @@ package potato.modules.dependencies
 		{
 			var itemLoader:LoaderCore;
 			var ext:String = url.substr(url.lastIndexOf(".") + 1);
+			props ||= {};
 			
 			// Set default LoaderContext for SWFs in the same domain.
 			if(ext == "swf" && !props.hasOwnProperty("context"))
