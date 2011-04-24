@@ -2,7 +2,7 @@ package potato.modules.parameters
 {
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
-	import potato.core.config.ObjectConfig;
+	import potato.core.config.Config;
 	import potato.core.config.Config;
 	import flash.utils.Dictionary;
 	import br.com.stimuli.string.printf;
@@ -54,7 +54,7 @@ package potato.modules.parameters
 		 */
 		public function Parameters(config:Config=null)
 		{
-			_parameters = config ? config : new ObjectConfig();
+			_parameters = config ? config : new Config();
 			_parameters.init();
 			
 			_defaults = new Dictionary();

@@ -8,7 +8,7 @@ package potato.modules.navigation
 	import flash.events.Event;
 	import potato.modules.dependencies.IDependencies;
 	import flash.utils.getDefinitionByName;
-	import potato.core.config.ObjectConfig;
+	import potato.core.config.Config;
 	import ReferenceError;
 	import potato.core.IDisposable;
 	import potato.modules.navigation.events.NavigationEvent;

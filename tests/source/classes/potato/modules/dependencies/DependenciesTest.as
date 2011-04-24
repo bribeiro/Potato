@@ -1,7 +1,7 @@
 package potato.modules.dependencies
 {	
     import potato.modules.dependencies.Dependencies;
-	import potato.core.config.ObjectConfig;
+	import potato.core.config.Config;
 	import flash.events.*;
 	import org.flexunit.Assert;
 	import org.flexunit.async.Async;
@@ -27,7 +27,7 @@ package potato.modules.dependencies
 		[Test(async)]
 		public function dependenciesFromConfig():void
 		{
-			var cfg:ObjectConfig = new ObjectConfig([
+			var cfg:Config = new Config([
 				{
 					"id":"main",
 					"url":"%(basePath)s/dummy.swf",
@@ -68,7 +68,7 @@ package potato.modules.dependencies
 		[Test(async)]
 		public function dependenciesFromConfigAndAdd():void
 		{
-			var cfg:ObjectConfig = new ObjectConfig([
+			var cfg:Config = new Config([
 				{
 					"id":"main",
 					"url":"%(basePath)s/dummy.swf",

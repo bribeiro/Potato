@@ -5,7 +5,7 @@ package potato.modules.navigation
 	import potato.modules.navigation.events.NavigationEvent;
 	import potato.modules.navigation.View;
 	import potato.core.config.Config;
-	import potato.core.config.ObjectConfig;
+	import potato.core.config.Config;
 	import potato.modules.log.log;
 	
 	// Potato Navigation module namespace

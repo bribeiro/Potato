@@ -57,9 +57,9 @@ package potato.modules.navigation {
 			for each(var raw:Object in viewsConfig)
 			{
 				//Creating a config from the raw data
-				var config:Config = new ObjectConfig(raw);
+				var config:Config = new Config(raw);
 				config.interpolationValues = _interpolationValues;
-				//No need to wait for the INIT event in ObjectConfigs
+				//No need to wait for the INIT event in Configs
 				config.init();
 				
 				//Checking if this is the config we want

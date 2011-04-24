@@ -6,8 +6,6 @@ import flash.net.URLRequest;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import dupin.parsers.yaml.YAML;
-import potato.core.config.ObjectConfig;
-import potato.core.dsl.ConditionalParser;
 import potato.modules.log.log;
 
 /**
@@ -26,7 +24,7 @@ import potato.modules.log.log;
  * @author Lucas Dupin, Fernando França
  * @since  15.06.2010
  */
-public class YAMLConfig extends ObjectConfig implements Config
+public class YAMLConfig extends Config
 {
 	/**
 	 * URL for the YAML file

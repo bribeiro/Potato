@@ -3,7 +3,6 @@ package potato.core.config
 
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import potato.core.dsl.ConditionalParser;
 	import br.com.stimuli.string.printf;
 
   /**
@@ -30,18 +29,9 @@ package potato.core.config
 		/** @private */
 		protected var _interpolationValues:Object;
 		
-		/** @private */
-		protected var _conditionalParser:ConditionalParser;
-		
-		/** @private Magic word for creating conditionals. */
-		public const CONDITIONAL_KEYWORD:String = "when";
-		
-		public function ObjectConfig(source:Object=null):void
+		public function Config(source:Object=null):void
 		{
 			_config = source || {};
-			
-			//Creating our default parser
-			_conditionalParser = new ConditionalParser();
 		}
 		
 		/**
@@ -100,28 +90,10 @@ package potato.core.config
 			//Dealing with null
 			if (!r) return null;
 
-			//Dealing with conditionals
-			if (r.hasOwnProperty(CONDITIONAL_KEYWORD))
-			{
-				//Isolating conditions
-				var conditions:Array = r[CONDITIONAL_KEYWORD];
-
-				//Check for matches
-				for each (var condition:Object in conditions)
-				{
-					if(_conditionalParser.match(condition.key)){
-						r = condition.value;
-						break;
-					}	
-				}
-			}
-			
 			if(r is String){
 				r = printf(r+"", _interpolationValues);
 			}
-				
-			
-			
+
 			return r;
 		}
 		
@@ -157,7 +129,7 @@ package potato.core.config
 		 */
 		public function configForKey(key:Object):Config
 		{
-			var o:ObjectConfig = new ObjectConfig(_config[key]);
+			var o:Config = new Config(_config[key]);
 			o.interpolationValues = _interpolationValues;
 			o.init();
 			return o;

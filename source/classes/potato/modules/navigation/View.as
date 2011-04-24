@@ -8,7 +8,7 @@ package potato.modules.navigation
 	import potato.modules.dependencies.IDependencies;
 	import potato.core.IDisposable;
 	import potato.core.IVisible;
-	import potato.core.config.ObjectConfig;
+	import potato.core.config.Config;
 	import potato.modules.navigation.ViewLoader;
 	import potato.modules.navigation.ViewMessenger;
 	import potato.modules.navigation.NavigationController;
@@ -74,7 +74,7 @@ package potato.modules.navigation
 		 */
 		potato_navigation final function startup(value:Config=null):void
 		{
-			_config = value || new ObjectConfig();
+			_config = value || new Config();
 			
 			// Config initialization
 			_config.interpolationValues = parameters;
