@@ -1,4 +1,4 @@
-package potato.media
+package potato.modules.media
 {
 	/**
 	 * Represents the current state of the media.
