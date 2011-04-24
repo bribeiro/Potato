@@ -92,9 +92,9 @@ package potato.modules.navigation
 
                     //Stop searching
                     if(chainedLoader) {
-						//Parent must be relative to the first unloaded view found
-                        chainedLoader.parentView ||= v;
-                        return chainedLoader;
+                      //Parent must be relative to the first unloaded view found
+                      chainedLoader.parentView ||= v;
+                      return chainedLoader;
                     }
                 }
 
@@ -184,16 +184,19 @@ package potato.modules.navigation
 		
 		/**
          * Adds a view to the screen
-		 * @param viewOrId * String or View instance
+		 * @param id * Id of the View instance
 		 */
 		public function addView(id:String):ViewLoader
 		{
 
 			//Check if it already exists
 			if (root.nav.findChild(id)) {
-			    log("[NavigationController] View already on stage", id);
-			    //Nothing else to do...
-			    return null;
+        log("[NavigationController] View already on stage", id);
+        //Nothing else to do...
+        return null;
+			} else if (!findUnloadedChild(id)) {
+			  log("    ", id, "could not be found on", currentView.id);
+			  return null;
 			}
 
 			//Search in Loaded Views
@@ -212,8 +215,6 @@ package potato.modules.navigation
 			var loader:ViewLoader = loaderFor(id);
 			//Listens for complete
 			loader.addEventListener(Event.COMPLETE, loader.parentView.nav.onViewReadyToAdd);
-			//TODO Notify
-			//dispatchEvent(new Event(NavigationEvent.LOAD_START));
 			//Load!
 			loader.start();
 			
@@ -223,34 +224,30 @@ package potato.modules.navigation
         /**
          * Removes a view from the screen
          * */
-		public function removeView(viewOrId:Object):void
+		public function removeView(id:String):void
 		{
-            //Getting the view instance
-            var targetView:View;
-			if(viewOrId is View)
-                targetView = viewOrId as View;
-			else
-				targetView = root.nav.findChild(viewOrId + "");
+      //Getting the view instance
+      var targetView:View = root.nav.findChild(id + "");
             
-            if(targetView) {
-                //Getting the parent Controller of the view,
-                //It's where the transition will occur
-                var parentNav:NavigationController = targetView.nav.parent.nav;
-                //Adding to the list of views to be removed
-                parentNav._viewsToHide.push(targetView);
-                //removing
-                parentNav.doTransition();
-            } else {
-                //None found...
-                log("[NavigationController] No view name", viewOrId, "found.");
-                return;
-            }
+      if(targetView) {
+          //Getting the parent Controller of the view,
+          //It's where the transition will occur
+          var parentNav:NavigationController = targetView.nav.parent.nav;
+          //Adding to the list of views to be removed
+          parentNav._viewsToHide.push(targetView);
+          //removing
+          parentNav.doTransition();
+      } else {
+          //None found...
+          log("[NavigationController] No view named ", id, " found.");
+          return;
+      }
 
 		}
 		
-        /**
-         * Adds a view and remove it's siblings
-         * */
+    /**
+     * Adds a view and remove it's siblings
+     * */
 		public function changeView(id:String):ViewLoader
 		{
 			//Is there something to do?
@@ -265,12 +262,7 @@ package potato.modules.navigation
 			//Setting which views we're going to hide
 			_viewsToHide = _viewsToHide.concat(children);
 			//Asking to add the view we want
-            if(findUnloadedChild(id))
-    			return addView(id);
-            else
-                log("    ", id, "could not be found on", currentView.id);
-
-			return null;
+      return addView(id);
 		}
 		
 		public function hideAll():void
@@ -290,9 +282,6 @@ package potato.modules.navigation
 			//Add to the list of views to show
 			_viewsToShow.push(e.view);
 			
-            //TODO Notify
-            //dispatchEvent(new Event(NavigationEvent.LOAD_COMPLETE));
-			
 			//Start transition
 			doTransition();
 		}
@@ -306,15 +295,25 @@ package potato.modules.navigation
 		{
 			dispatchEvent(new NavigationEvent(NavigationEvent.TRANSITION_START));
 			
+			//Make theses views available to the messenger
+			for each (v in _viewsToShow)
+			{
+			  //Remove from queue
+				viewsLoaded.splice(viewsLoaded.indexOf(v), 1);
+				
+				//Add to the list of views
+				if(children.indexOf(v) == -1)
+					children.push(v);
+				
+				//Tell parent to add it
+				dispatchEvent(new NavigationEvent(NavigationEvent.ADD_VIEW, v));
+			}
+			
 			var v:View;
 			if (_viewsToHide.length > 0)
 			{
 				for each (v in _viewsToHide)
-				{
-					//Remove from list of views
-					var p:View = v.nav.parent;
-					p.nav.children.splice(p.nav.children.indexOf(v),1);
-					
+				{					
 					//Prepare to hide
 					v.addEventListener(NavigationEvent.VIEW_HIDDEN, onViewHidden);
 			
@@ -338,27 +337,16 @@ package potato.modules.navigation
 			var v:View;
 			if(_viewsToShow.length > 0)
 			{
-				for each (v in _viewsToShow)
+			  for each (v in _viewsToShow)
 				{
-					//Remove from queue
-					viewsLoaded.splice(viewsLoaded.indexOf(v), 1);
-					
-					//Add to the list of views
-					if(children.indexOf(v) == -1)
-						children.push(v);
-					
-					//Tell parent to add it
-					dispatchEvent(new NavigationEvent(NavigationEvent.ADD_VIEW, v));
-					
 					//Prepare to show
-					v.addEventListener(NavigationEvent.VIEW_SHOWN, onViewShown);
-					
+					v.addEventListener(NavigationEvent.VIEW_SHOWN, onViewShown);					
 					//Show time
 					v.show();
 				}
 			} else
 			{
-				finishTransition();
+			  finishTransition();
 			}
 			
 		}
@@ -376,8 +364,12 @@ package potato.modules.navigation
 		 */
 		protected function onViewHidden(e:NavigationEvent):void
 		{
-			//Remove from stage
+		  //Remove from stage
 			dispatchEvent(new NavigationEvent(NavigationEvent.REMOVE_VIEW, e.view));
+			
+			//Remove from list of views
+			var p:View = e.view.nav.parent;
+			p.nav.children.splice(p.nav.children.indexOf(e.view),1);
 
 			//Free some memory
 			e.view._dispose();
@@ -391,6 +383,7 @@ package potato.modules.navigation
 		 */
 		protected function onViewShown(e:NavigationEvent):void
 		{
+		  e.view.removeEventListener(NavigationEvent.VIEW_SHOWN, onViewShown);
 			_viewsToShow.splice(_viewsToShow.indexOf(e.view),1);
 			if (_viewsToShow.length == 0)
 				finishTransition();

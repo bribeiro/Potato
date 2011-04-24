@@ -59,9 +59,6 @@ package potato.modules.navigation
 		protected var _dependencies:IDependencies;
 		protected var _config:IConfig;
 		
-		// Flag
-		protected var _initialized:Boolean = false;
-	
 		/**
 		 * @constructor
 		 * Nothing is done here, logic was moved to <code>startup</code> to prevent synchronization issues.
@@ -77,9 +74,6 @@ package potato.modules.navigation
 		 */
 		potato_navigation final function startup(value:IConfig=null):void
 		{
-			// Flag
-			_initialized = true;
-			
 			_config = value || new ObjectConfig();
 			
 			// Config initialization
@@ -90,7 +84,7 @@ package potato.modules.navigation
 		
 		/**
 		 * @param e Event 
-		 * Runs after que configuration is loaded.
+		 * Runs after configuration is loaded.
 		 * Responsible for setting default view behaviours: init, resize, transitions
 		 */
 		protected function onConfigInit(e:Event):void
@@ -268,11 +262,6 @@ package potato.modules.navigation
 		public function get zIndex():int
 		{
 			return _zIndex;
-		}
-		
-		public function get initialized():Boolean
-		{
-			return _initialized;
 		}
 		public function get config():IConfig
 		{

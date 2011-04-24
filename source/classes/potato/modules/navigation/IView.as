@@ -27,7 +27,6 @@ package potato.modules.navigation
 		
 		// Initialization
 		function init():void;
-		function get initialized():Boolean;
 		
 		// Navigation
 		function msg(view:String):ViewMessenger;
