@@ -28,11 +28,11 @@ source-path:
     # - classes/potato/control
     # - classes/potato/debug
     # - classes/potato/display
-    # - classes/potato/media
     # - classes/potato/utils
     # - classes/potato/modules/dependencies
     # - classes/potato/modules/i18n
     # - classes/potato/modules/log
+    # - classes/potato/modules/media
     # - classes/potato/modules/navigation
     # - classes/potato/modules/parameters
     # - classes/potato/modules/services
@@ -52,7 +52,7 @@ asdoc:
         - potato.core.config:                "Configuration object interface and implementations."
         - potato.debug:                      "Debugging methods and utilities."
         - potato.display:                    "Structures and methods that mimetize the flash.display package."
-        - potato.media:                      "Media managers with audio and video support."
+        - potato.modules.media:                      "Media managers with audio and video support."
         - potato.utils:                      "Common utility methods."
         - potato.modules.dependencies:       "Defines and implements dependencies used by the navigation module."
         - potato.modules.i18n:               "Internationalization support."

@@ -1,4 +1,4 @@
-package potato.media.soundlib
+package potato.modules.media.soundlib
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -6,9 +6,9 @@ package potato.media.soundlib
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
 	
-	import potato.media.MediaState;
-	import potato.media.interfaces.IAudio;
-	import potato.media.interfaces.IMedia;
+	import potato.modules.media.MediaState;
+	import potato.modules.media.interfaces.IAudio;
+	import potato.modules.media.interfaces.IMedia;
 	
 	/**
 	 * SoundClip is a composition of Sound with some important features for a simple playback.
@@ -67,7 +67,7 @@ package potato.media.soundlib
 		/**
 		 * Holds the current state.
 		 * 
-		 * @see potato.media.MediaState
+		 * @see potato.modules.media.MediaState
 		 */
 		protected var _state:String;
 		
@@ -235,7 +235,7 @@ package potato.media.soundlib
 		/**
 		 * The current state of the SoundClip instance.
 		 * 
-		 * @see potato.media.MediaState
+		 * @see potato.modules.media.MediaState
 		 */
 		public function get state():String
 		{

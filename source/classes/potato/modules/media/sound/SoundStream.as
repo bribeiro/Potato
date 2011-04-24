@@ -1,4 +1,4 @@
-package potato.media.sound
+package potato.modules.media.sound
 {
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
@@ -9,36 +9,36 @@ package potato.media.sound
 	import flash.media.SoundLoaderContext;
 	import flash.net.URLRequest;
 	
-	import potato.media.MediaEvent;
-	import potato.media.interfaces.IStream;
+	import potato.modules.media.MediaEvent;
+	import potato.modules.media.interfaces.IStream;
 
 	/**
 	* Dispatched when the load operation starts.
 	*
 	* <p>This dispatch doesn't matter if the url is valid or not, so after this event can ocurrs an error event.</p>  
 	*
-	* @eventType potato.media.MediaEvent.LOAD_START
+	* @eventType potato.modules.media.MediaEvent.LOAD_START
 	*/
 	[Event(name="load_start" , type="flash.events.Event")]
 	
 	/**
 	* Dispatched when the bytesLoaded changes. 
 	*
-	* @eventType potato.media.MediaEvent.LOAD_PROGRESS
+	* @eventType potato.modules.media.MediaEvent.LOAD_PROGRESS
 	*/
 	[Event(name="load_progress" , type="flash.events.Event")]
 	
 	/**
 	* Dispatched when the load operation finishes.
 	* 
-	* @eventType potato.media.MediaEvent.LOAD_COMPLETE
+	* @eventType potato.modules.media.MediaEvent.LOAD_COMPLETE
 	*/
 	[Event(name="load_complete" , type="flash.events.Event")]
 	
 	/**
 	* Dispatched when the ID3 is available.
 	* 
-	* @eventType potato.media.MediaEvent.METADATA_LOADED
+	* @eventType potato.modules.media.MediaEvent.METADATA_LOADED
 	*/
 	[Event(name="metadata_loaded" , type="flash.events.Event")]
 	

@@ -1,4 +1,4 @@
-package potato.media.slideshow
+package potato.modules.media.slideshow
 {
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
@@ -6,10 +6,10 @@ package potato.media.slideshow
 	import flash.events.EventDispatcher;
 	import flash.utils.getTimer;
 	
-	import potato.media.MediaEvent;
-	import potato.media.MediaState;
-	import potato.media.interfaces.IMedia;
-	import potato.media.interfaces.ITimeline;
+	import potato.modules.media.MediaEvent;
+	import potato.modules.media.MediaState;
+	import potato.modules.media.interfaces.IMedia;
+	import potato.modules.media.interfaces.ITimeline;
 
 	/**
 	 * @private
