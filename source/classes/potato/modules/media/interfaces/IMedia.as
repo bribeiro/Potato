@@ -1,4 +1,4 @@
-package potato.media.interfaces
+package potato.modules.media.interfaces
 {	
 	public interface IMedia
 	{

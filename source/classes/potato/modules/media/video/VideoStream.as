@@ -1,4 +1,4 @@
-package potato.media.video
+package potato.modules.media.video
 {
 	import flash.display.Sprite;
 	import flash.events.ErrorEvent;
@@ -8,26 +8,26 @@ package potato.media.video
 	import flash.net.NetStream;
 	import flash.utils.clearInterval;
 	
-	import potato.media.MediaEvent;
-	import potato.media.interfaces.IStream;
+	import potato.modules.media.MediaEvent;
+	import potato.modules.media.interfaces.IStream;
 
 	/**
-	 * @eventType potato.media.MediaEvent.LOAD_START
+	 * @eventType potato.modules.media.MediaEvent.LOAD_START
 	 */
 	[Event(name="load_start" , type="flash.events.Event")]
 	
 	/**
-	* @eventType potato.media.MediaEvent.LOAD_PROGRESS
+	* @eventType potato.modules.media.MediaEvent.LOAD_PROGRESS
 	*/
 	[Event(name="load_progress" , type="flash.events.Event")]
 	
 	/**
-	* @eventType potato.media.MediaEvent.LOAD_COMPLETE
+	* @eventType potato.modules.media.MediaEvent.LOAD_COMPLETE
 	*/
 	[Event(name="load_complete" , type="flash.events.Event")]
 	
 	/**
-	* @eventType potato.media.MediaEvent.METADATA_LOADED
+	* @eventType potato.modules.media.MediaEvent.METADATA_LOADED
 	*/
 	[Event(name="metadata_loaded" , type="flash.events.Event")]
 	

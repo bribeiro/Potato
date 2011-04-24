@@ -1,4 +1,4 @@
-package potato.media
+package potato.modules.media
 {
 	/**
 	 * The ids of the events dipatched by the media objects.
