@@ -79,7 +79,7 @@ package potato.core.config
 		}
 		
 		/**
-		* Parse the config, search for conditionals and cast to the right types
+		* Do interpolation if needed
 		 * @param target Object 
 		 * @return Object 
 		 */
@@ -87,10 +87,7 @@ package potato.core.config
 		{
 			var r:Object = target;
 
-			//Dealing with null
-			if (!r) return null;
-
-			if(r is String){
+			if(r is String && _interpolationValues != null){
 				r = printf(r+"", _interpolationValues);
 			}
 
