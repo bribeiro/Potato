@@ -28,7 +28,8 @@
 				
 				//This run statements executes the unit tests for the FlexUnit4 framework 
 				//the Hamcrest matchers and some of the tests shown in the FlexUnit in 360 seconds blog post
-				core.run( ParametersTest, DependenciesTest, YAMLConfigTest );
+				core.run( ParametersTest, YAMLConfigTest );
+				//core.run( ParametersTest, DependenciesTest, YAMLConfigTest );
 				
 			}
 		]]>
