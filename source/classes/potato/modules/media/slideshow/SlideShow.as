@@ -1,12 +1,12 @@
-package potato.media.slideshow
+package potato.modules.media.slideshow
 {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
-	import potato.media.MediaEvent;
-	import potato.media.interfaces.IMedia;
-	import potato.media.interfaces.ITimeline;
+	import potato.modules.media.MediaEvent;
+	import potato.modules.media.interfaces.IMedia;
+	import potato.modules.media.interfaces.ITimeline;
 
 	/**
 	 * @private

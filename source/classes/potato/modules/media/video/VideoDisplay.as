@@ -1,4 +1,4 @@
-package potato.media.video
+package potato.modules.media.video
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -10,51 +10,51 @@ package potato.media.video
 	import flash.media.Video;
 	import flash.net.NetStream;
 	
-	import potato.media.MediaEvent;
-	import potato.media.MediaState;
-	import potato.media.interfaces.IAudio;
-	import potato.media.interfaces.IMedia;
-	import potato.media.interfaces.ITimeline;
+	import potato.modules.media.MediaEvent;
+	import potato.modules.media.MediaState;
+	import potato.modules.media.interfaces.IAudio;
+	import potato.modules.media.interfaces.IMedia;
+	import potato.modules.media.interfaces.ITimeline;
 
 	/**
 	 * Dispatched when the playback starts, only if the playback was in time 0
 	 * 
-	 * @eventType potato.media.MediaEvent.PLAYBACK_START
+	 * @eventType potato.modules.media.MediaEvent.PLAYBACK_START
 	*/
 	[Event(name="playback_start" , type="flash.events.Event")]
 	
 	/**
 	 * Dispatched when the playback progress, in an enterFrame.
 	 *
-	 * @eventType potato.media.MediaEvent.PLAYBACK_PROGRESS
+	 * @eventType potato.modules.media.MediaEvent.PLAYBACK_PROGRESS
 	*/
 	[Event(name="playback_progress" , type="flash.events.Event")]
 	
 	/**
 	 * Dispatched when the playback finishes.
 	 * 
-	 * @eventType potato.media.MediaEvent.PLAYBACK_COMPLETE
+	 * @eventType potato.modules.media.MediaEvent.PLAYBACK_COMPLETE
 	*/
 	[Event(name="playback_complete" , type="flash.events.Event")]
 	
 	/**
 	 * Dispatched when the video plays.
 	 * 
-	 * @eventType potato.media.MediaEvent.PLAY
+	 * @eventType potato.modules.media.MediaEvent.PLAY
 	*/
 	[Event(name="play" , type="flash.events.Event")]
 	
 	/**
 	 * Dispatched when the video pauses.
 	 * 
-	 * @eventType potato.media.MediaEvent.PAUSE
+	 * @eventType potato.modules.media.MediaEvent.PAUSE
 	*/
 	[Event(name="pause" , type="flash.events.Event")]
 	
 	/**
 	 * Dispatched when the video stops.
 	 * 
-	 * @eventType potato.media.MediaEvent.STOP
+	 * @eventType potato.modules.media.MediaEvent.STOP
 	*/
 	[Event(name="stop" , type="flash.events.Event")]
 
@@ -64,7 +64,7 @@ package potato.media.video
 	 * <p>It receives a NetStream object previously started and give all the expected controls that the video must have, like play, stop, pause, sets the playback
 	 * position by time, by ratio and dispatches all the events aways needed (see MediaEvent).</p>
 	 * 
-	 * <p>VideoDisplay also implements known interfaces in the potato.media universe. So you can control the video playback the same way that you control the sound playback.</p>
+	 * <p>VideoDisplay also implements known interfaces in the potato.modules.media universe. So you can control the video playback the same way that you control the sound playback.</p>
 	 */ 
 	public class VideoDisplay extends Sprite implements IMedia, IAudio, ITimeline
 	{
@@ -252,7 +252,7 @@ package potato.media.video
 		 * 
 		 * <p>Indicates if it is playing, paused or stopped.</p>
 		 * 
-		 * @see potato.media.MediaState 
+		 * @see potato.modules.media.MediaState 
 		*/ 
 		public function get state():String
 		{

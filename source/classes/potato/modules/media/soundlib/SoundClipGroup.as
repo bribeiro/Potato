@@ -1,14 +1,14 @@
-package potato.media.soundlib
+package potato.modules.media.soundlib
 {
 	import flash.utils.Dictionary;
 	
-	import potato.media.interfaces.IAudio;
-	import potato.media.interfaces.IMedia;
+	import potato.modules.media.interfaces.IAudio;
+	import potato.modules.media.interfaces.IMedia;
 
 	/**
 	 * SoundClipGroup join togheter any number of SoundClip instances, to massive manipulation.
 	 * 
-	 * @see potato.media.soundlib.SoundClip 
+	 * @see potato.modules.media.soundlib.SoundClip 
 	 */
 	public class SoundClipGroup implements IMedia, IAudio
 	{  
@@ -89,7 +89,7 @@ package potato.media.soundlib
 		 * 
 		 * <p>This porperty modify only the volumeScale of the SoundClip instances, keeping all volumes with the same proportional rate.</p>
 		 * 
-		 * @see potato.media.soundlib.SoundClip
+		 * @see potato.modules.media.soundlib.SoundClip
 		 */
 		public function get volume():Number
 		{

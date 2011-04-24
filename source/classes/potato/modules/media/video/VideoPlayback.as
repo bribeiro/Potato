@@ -1,17 +1,17 @@
-package potato.media.video
+package potato.modules.media.video
 {
 	import flash.events.Event;
 	
-	import potato.media.MediaEvent;
-	import potato.media.MediaState;
+	import potato.modules.media.MediaEvent;
+	import potato.modules.media.MediaState;
 
 	/**
 	 * VideoPlayback is an extension of VideoDisplay, with a VideoStream instance. 
 	 * 
 	 * <p>It gets together all the main funcionalities that a videoPlayer needs.</p>
 	 * 
-	 * @see potato.media.VideoDisplay
-	 * @see potato.media.VideoStream
+	 * @see potato.modules.media.VideoDisplay
+	 * @see potato.modules.media.VideoStream
 	 */  
 	public class VideoPlayback extends VideoDisplay
 	{

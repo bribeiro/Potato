@@ -1,4 +1,4 @@
-package potato.media.soundlib
+package potato.modules.media.soundlib
 {
 	import flash.media.Sound;
 	import flash.utils.Dictionary;
@@ -9,8 +9,8 @@ package potato.media.soundlib
 	/**
 	 * SoundLibrary holds many soundClips and groups, and manage them.
 	 *  
-	 * @see potato.media.soundlib.SoundClip
-	 * @see potato.media.soundlib.SoundClipGroup
+	 * @see potato.modules.media.soundlib.SoundClip
+	 * @see potato.modules.media.soundlib.SoundClipGroup
 	 */
 	public class SoundLibrary
 	{ 	

@@ -1,15 +1,15 @@
-package potato.media.sound
+package potato.modules.media.sound
 {
 	import flash.events.Event;
 	
-	import potato.media.MediaEvent;
-	import potato.media.MediaState;
+	import potato.modules.media.MediaEvent;
+	import potato.modules.media.MediaState;
 	
 	/**
 	 * SoundPlayback is an extension of SoundPlayer with a SoundStream instance, making it able to control the load and playback of the sounds.
 	 * 
-	 * @see potato.media.SoundPlayer
-	 * @see potato.media.SoundStream
+	 * @see potato.modules.media.SoundPlayer
+	 * @see potato.modules.media.SoundStream
 	 */
 	public class SoundPlayback extends SoundPlayer
 	{
