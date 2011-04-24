@@ -7,8 +7,12 @@ Showcase
 --------
 _All projects showcased here are property of their respective owners._
 
-*  [Idade Interior](http://www.idadeinterior.com.br/)
-
+*  [Coke Zero - The Impossible Auction](http://leilaoimpossivel.cocacolazero.com.br/)
+*  [Coke Zero - My video-game life](http://game.cocacolazero.com.br/minhavidadegame/)
+*  Absolut Carnaval 2011
+*  [Absolut Berri Açaí](http://www.absolut.com/br/berriacai)
+*  [Coke - Summer Radar](http://apps.facebook.com/radarcocacola/)
+*  [Real Age](http://www.idadeinterior.com.br/)
 *  [Máquina de Profissões](http://www.maquinadeprofissoes.com.br/)
 
 License
