@@ -3,12 +3,12 @@ package potato.modules.navigation
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
-	import potato.core.config.IConfig;
+	import potato.core.config.Config;
 	import flash.utils.Proxy;
 	import potato.modules.dependencies.IDependencies;
 	import potato.core.IDisposable;
 	import potato.core.IVisible;
-	import potato.core.config.ObjectConfig;
+	import potato.core.config.Config;
 	import potato.modules.navigation.ViewLoader;
 	import potato.modules.navigation.ViewMessenger;
 	import potato.modules.navigation.NavigationController;
@@ -57,7 +57,7 @@ package potato.modules.navigation
 		// (dependencies and parameters modules are not included by default)
 		protected var _parameters:Object;
 		protected var _dependencies:IDependencies;
-		protected var _config:IConfig;
+		protected var _config:Config;
 		
 		/**
 		 * @constructor
@@ -68,13 +68,13 @@ package potato.modules.navigation
 		public function View() {}
 		
 		/**
-		 * @param value IConfig View configuration
+		 * @param value Config View configuration
 		 * 
 		 * Prepares the view to receive interaction.
 		 */
-		potato_navigation final function startup(value:IConfig=null):void
+		potato_navigation final function startup(value:Config=null):void
 		{
-			_config = value || new ObjectConfig();
+			_config = value || new Config();
 			
 			// Config initialization
 			_config.interpolationValues = parameters;
@@ -231,23 +231,27 @@ package potato.modules.navigation
 		{
 			if(nav.children.length < 2) return;
 			
-			var swapped:Boolean, i:int;
+			var swapped:Boolean, i:int, i2:int;
 			do
 			{
 				swapped = false;
-				for(i=0; i< nav.children.length-1; i++){
-				      if (nav.children[i].zIndex > nav.children[i+1].zIndex && getChildIndex(nav.children[i]) < getChildIndex(nav.children[i+1])) { // test whether the two elements are in the wrong order
-				        swapChildren(nav.children[i], nav.children[i+1]); // let the two elements change places
-				        swapped = true;
-				      }
-				 }
+				for(i=0; i< nav.children.length; i++){
+				  i2 = i+1 == nav.children.length ? 0 : i+1;
+          if ((nav.children[i].zIndex > nav.children[i2].zIndex && getChildIndex(nav.children[i]) < getChildIndex(nav.children[i2])) ||
+            (nav.children[i].zIndex < nav.children[i2].zIndex && getChildIndex(nav.children[i]) > getChildIndex(nav.children[i2]))) { // test whether the two elements are in the wrong order
+            swapChildren(nav.children[i], nav.children[i2]); // let the two elements change places
+            swapped = true;
+          }
+        }
+        
 				if(!swapped)
 					break;
 					
 				swapped = false;
 				for(i=nav.children.length-1; i<0; i--){
-					if (nav.children[i].zIndex > nav.children[i+1].zIndex && getChildIndex(nav.children[i]) < getChildIndex(nav.children[i+1])){
-						swapChildren(nav.children[i], nav.children[i+1]); // let the two elements change places
+					if ((nav.children[i].zIndex > nav.children[i2].zIndex && getChildIndex(nav.children[i]) < getChildIndex(nav.children[i2])) ||
+            (nav.children[i].zIndex < nav.children[i2].zIndex && getChildIndex(nav.children[i]) > getChildIndex(nav.children[i2]))){
+						swapChildren(nav.children[i], nav.children[i2]); // let the two elements change places
 				        swapped = true;
 				    }
 				 }
@@ -263,7 +267,7 @@ package potato.modules.navigation
 		{
 			return _zIndex;
 		}
-		public function get config():IConfig
+		public function get config():Config
 		{
 			return _config;
 		}

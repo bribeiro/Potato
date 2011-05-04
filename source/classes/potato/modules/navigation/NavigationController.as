@@ -4,8 +4,8 @@ package potato.modules.navigation
 	import flash.utils.Dictionary;
 	import potato.modules.navigation.events.NavigationEvent;
 	import potato.modules.navigation.View;
-	import potato.core.config.IConfig;
-	import potato.core.config.ObjectConfig;
+	import potato.core.config.Config;
+	import potato.core.config.Config;
 	import potato.modules.log.log;
 	
 	// Potato Navigation module namespace
@@ -67,7 +67,7 @@ package potato.modules.navigation
 		}
 		
 		/**
-		 * TODO test with mixed trees (Views and IConfigs)
+		 * TODO test with mixed trees (Views and Configs)
 		 * Go deeper in the tree and find where the config is,
 		 * once found, build the loader form it
 		 * @param id String 
@@ -118,13 +118,13 @@ package potato.modules.navigation
 		 * a chained ViewLoader.
 		 * 
 		 * @param search String Id of the view we want to loop for
-		 * @param haystack Vector.&lt;IConfig&gt; list of child views
+		 * @param haystack Vector.&lt;Config&gt; list of child views
 		 * @return ViewLoader chaned loader with all dependencies
 		 */
-		protected function configLooper(search:String, haystack:Vector.<IConfig>):ViewLoader
+		protected function configLooper(search:String, haystack:Vector.<Config>):ViewLoader
 		{
 			//Searching for this view in the config
-			for each(var c:IConfig in haystack)
+			for each(var c:Config in haystack)
 			{
 				//Did we find our view?
 				if(c.getProperty("id") == search)
@@ -134,10 +134,10 @@ package potato.modules.navigation
 				if(c.hasProperty("views"))
 				{
 					//List of children views
-					var views:IConfig = c.configForKey("views");
+					var views:Config = c.configForKey("views");
 					
 					//Generate a new haystack
-					var newHaystack:Vector.<IConfig> = new Vector.<IConfig>();
+					var newHaystack:Vector.<Config> = new Vector.<Config>();
 					var keys:Array = views.keys;
 					for (var i:int = 0; i < keys.length; i++)
 					{

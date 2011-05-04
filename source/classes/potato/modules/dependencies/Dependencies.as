@@ -5,6 +5,7 @@ package potato.modules.dependencies
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import flash.events.ErrorEvent;
 	import flash.display.Loader;
 	import flash.events.EventDispatcher;
 	import flash.events.ProgressEvent;
@@ -21,8 +22,10 @@ package potato.modules.dependencies
 	import com.greensock.loading.SWFLoader;
 	import com.greensock.loading.core.LoaderCore;
 	
-	import potato.core.config.IConfig;
+	import potato.core.config.Config;
 	import potato.modules.log.log;
+	import flash.net.NetStream;
+	import flash.display.MovieClip;
 
 	/**
 	 * Implements IDependencies with GreenSock's LoaderMax.
@@ -38,11 +41,14 @@ package potato.modules.dependencies
 	  /** @private */
 		protected var _queue:LoaderMax;
 		
+		/** @private flag */
+		protected var _error:Boolean;
+		
 		/**
 		 * @param config An optional configuration object describing items to load.
 		 * @constructor
 		 */
-		public function Dependencies(config:IConfig = null)
+		public function Dependencies(config:Config = null)
 		{
 			LoaderMax.activate([ImageLoader, DataLoader, SWFLoader, XMLLoader]);
 			
@@ -61,12 +67,15 @@ package potato.modules.dependencies
 		
 		public function onLoaderComplete(e:LoaderEvent):void
 		{
-			dispatchEvent(new Event(Event.COMPLETE));
+		  if(!_error)
+			  dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
 		public function onLoaderError(e:LoaderEvent):void
 		{
 			log("Dependencies::onLoaderError()");
+			_error = true;
+			dispatchEvent(new ErrorEvent(ErrorEvent.ERROR))
 		}
 		
 		/**
@@ -74,7 +83,7 @@ package potato.modules.dependencies
 		 * 
 		 * @param config A configuration object containing items to be merged.
 		 */
-		public function inject(config:IConfig):void
+		public function inject(config:Config):void
 		{
 			var keys:Array = config.keys;
 			
@@ -90,15 +99,6 @@ package potato.modules.dependencies
 				// Get the type
 				if (config.hasProperty(key, "type"))
 					params.type = config.getProperty(key, "type");
-				
-				// Key for choosing an ApplicationDomain (SWFLoader)
-				//if (config.hasProperty(key, "domain"))
-				//{
-				//	var customLoaderContext:LoaderContext = new LoaderContext(); 
-				//	if (config.getProperty(key, "domain") == "current")
-				//		customLoaderContext.applicationDomain = ApplicationDomain.currentDomain;
-				//	params.context = customLoaderContext;
-				//}
 				
 				// Add additional keys from config
 				mergeProperties(params, config.configForKey(key), ["id", "type", "domain", "url"]);
@@ -118,12 +118,12 @@ package potato.modules.dependencies
 		 * Merges properties of an object and a configuration. Ignores some keys if necessary.
 		 * 
 		 * @param obj Object 
-		 * @param config IConfig 
+		 * @param config Config 
 		 * @param ignoreKeys Array An Array containing keys to be ignored from the merge.
 		 * 
 		 * @private
 		 */
-		protected function mergeProperties(obj:Object, config:IConfig, ignoreKeys:Array):void
+		protected function mergeProperties(obj:Object, config:Config, ignoreKeys:Array):void
 		{			
 			var keys:Array = config.keys;
 			
@@ -155,6 +155,7 @@ package potato.modules.dependencies
 		{
 			var itemLoader:LoaderCore;
 			var ext:String = url.substr(url.lastIndexOf(".") + 1);
+			props ||= {};
 			
 			// Set default LoaderContext for SWFs in the same domain.
 			if(ext == "swf" && !props.hasOwnProperty("context"))
@@ -180,6 +181,7 @@ package potato.modules.dependencies
 		 */
 		public function load():void
 		{
+		  _error = false;
 			if(_queue.numChildren > 0){
 				_queue.load();
 			}
@@ -222,6 +224,11 @@ package potato.modules.dependencies
 		  return _queue.getContent(key).rawContent as Loader;
 		}
 		
+		public function getMovieClip(key:String):MovieClip
+		{
+		  return _queue.getContent(key).rawContent as MovieClip;
+		}
+		
 		public function getSound(key:String):Sound
 		{
 		  return _queue.getContent(key).content;
@@ -235,6 +242,11 @@ package potato.modules.dependencies
 		public function getXML(key:String):XML
 		{
 			return _queue.getContent(key);
+		}
+		
+		public function getVideo(key:String):*
+		{
+			return _queue.getLoader(key);
 		}
 		
 		/**

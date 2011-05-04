@@ -1,7 +1,7 @@
 package potato.core.config
 {	
     import potato.core.config.YAMLConfig;
-	import potato.core.config.ObjectConfig;
+	import potato.core.config.Config;
 	import flash.events.*;
 	import org.flexunit.Assert;
 	import org.flexunit.async.Async;

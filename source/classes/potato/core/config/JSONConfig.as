@@ -5,8 +5,6 @@ package potato.core.config
 	import flash.net.URLRequest;
 	import flash.events.Event;
 	import com.adobe.serialization.json.JSON;
-	import potato.core.config.ObjectConfig;
-	import potato.core.dsl.ConditionalParser;
 
 	/**
 	 *  Dispatched after the JSON file has been loaded and parsed.
@@ -24,7 +22,7 @@ package potato.core.config
 	 * @author Lucas Dupin
 	 * @since  15.06.2010
 	 */
-	public class JSONConfig extends ObjectConfig implements IConfig
+	public class JSONConfig extends Config
 	{
 		/**
 		 * URL for the JSON file

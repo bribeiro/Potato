@@ -3,7 +3,7 @@ package potato.modules.parameters
     import org.flexunit.Assert;
 	import flash.display.Sprite;
 	import potato.modules.parameters.Parameters;
-	import potato.core.config.ObjectConfig;
+	import potato.core.config.Config;
 	public class ParametersTest
 	{
 
@@ -14,7 +14,7 @@ package potato.modules.parameters
 				p = new Parameters();
 			
 			//Loaded values
-			p.inject(new ObjectConfig({
+			p.inject(new Config({
 				"name": "value",
 				"name2": "value2",
 				"name3": "value3",
@@ -84,7 +84,7 @@ package potato.modules.parameters
         [Test]
 		public function inheritance():void
 		{
-			var inh:Parameters = new Parameters(new ObjectConfig({
+			var inh:Parameters = new Parameters(new Config({
 				inheritedProp: "yep"
 			}));
 			parameter.inherit = inh;

@@ -3,7 +3,7 @@ package potato.modules.navigation
 	import potato.core.IDisposable;
 	import potato.core.IResizable;
 	import potato.core.IVisible;
-	import potato.core.config.IConfig;
+	import potato.core.config.Config;
 	
 	/**
 	 * Defines View's responsibilities.
@@ -23,7 +23,7 @@ package potato.modules.navigation
 		function get zIndex():int;
 		
 		// Generic view configuration
-		function get config():IConfig;
+		function get config():Config;
 		
 		// Initialization
 		function init():void;

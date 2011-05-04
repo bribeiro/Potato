@@ -1,7 +1,7 @@
 package potato.modules.tracking
 {
   import flash.events.Event;
-  import potato.core.config.IConfig;
+  import potato.core.config.Config;
   import flash.external.ExternalInterface;
   import br.com.stimuli.string.printf;
   import potato.modules.log.log;
@@ -32,7 +32,7 @@ package potato.modules.tracking
     * Tracking configuration.
     * @private
     */
-    private var _config:IConfig;
+    private var _config:Config;
 
     /**
     * Simple flag.
@@ -68,7 +68,7 @@ package potato.modules.tracking
     /**
      * Tracking configuration.
      */
-    public function set config(value:IConfig):void
+    public function set config(value:Config):void
     {
       _config = value;
     }

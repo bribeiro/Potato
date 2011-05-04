@@ -3,7 +3,6 @@ package potato.core.config
 
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import potato.core.dsl.ConditionalParser;
 	import br.com.stimuli.string.printf;
 
   /**
@@ -22,7 +21,7 @@ package potato.core.config
 	 * @author Lucas Dupin
 	 * @since  26.07.2010
 	 */
-	public class ObjectConfig extends EventDispatcher implements IConfig
+	public class Config extends EventDispatcher
 	{
 		/** @private Source object */
 		internal var _config:Object;
@@ -30,18 +29,9 @@ package potato.core.config
 		/** @private */
 		protected var _interpolationValues:Object;
 		
-		/** @private */
-		protected var _conditionalParser:ConditionalParser;
-		
-		/** @private Magic word for creating conditionals. */
-		public const CONDITIONAL_KEYWORD:String = "when";
-		
-		public function ObjectConfig(source:Object=null):void
+		public function Config(source:Object=null):void
 		{
 			_config = source || {};
-			
-			//Creating our default parser
-			_conditionalParser = new ConditionalParser();
 		}
 		
 		/**
@@ -89,7 +79,7 @@ package potato.core.config
 		}
 		
 		/**
-		* Parse the config, search for conditionals and cast to the right types
+		* Do interpolation if needed
 		 * @param target Object 
 		 * @return Object 
 		 */
@@ -97,37 +87,15 @@ package potato.core.config
 		{
 			var r:Object = target;
 
-			//Dealing with null
-			if (!r) return null;
-
-			//Dealing with conditionals
-			if (r.hasOwnProperty(CONDITIONAL_KEYWORD))
-			{
-				//Isolating conditions
-				var conditions:Array = r[CONDITIONAL_KEYWORD];
-
-				//Check for matches
-				for each (var condition:Object in conditions)
-				{
-					if(_conditionalParser.match(condition.key)){
-						r = condition.value;
-						break;
-					}	
-				}
-			}
-			
-			if(r is String){
+			if(r is String && _interpolationValues != null){
 				r = printf(r+"", _interpolationValues);
 			}
-				
-			
-			
+
 			return r;
 		}
 		
 		/**
 		 * Inserts or modifies a property.
-		 * If it contains a valid conditional syntax, the conditional will be used.
 		 */
 		public function setProperty(name:Object, value:Object):void
 		{
@@ -154,11 +122,11 @@ package potato.core.config
 		
 		/**
 		 * @param key Object 
-		 * Generates a new IConfig based in one item
+		 * Generates a new Config based in one item
 		 */
-		public function configForKey(key:Object):IConfig
+		public function configForKey(key:Object):Config
 		{
-			var o:ObjectConfig = new ObjectConfig(_config[key]);
+			var o:Config = new Config(_config[key]);
 			o.interpolationValues = _interpolationValues;
 			o.init();
 			return o;

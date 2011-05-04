@@ -2,13 +2,13 @@ package potato.modules.navigation
 {
 
 	import flash.events.EventDispatcher;
-	import potato.core.config.IConfig;
+	import potato.core.config.Config;
 	import potato.modules.navigation.View;
 	import flash.events.ProgressEvent;
 	import flash.events.Event;
 	import potato.modules.dependencies.IDependencies;
 	import flash.utils.getDefinitionByName;
-	import potato.core.config.ObjectConfig;
+	import potato.core.config.Config;
 	import ReferenceError;
 	import potato.core.IDisposable;
 	import potato.modules.navigation.events.NavigationEvent;
@@ -31,15 +31,12 @@ package potato.modules.navigation
 	public class ViewLoader extends EventDispatcher implements IDisposable
 	{
 		//@private
-		private var viewOrConfig:Object;
+		private var _viewConfig:Config;
 		
 		//Internal: view to be loaded
 		protected var _viewId:String;
 		
 		protected var _loaded:Boolean;
-		
-		//Config to be attached to the view
-		public var _viewConfig:IConfig;
 		
 		//View loaded
 		public var view:View;
@@ -51,85 +48,27 @@ package potato.modules.navigation
 		public var chain:ViewLoader;
 		
 		/**
-		 * Receives a view to load or an IConfig.
+		 * Receives a view to load or an Config.
 		 * The second parameter is a chain we must load before
 		 * @return  
 		 */
-		public function ViewLoader(viewOrConfig:Object, chain:ViewLoader=null){
-			this.viewOrConfig = viewOrConfig;
+		public function ViewLoader(config:Config, chain:ViewLoader=null){
+			_viewConfig = config;
 			this.chain = chain;
 		}
-		
+
+		/**
+		 * @param v View 
+		 * Setup listeners, create dependencies and start to load
+ 		 */
 		public function start():void
 		{
 			/*
 			Checking the type, maybe it's a view, maybe not
 			*/
-			if (viewOrConfig is View)
-			{
-				_viewId = viewOrConfig.id;
-				log("[ViewLoader] ", _viewId, " load start");
-				handleViewLoading(viewOrConfig as View)
-			} 
-			else if (viewOrConfig is IConfig)
-			{
-				_viewId = viewOrConfig.getProperty("id");
-				log("[ViewLoader] ", _viewId, " load start");
-				handleConfigLoading(viewOrConfig as IConfig)
-			} else
-			{
-				throw new Error("[ViewLoader] doesn't know how to load " + viewOrConfig);
-			}
-		}
-		
-		/**
-		 * @param v View 
-		 * Setup listeners and start to load
-		 */
-		protected function handleViewLoading(v:View):void
-		{
-			//View reference
-			view = v;
-			
-			//i18n?
-			if(view.config.hasProperty("localeFile"))
-			{
-				//Check if the module was included
-				with(getDefinitionByName("potato.modules.i18n.I18n")){
-					inject(new parser(view.config.getProperty("localeFile")));
-					instance.addEventListener(Event.COMPLETE, continueViewLoading, false, 0, true);
-				}
-			} else {
-				continueViewLoading();
-			}
-		}
-		/**
-		 * @param e Event 
-		 * Runs after i18n verifications (Loading View instance)
-		 */
-		public function continueViewLoading(e:Event=null):void
-		{
-			//Check if there is something else to load
-			if(view.dependencies)
-			{
-				view.dependencies.addEventListener(Event.COMPLETE, onViewLoadComplete);
-				view.dependencies.addEventListener(ProgressEvent.PROGRESS, onViewLoadProgress, false, 0, true);
-				view.dependencies.load();
-			} else
-			{
-				onViewLoadComplete();
-			}
-		}
-		
-		/**
-		 * @param viewConfig Object Default object from IConfig
-		 * Setup listeners, create dependencies and start to load
-		 */
-		protected function handleConfigLoading(viewConfig:IConfig):void
-		{
-			//Reference
-			_viewConfig = viewConfig;
-			
+			_viewId = _viewConfig.getProperty("id");
+			log("[ViewLoader] ", _viewId, " load start");
+
 			//Do we need to load localization stuff?
 			if (_viewConfig.hasProperty("localeFile"))
 			{
@@ -148,12 +87,12 @@ package potato.modules.navigation
 		/**
 		 * @param e Event 
 		 * Runs after i18n verifications
-		 * (Loading IConfig instance)
+		 * (Loading Config instance)
 		 */
 		public function continueConfigLoading(e:Event=null):void
 		{
 			if(e)
-				getDefinitionByName("potato.modules.i18n.I18n").instance.removeEventListener(Event.COMPLETE, continueConfigLoading);
+				e.target.removeEventListener(Event.COMPLETE, continueConfigLoading);
 			
 			//Do we have dependencies?
 			if (_viewConfig.hasProperty("dependencies"))
@@ -173,7 +112,7 @@ package potato.modules.navigation
 			}
 		}
 		
-		protected function getDependenciesInstance(config:IConfig):IDependencies
+		protected function getDependenciesInstance(config:Config):IDependencies
 		{
 			var dependencies:IDependencies = getInstanceByName("potato.modules.dependencies.Dependencies", config);
 			
@@ -271,7 +210,6 @@ package potato.modules.navigation
 			_viewId      = null;
 			_viewConfig  = null;
 			view         = null;
-			viewOrConfig = null;
 
 		}
 	
