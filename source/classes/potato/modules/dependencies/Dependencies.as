@@ -24,6 +24,8 @@ package potato.modules.dependencies
 	
 	import potato.core.config.Config;
 	import potato.modules.log.log;
+	import flash.net.NetStream;
+	import flash.display.MovieClip;
 
 	/**
 	 * Implements IDependencies with GreenSock's LoaderMax.
@@ -222,6 +224,11 @@ package potato.modules.dependencies
 		  return _queue.getContent(key).rawContent as Loader;
 		}
 		
+		public function getMovieClip(key:String):MovieClip
+		{
+		  return _queue.getContent(key).rawContent as MovieClip;
+		}
+		
 		public function getSound(key:String):Sound
 		{
 		  return _queue.getContent(key).content;
@@ -235,6 +242,11 @@ package potato.modules.dependencies
 		public function getXML(key:String):XML
 		{
 			return _queue.getContent(key);
+		}
+		
+		public function getVideo(key:String):*
+		{
+			return _queue.getLoader(key);
 		}
 		
 		/**

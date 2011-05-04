@@ -231,23 +231,27 @@ package potato.modules.navigation
 		{
 			if(nav.children.length < 2) return;
 			
-			var swapped:Boolean, i:int;
+			var swapped:Boolean, i:int, i2:int;
 			do
 			{
 				swapped = false;
-				for(i=0; i< nav.children.length-1; i++){
-				      if (nav.children[i].zIndex > nav.children[i+1].zIndex && getChildIndex(nav.children[i]) < getChildIndex(nav.children[i+1])) { // test whether the two elements are in the wrong order
-				        swapChildren(nav.children[i], nav.children[i+1]); // let the two elements change places
-				        swapped = true;
-				      }
-				 }
+				for(i=0; i< nav.children.length; i++){
+				  i2 = i+1 == nav.children.length ? 0 : i+1;
+          if ((nav.children[i].zIndex > nav.children[i2].zIndex && getChildIndex(nav.children[i]) < getChildIndex(nav.children[i2])) ||
+            (nav.children[i].zIndex < nav.children[i2].zIndex && getChildIndex(nav.children[i]) > getChildIndex(nav.children[i2]))) { // test whether the two elements are in the wrong order
+            swapChildren(nav.children[i], nav.children[i2]); // let the two elements change places
+            swapped = true;
+          }
+        }
+        
 				if(!swapped)
 					break;
 					
 				swapped = false;
 				for(i=nav.children.length-1; i<0; i--){
-					if (nav.children[i].zIndex > nav.children[i+1].zIndex && getChildIndex(nav.children[i]) < getChildIndex(nav.children[i+1])){
-						swapChildren(nav.children[i], nav.children[i+1]); // let the two elements change places
+					if ((nav.children[i].zIndex > nav.children[i2].zIndex && getChildIndex(nav.children[i]) < getChildIndex(nav.children[i2])) ||
+            (nav.children[i].zIndex < nav.children[i2].zIndex && getChildIndex(nav.children[i]) > getChildIndex(nav.children[i2]))){
+						swapChildren(nav.children[i], nav.children[i2]); // let the two elements change places
 				        swapped = true;
 				    }
 				 }

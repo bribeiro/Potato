@@ -4,6 +4,7 @@ package potato.modules.i18n
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import potato.modules.log.log;
+	import flash.text.TextFormat;
 	
 	/**
 	 * Contains the fillWithLocale function and related functionalities.
@@ -106,8 +107,14 @@ package potato.modules.i18n
 					var id:String = miner.apply(where, [where].concat(rest));
 					
 					//Check if it exists in the list
-					if (strings[id])
-						where["text"] = strings[id];
+					if (strings[id]){
+					  var t:TextField = where as TextField;
+					  t.text = strings[id];
+					  var fmt:TextFormat = t.getTextFormat();
+            t.setTextFormat(fmt);
+            t.autoSize = t.autoSize;
+					}
+						
 					else
 						log("ID NOT FOUND:", id)
 

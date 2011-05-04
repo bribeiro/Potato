@@ -2,6 +2,7 @@ package potato.modules.dependencies
 {
   import flash.events.IEventDispatcher;
   import flash.display.Bitmap;
+  import flash.display.MovieClip;
   import flash.display.BitmapData;
   import flash.display.DisplayObject;
   import flash.display.Loader;
@@ -26,8 +27,6 @@ package potato.modules.dependencies
 		 */
 		function load() : void;
 		
-		//TODO implement a nice interface here
-		
 		function getBitmap(key:String):Bitmap;
 		function getBitmapData(key:String):BitmapData;
     function getByteArray(key:String):ByteArray;
@@ -37,6 +36,8 @@ package potato.modules.dependencies
 		function getSound(key:String):Sound;
 		function getString(key:String):String;
     function getXML(key:String):XML;
+    function getVideo(key:String):*;
+    function getMovieClip(key:String):MovieClip;
 	}
 
 }
