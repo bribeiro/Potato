@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
 	creationComplete="runMe()" xmlns:flexUnitUIRunner="http://www.adobe.com/2009/flexUnitUIRunner" 
-    width="1024" height="700" styleName="flexUnitApplication" >
+    width="100%" height="100%" styleName="flexUnitApplication" >
 	
 	<mx:Script>
 		<![CDATA[
@@ -10,9 +10,10 @@
 			import org.flexunit.listeners.UIListener;
 			import org.flexunit.internals.TraceListener;
 			import org.flexunit.runner.FlexUnitCore;
-            import potato.core.config.YAMLConfigTest;
-            import potato.modules.parameters.ParametersTest;
-            import potato.modules.dependencies.DependenciesTest;
+      import potato.core.config.YAMLConfigTest;
+      import potato.core.config.JSONConfigTest;
+      import potato.modules.parameters.ParametersTest;
+      import potato.modules.dependencies.DependenciesTest;
 			
 			private var core:FlexUnitCore;
 
@@ -28,7 +29,7 @@
 				
 				//This run statements executes the unit tests for the FlexUnit4 framework 
 				//the Hamcrest matchers and some of the tests shown in the FlexUnit in 360 seconds blog post
-				core.run( ParametersTest, DependenciesTest, YAMLConfigTest );
+				core.run( ParametersTest, DependenciesTest, YAMLConfigTest, JSONConfigTest );
 				
 			}
 		]]>

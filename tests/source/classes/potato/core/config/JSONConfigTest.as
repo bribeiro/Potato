@@ -1,14 +1,14 @@
 package potato.core.config
 {	
-  import potato.core.config.YAMLConfig;
+  import potato.core.config.JSONConfig;
 	import potato.core.config.Config;
 	import flash.events.*;
 	import org.flexunit.Assert;
 	import org.flexunit.async.Async;
 	
-	public class YAMLConfigTest 
+	public class JSONConfigTest 
 	{
-    private const YAML_PATH:String = "data/config.yaml";
+    private const JSON_PATH:String = "data/config.json";
 
     [Test(async)]
     public function boolParsing():void
@@ -19,7 +19,7 @@ package potato.core.config
         Assert.assertEquals(config.getProperty("bool"), true);
       }, 5000, null, handleTimeout);
 
-      var config:YAMLConfig = new YAMLConfig(YAML_PATH);
+      var config:JSONConfig = new JSONConfig(JSON_PATH);
       config.addEventListener(Event.INIT, asyncHandler)
       config.init();
     }
@@ -32,7 +32,7 @@ package potato.core.config
         Assert.assertEquals(config.getProperty("str"), "my fançy and complex StRiNg!");
       }, 5000, null, handleTimeout);
 
-      var config:YAMLConfig = new YAMLConfig(YAML_PATH);
+      var config:JSONConfig = new JSONConfig(JSON_PATH);
       config.addEventListener(Event.INIT, asyncHandler)
       config.init();
     }
@@ -45,7 +45,7 @@ package potato.core.config
         Assert.assertEquals(config.getProperty("float"), 1.23456);
       }, 5000, null, handleTimeout);
 
-      var config:YAMLConfig = new YAMLConfig(YAML_PATH);
+      var config:JSONConfig = new JSONConfig(JSON_PATH);
       config.addEventListener(Event.INIT, asyncHandler)
       config.init();
     }

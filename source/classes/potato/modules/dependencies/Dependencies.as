@@ -41,9 +41,6 @@ package potato.modules.dependencies
 	  /** @private */
 		protected var _queue:LoaderMax;
 		
-		/** @private flag */
-		protected var _error:Boolean;
-		
 		/**
 		 * @param config An optional configuration object describing items to load.
 		 * @constructor
@@ -67,14 +64,11 @@ package potato.modules.dependencies
 		
 		public function onLoaderComplete(e:LoaderEvent):void
 		{
-		  if(!_error)
-			  dispatchEvent(new Event(Event.COMPLETE));
+		  dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
 		public function onLoaderError(e:LoaderEvent):void
 		{
-			log("Dependencies::onLoaderError()");
-			_error = true;
 			dispatchEvent(new ErrorEvent(ErrorEvent.ERROR))
 		}
 		
@@ -181,7 +175,6 @@ package potato.modules.dependencies
 		 */
 		public function load():void
 		{
-		  _error = false;
 			if(_queue.numChildren > 0){
 				_queue.load();
 			}

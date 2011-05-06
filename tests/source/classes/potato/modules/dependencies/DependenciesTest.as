@@ -59,8 +59,8 @@ package potato.modules.dependencies
 		public function dependenciesFailed():void
 		{
 			var dep:Dependencies = new Dependencies();
-            dep.addEventListener(ErrorEvent.ERROR, asyncHandler, false, 0, true);
-            Async.failOnEvent(this, dep, Event.COMPLETE);
+      dep.addEventListener(ErrorEvent.ERROR, asyncHandler, false, 0, true);
+			dep.addItem("./dummy.swf");
 			dep.addItem("./dummye.swf");
 			dep.load();
 		}
