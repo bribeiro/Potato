@@ -1,7 +1,7 @@
 package potato.modules.services
 {
-	import com.adobe.serialization.json.JSONDecoder;
 	import potato.modules.services.IResponseParser;
+	import com.brokenfunction.json.decodeJson;
 
 	public class JSONResponseParser implements IResponseParser
 	{
@@ -14,9 +14,7 @@ package potato.modules.services
 		{
 			try
 			{
-				var jsonDecoder:JSONDecoder = new JSONDecoder(rawContent, false);
-				var content:* = jsonDecoder.getValue();
-				return content;
+				return decodeJson( rawContent );
 			}
 			catch (e:Error)
 			{

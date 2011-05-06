@@ -1,10 +1,9 @@
 package potato.core.config
 {
-	import flash.events.EventDispatcher;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.events.Event;
-	import com.adobe.serialization.json.JSON;
+	import com.brokenfunction.json.decodeJson;
 
 	/**
 	 *  Dispatched after the JSON file has been loaded and parsed.
@@ -58,7 +57,7 @@ package potato.core.config
 			e.target.removeEventListener(Event.COMPLETE, onConfigLoaded);
 		
 			// Parse JSON
-			_config = JSON.decode(e.target.data);
+			_config =  decodeJson( e.target.data )
 		
 			// Notify
 			dispatchEvent(new Event(Event.INIT));

@@ -1,8 +1,9 @@
 package potato.modules.services
 {
-	import com.adobe.serialization.json.JSONEncoder;
 	import potato.modules.services.ICallEncoder;
 	import potato.modules.log.log;
+	
+	import com.brokenfunction.json.encodeJson;
 
 	public class JSONCallEncoder implements ICallEncoder
 	{
@@ -15,9 +16,7 @@ package potato.modules.services
 		{
 			try
 			{
-				var jsonEncoder:JSONEncoder = new JSONEncoder(value);
-				var content:String = jsonEncoder.getString();
-				return content;
+				return encodeJson( value );
 			}
 			catch (e:Error)
 			{
