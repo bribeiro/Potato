@@ -16,7 +16,51 @@
     false,
     true,
     null,
-    "áííóú ÁÉÍÓÚ çÇ"
-  ]
-  
+    "éíóúâêîôûàèìòùäëïöüãõç ÉÍÓÚÂÊÎÔÛÀÈÌÒÙÄËÏÖÜÃÕÇ"
+  ],
+  "complexObject":
+  {
+    "name":"Is my name",
+    "gender":"M",
+    "birth":1981,
+    "cost":5983.27,
+    "count":908098409238403472,
+    "var_underscored" : "a var undersocre",
+    "array":
+    [
+      "one",
+      2,
+      "III",
+      false,
+      true,
+      null,
+      "áííóú ÁÉÍÓÚ çÇ",
+      {
+        "code": 10933208409238938,
+        "result":false,
+        "message":"hash item 2 in da house",
+        "array":["a", 2, {"one":1, "two":"two", "end":true, "latin":"éíóúâêîôûàèìòùäëïöüãõç ÉÍÓÚÂÊÎÔÛÀÈÌÒÙÄËÏÖÜÃÕÇ"}]
+      }
+    ],
+    "hash":{
+      "item1":
+      {
+        "code": 10938990398418903843,
+        "result":true,
+        "message":"my simple object"
+      },
+      "item2":
+      {
+        "code": 10933208409238938,
+        "result":false,
+        "message":"hash item 2 in da house"
+      },
+      "item3":
+      {
+        "code": 10933208409238938,
+        "result":false,
+        "message":"hash item 2 in da house"
+      }
+    }
+  }
 }
