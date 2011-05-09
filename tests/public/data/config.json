@@ -7,5 +7,16 @@
     "code": 10938990398418903843,
     "result":true,
     "message":"my simple object"
-  }
+  },
+  "array":
+  [
+    "one",
+    2,
+    "III",
+    false,
+    true,
+    null,
+    "áííóú ÁÉÍÓÚ çÇ"
+  ]
+  
 }
