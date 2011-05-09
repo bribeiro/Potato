@@ -49,6 +49,28 @@ package potato.core.config
       config.addEventListener(Event.INIT, asyncHandler)
       config.init();
     }
+    
+    [Test(async)]
+    public function simpleObjectParsing():void
+    {
+      var asyncHandler:Function = Async.asyncHandler(this, function(e:Event, o:*):void{
+        config.removeEventListener(Event.INIT, asyncHandler);
+        
+        var result : Object = {
+          code: 10938990398418903843,
+          result:true,
+          message:"my simple object"
+        };
+        
+        for(var p : String in result)
+          Assert.assertEquals(config.getProperty("object")[p], result[p]);
+          
+      }, 5000, null, handleTimeout);
+      
+      var config:JSONConfig = new JSONConfig(JSON_PATH);
+      config.addEventListener(Event.INIT, asyncHandler)
+      config.init();
+    }
 
 
     //Failed

@@ -1,5 +1,11 @@
 {
   "bool" : true,
   "str" : "my fançy and complex StRiNg!",
-  "float" : 1.23456
+  "float" : 1.23456,
+  "object":
+  {
+    "code": 10938990398418903843,
+    "result":true,
+    "message":"my simple object"
+  }
 }
