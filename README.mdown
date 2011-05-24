@@ -7,8 +7,10 @@ Showcase
 --------
 _All projects showcased here are property of their respective owners._
 
+*  [Magazine Luiza - Mother's Day](http://www.magazineluiza.com.br/maes/)
 *  [Coke Zero - The Impossible Auction](http://leilaoimpossivel.cocacolazero.com.br/)
 *  [Coke Zero - My video-game life](http://game.cocacolazero.com.br/minhavidadegame/)
+*  [SPFC - Convene Your Team](http://www.saopaulofc.net/interativo/convoque-seu-time/)
 *  Absolut Carnaval 2011
 *  [Absolut Berri Açaí](http://www.absolut.com/br/berriacai)
 *  [Coke - Summer Radar](http://apps.facebook.com/radarcocacola/)
