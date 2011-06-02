@@ -111,11 +111,11 @@ package potato.modules.navigation
 			nav.addEventListener(NavigationEvent.REMOVE_VIEW, onViewReadyToRemove);
 			
 			// Default view behaviour
-			addEventListener(Event.ADDED_TO_STAGE, _init, false, 0, true);
+			addEventListener(Event.ADDED_TO_STAGE, potato_navigation::_init, false, 0, true);
 			
 			//If this is the first view, it's already on stage
 			if(stage)
-				_init();
+				potato_navigation::_init();
 			
 		}
 
@@ -155,7 +155,7 @@ package potato.modules.navigation
 	 	potato_navigation function _init(e:Event=null):void
 		{
 			//Init only once
-			removeEventListener(Event.ADDED_TO_STAGE, _init);
+			removeEventListener(Event.ADDED_TO_STAGE, potato_navigation::_init);
 			
 			//Enable resize
 			stage.addEventListener(Event.RESIZE, _resize, false, 0, true);
