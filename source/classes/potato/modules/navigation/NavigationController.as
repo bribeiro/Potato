@@ -377,6 +377,8 @@ package potato.modules.navigation
 			//Are we done?
 			if (_viewsToHide.length == 0)
 				continueTransition();
+			
+			e.view.removeEventListener(NavigationEvent.VIEW_HIDDEN, onViewHidden);
 		}
 		/**
 		 * @private
