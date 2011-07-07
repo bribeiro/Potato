@@ -19,7 +19,6 @@ package potato.modules.navigation
 	
 	// Potato Navigation module namespace
 	import potato.modules.navigation.potato_navigation;
-	use namespace potato_navigation;
 
 	/**
 	 * Main piece of the navigation
@@ -36,7 +35,11 @@ package potato.modules.navigation
 	 */
 	public class View extends DisposableSprite implements IView
 	{
-		/**
+	  
+	  // namespace for potato's module access.
+    use namespace potato_navigation;
+	  
+	  /**
 		 * id used for sending messages and doing navigation operations
 		 */
 		protected var _id:String;
@@ -58,6 +61,7 @@ package potato.modules.navigation
 		protected var _parameters:Object;
 		protected var _dependencies:IDependencies;
 		protected var _config:Config;
+		
 		
 		/**
 		 * @constructor
@@ -89,6 +93,8 @@ package potato.modules.navigation
 		 */
 		protected function onConfigInit(e:Event):void
 		{
+		  use namespace potato_navigation;
+		  
 			_config.removeEventListener(Event.INIT, onConfigInit);
 			
 			// Initialize the id (set it to class name if not defined)
@@ -119,33 +125,34 @@ package potato.modules.navigation
 			
 		}
 
-        /**
-         * @param view String
-         * Returns a proxy to a View
-         */
-        public function msg(view:String):ViewMessenger{
-            return nav.getViewMessenger(view);
-        }
+    /**
+    * @param view String
+    * Returns a proxy to a View
+    */
+    public function msg(view:String):ViewMessenger
+    {
+      return nav.getViewMessenger(view);
+    }
 
-        public function addView(id:String):ViewLoader
-		{
-            return nav.root.nav.addView(id);
-        }
-        
-		public function removeView(id:String):void
-		{
-            nav.root.nav.removeView(id);
-        }
-        
-		public function changeView(id:String):ViewLoader
-		{
-            return nav.changeView(id);
-        }
-        
-		public function loaderFor(view:String):ViewLoader
-		{
-            return nav.loaderFor(view);
-        }
+    public function addView(id:String):ViewLoader
+    {
+      return nav.root.nav.addView(id);
+    }
+
+    public function removeView(id:String):void
+    {
+      nav.root.nav.removeView(id);
+    }
+
+    public function changeView(id:String):ViewLoader
+    {
+      return nav.changeView(id);
+    }
+
+    public function loaderFor(view:String):ViewLoader
+    {
+      return nav.loaderFor(view);
+    }
 
 
 		/**
@@ -154,6 +161,8 @@ package potato.modules.navigation
 		 */
 	 	potato_navigation function _init(e:Event=null):void
 		{
+      use namespace potato_navigation;
+      
 			//Init only once
 			removeEventListener(Event.ADDED_TO_STAGE, _init);
 			
@@ -322,6 +331,7 @@ package potato.modules.navigation
 			nav.addEventListener(NavigationEvent.TRANSITION_COMPLETE, _showComplete, false, 0, true);
 			nav.doTransition();
 		}
+		
 		potato_navigation function _showComplete(e:Event):void
 		{
 			nav.removeEventListener(NavigationEvent.TRANSITION_COMPLETE, _showComplete);
@@ -337,6 +347,7 @@ package potato.modules.navigation
 			nav.addEventListener(NavigationEvent.TRANSITION_COMPLETE, _hideComplete, false, 0, true);
 			nav.hideAll();
 		}
+		
 		potato_navigation function _hideComplete(e:Event):void
 		{	
 			nav.removeEventListener(NavigationEvent.TRANSITION_COMPLETE, _hideComplete);
