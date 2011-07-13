@@ -26,6 +26,7 @@ package potato.modules.dependencies
 	import potato.modules.log.log;
 	import flash.net.NetStream;
 	import flash.display.MovieClip;
+	import com.greensock.loading.BinaryDataLoader;
 
 	/**
 	 * Implements IDependencies with GreenSock's LoaderMax.
@@ -47,7 +48,8 @@ package potato.modules.dependencies
 		 */
 		public function Dependencies(config:Config = null)
 		{
-			LoaderMax.activate([ImageLoader, DataLoader, SWFLoader, XMLLoader]);
+			LoaderMax.activate([ImageLoader, DataLoader, SWFLoader, XMLLoader, BinaryDataLoader]);
+			registerExtensions();
 			
 			// Create a new LoaderMax instance (an unique name is automatically assigned)
 			_queue = new LoaderMax({onProgress:onLoaderProgress, onComplete:onLoaderComplete, onError:onLoaderError});
@@ -140,6 +142,29 @@ package potato.modules.dependencies
 		}
 		
 		/**
+		 * Register in LoaderMax, some usual extensions to use the correct loader type.
+		 * To retrive bytes, use the getContent() method.
+		 * 
+		 * @private
+		 */
+		protected function registerExtensions():void
+		{
+		  var extension:String;
+		  var binaries:Array;
+		  var plainTexts:Array;
+			
+			binaries = ["pbj", "zip", "pdf"];
+			plainTexts = ["yaml", "json"];
+			
+			for each(extension in binaries)
+			  LoaderMax.registerFileType(extension, BinaryDataLoader);
+			  
+			for each(extension in plainTexts)
+			  LoaderMax.registerFileType(extension, DataLoader);
+			
+		}
+		
+		/**
 		 * Adds a new item to the loading queue.
 		 * 
 		 * @param url * The item's URL.
@@ -157,16 +182,25 @@ package potato.modules.dependencies
 				props.context = new LoaderContext(false, ApplicationDomain.currentDomain);
 			}
 			
-			// Create correct type of loader from the given URL.
-			var dataExtensions:Array = ["yaml", "json"];
-			if (props.type == 'data' || dataExtensions.indexOf(ext) != -1) {
-				itemLoader = new DataLoader(url, props);
+			switch( props.type )
+			{
+			  case "data":
+			    itemLoader = new DataLoader(url, props);
+			  break;
+			  
+			  case "xml":
+			    itemLoader = new XMLLoader(url, props);
+			  break;
+			  
+			  case "binary":
+			    itemLoader = new BinaryDataLoader(url, props);
+			  break;
+			  
+			  default:
+			    itemLoader = LoaderMax.parse(url, props);
+			  break;
 			}
-			else if (props.type == 'xml') {
-			  itemLoader = new XMLLoader(url, props);
-			}	else {
-				itemLoader = LoaderMax.parse(url, props);
-			}
+			
 			_queue.append(itemLoader);
 		}
 		
@@ -199,7 +233,7 @@ package potato.modules.dependencies
 		
 		public function getByteArray(key:String):ByteArray
 		{
-		  return _queue.getContent(key).rawContent as ByteArray;
+		  return _queue.getContent(key).content as ByteArray;
 		}
 		
 		public function getContent(key:String):*

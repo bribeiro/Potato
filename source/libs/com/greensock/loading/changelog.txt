@@ -1,6 +1,12 @@
 CHANGE LOG : GREENSOCK LOADERMAX SYSTEM
 ----------------------------------------
 
+2011-07-05
+------------------------------------------
+VideoLoader			1.856
+LoaderMax			1.856
+	- Fixed issue that could cause a VideoLoader's videoTime to report as non-zero initially even though autoPlay was set to false (it's actually a bug in Adobe's NetStream that was worked around)
+
 2011-06-27
 -------------------------------------------
 LoaderMax			1.855

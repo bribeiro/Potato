@@ -1,6 +1,14 @@
 CHANGE LOG : GREENSOCK TWEENING PLATFORM
 ----------------------------------------
 
+2011-07-07
+---------------------------------------------
+TweenLite				11.63
+TweenMax				11.69
+TweenMaxVars			5.14
+	- Made TweenLite.from(), TweenMax.from(), TweenMax.allFrom(), and TweenMax.allFromTo() compatible with the TweenLiteVars and TweenMaxVars data classes
+	- Fixed warning trace() that could show up if you created a TweenMaxVars object BEFORE ever referencing TweenMax in your code. 
+
 2011-06-28
 ---------------------------------------------
 TintPlugin				1.2

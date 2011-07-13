@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.854
- * DATE: 2011-06-16
+ * VERSION: 1.856
+ * DATE: 2011-07-05
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -173,10 +173,10 @@ function progressHandler(event:LoaderEvent):void {
 
 function completeHandler(event:LoaderEvent):void {
 	//play the video
-	loader.playVideo();
+	video.playVideo();
 	
 	//tween the volume up to 1 over the course of 2 seconds.
-	TweenLite.to(loader, 2, {volume:1});
+	TweenLite.to(video, 2, {volume:1});
 }
 
 function errorHandler(event:LoaderEvent):void {
@@ -745,7 +745,8 @@ function errorHandler(event:LoaderEvent):void {
 		protected function _applyPendingPause():void {
 			_pausePending = false;
 			this.volume = _volume; //Just resets the volume to where it should be because we temporarily made it silent during the buffer.
-			_ns.seek(_forceTime || 0);
+			_setForceTime(_forceTime || 0);
+			_ns.seek(_forceTime);
 			if (_video.stage != null) {
 				_video.attachNetStream(_ns); //in case it was removed
 			}
