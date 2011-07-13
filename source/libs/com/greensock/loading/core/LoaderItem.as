@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.777
- * DATE: 2011-01-15
+ * VERSION: 1.855
+ * DATE: 2011-06-27
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -70,7 +70,7 @@ package com.greensock.loading.core {
 		
 		/** @private Flash doesn't properly apply extra GET url parameters when the URL contains them already (like "http://www.greensock.com?id=2") - it ends up missing an "&" delimiter so this method splits any that exist out into a URLVariables object and optionally adds extra parameters like gsCacheBusterID, etc. **/
 		protected function _setRequestURL(request:URLRequest, url:String, extraParams:String=""):void {
-			var a:Array = url.split("?");
+			var a:Array = (this.vars.allowMalformedURL) ? [url] : url.split("?");
 			
 			//in order to avoid a VERY strange bug in certain versions of the Flash Player (like 10.0.12.36), we must loop through each character and rebuild a separate String variable instead of just using a[0], otherwise the "?" delimiter will be omitted when GET parameters are appended to the URL by Flash! Performing any String manipulations on the url will cause the issue as long as there is a "?" in the url. Like url.split("?") or url.substr(0, url.indexOf("?"), etc. Absolutely baffling. Definitely a bug in the Player - it was fixed in 10.1.
 			var s:String = a[0];
@@ -80,11 +80,11 @@ package com.greensock.loading.core {
 			}
 			
 			request.url = parsedURL;
-			if (a.length == 2) {
+			if (a.length >= 2) {
 				extraParams += (extraParams == "") ? a[1] : "&" + a[1];
 			}
 			if (extraParams != "") {
-				var data:URLVariables = (request.data == null) ? new URLVariables() : request.data as URLVariables;
+				var data:URLVariables = (request.data is URLVariables) ? request.data as URLVariables : new URLVariables();
 				a = extraParams.split("&");
 				i = a.length;
 				var pair:Array;
@@ -112,6 +112,7 @@ package com.greensock.loading.core {
 				_auditStream.addEventListener("securityError", _auditStreamHandler, false, 0, true);
 				var request:URLRequest = new URLRequest();
 				request.data = _request.data;
+				request.method = _request.method;
 				_setRequestURL(request, _url, (!_isLocal || _url.substr(0, 4) == "http") ? "gsCacheBusterID=" + (_cacheID++) + "&purpose=audit" : "");
 				_auditStream.load(request);  
 			}
@@ -148,12 +149,13 @@ package com.greensock.loading.core {
 					_setRequestURL(_request, _url);
 					var request:URLRequest = new URLRequest();
 					request.data = _request.data;
+					request.method = _request.method;
 					_setRequestURL(request, _url, (!_isLocal || _url.substr(0, 4) == "http") ? "gsCacheBusterID=" + (_cacheID++) + "&purpose=audit" : "");
 					_auditStream.load(request);
 					_errorHandler(event);
 					return;
 				} else {	
-					//note: a CANCEL event won't be dispatched because technically the loader wasn't officially loading - we were only briefly checking the bytesTotal with a NetStream.
+					//note: a CANCEL event won't be dispatched because technically the loader wasn't officially loading - we were only briefly checking the bytesTotal with a URLStream.
 					super._failHandler(event);
 				}
 			}
@@ -163,14 +165,14 @@ package com.greensock.loading.core {
 		}
 		
 		/** @private **/
-		override protected function _failHandler(event:Event):void {
+		override protected function _failHandler(event:Event, dispatchError:Boolean=true):void {
 			if (this.vars.alternateURL != undefined && this.vars.alternateURL != "" && !_skipAlternateURL) { //don't do (_url != vars.alternateURL) because the audit could have changed it already - that's the whole purpose of _skipAlternateURL.
 				_skipAlternateURL = true;
 				_url = "temp" + Math.random(); //in case the audit already changed the _url to vars.alternateURL, we temporarily make it something different in order to force the refresh in the url setter which skips running the code if the url is set to the same value as it previously was. 
 				this.url = this.vars.alternateURL; //also calls _load()
 				_errorHandler(event);
 			} else {
-				super._failHandler(event);
+				super._failHandler(event, dispatchError);
 			}
 		}
 		
@@ -193,7 +195,7 @@ package com.greensock.loading.core {
 				_url = value;
 				_setRequestURL(_request, _url);
 				var isLoading:Boolean = Boolean(_status == LoaderStatus.LOADING);
-				_dump(0, LoaderStatus.READY, true);
+				_dump(1, LoaderStatus.READY, true);
 				if (isLoading) {
 					_load();
 				}

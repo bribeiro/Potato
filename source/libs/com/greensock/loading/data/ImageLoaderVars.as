@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.1
- * DATE: 2010-12-09
+ * VERSION: 1.22
+ * DATE: 2011-05-05
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -41,7 +41,7 @@ package com.greensock.loading.data {
  */	 
 	public class ImageLoaderVars {
 		/** @private **/
-		public static const version:Number = 1.1;
+		public static const version:Number = 1.22;
 		
 		/** @private **/
 		protected var _vars:Object;
@@ -125,7 +125,7 @@ package com.greensock.loading.data {
 			return _set("onHTTPStatus", value);
 		}
 		
-		/** A handler function for <code>LoaderEvent.IO_ERROR</code> events which will also call the onError handler, so you can use that as more of a catch-all whereas <code>onIOError</code> is specifically for LoaderEvent.IO_ERROR events. Make sure your onIOError function accepts a single parameter of type <code>LoaderEvent</code> (<code>com.greensock.events.LoaderEvent</code>).</li> **/
+		/** A handler function for <code>LoaderEvent.IO_ERROR</code> events which will also call the onError handler, so you can use that as more of a catch-all whereas <code>onIOError</code> is specifically for LoaderEvent.IO_ERROR events. Make sure your onIOError function accepts a single parameter of type <code>LoaderEvent</code> (<code>com.greensock.events.LoaderEvent</code>). **/
 		public function onIOError(value:Function):ImageLoaderVars {
 			return _set("onIOError", value);
 		}
@@ -161,6 +161,11 @@ package com.greensock.loading.data {
 		/** If <code>true</code>, a "gsCacheBusterID" parameter will be appended to the url with a random set of numbers to prevent caching (don't worry, this info is ignored when you <code>LoaderMax.getLoader()</code> or <code>LoaderMax.getContent()</code> by <code>url</code> or when you're running locally). **/
 		public function noCache(value:Boolean):ImageLoaderVars {
 			return _set("noCache", value);
+		}
+		
+		/** Normally, the URL will be parsed and any variables in the query string (like "?name=test&state=il&gender=m") will be placed into a URLVariables object which is added to the URLRequest. This avoids a few bugs in Flash, but if you need to keep the entire URL intact (no parsing into URLVariables), set <code>allowMalformedURL:true</code>. For example, if your URL has duplicate variables in the query string like <code>http://www.greensock.com/?c=S&c=SE&c=SW</code>, it is technically considered a malformed URL and a URLVariables object can't properly contain all the duplicates, so in this case you'd want to set <code>allowMalformedURL</code> to <code>true</code>. **/
+		public function allowMalformedURL(value:Boolean):ImageLoaderVars {
+			return _set("allowMalformedURL", value);
 		}
 		
 		
@@ -234,6 +239,21 @@ package com.greensock.loading.data {
 			return _set("rotation", value);
 		}
 		
+		/** Sets the <code>ContentDisplay</code>'s <code>rotationX</code> property. **/
+		public function rotationX(value:Number):ImageLoaderVars {
+			return _set("rotationX", value);
+		}
+		
+		/** Sets the <code>ContentDisplay</code>'s <code>rotationY</code> property. **/
+		public function rotationY(value:Number):ImageLoaderVars {
+			return _set("rotationY", value);
+		}
+		
+		/** Sets the <code>ContentDisplay</code>'s <code>rotationZ</code> property. **/
+		public function rotationZ(value:Number):ImageLoaderVars {
+			return _set("rotationZ", value);
+		}
+		
 		/** 
 		 * When a <code>width</code> and <code>height</code> are defined, the <code>scaleMode</code> controls how the loaded image will be scaled to fit the area. The following values are recognized (you may use the <code>com.greensock.layout.ScaleMode</code> constants if you prefer):
 		 * <ul>
@@ -289,6 +309,11 @@ package com.greensock.loading.data {
 		/** Sets the <code>ContentDisplay</code>'s <code>y</code> property (for positioning on the stage). **/
 		public function y(value:Number):ImageLoaderVars {
 			return _set("y", value);
+		}
+		
+		/** Sets the <code>ContentDisplay</code>'s <code>z</code> property (for positioning on the stage). **/
+		public function z(value:Number):ImageLoaderVars {
+			return _set("z", value);
 		}
 		
 		

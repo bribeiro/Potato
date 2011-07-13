@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 1.64
- * DATE: 2011-01-06
+ * VERSION: 1.66
+ * DATE: 2011-04-20
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCS AT: http://www.greensock.com/timelinelite/
  **/
@@ -113,7 +113,7 @@ package com.greensock {
  **/
 	public class TimelineLite extends SimpleTimeline {
 		/** @private **/
-		public static const version:Number = 1.64;
+		public static const version:Number = 1.66;
 		/** @private **/
 		private static var _overwriteMode:int = (OverwriteManager.enabled) ? OverwriteManager.mode : OverwriteManager.init(2); //Ensures that TweenLite instances don't overwrite each other before being put into the timeline/sequence.
 		/** @private **/
@@ -318,7 +318,10 @@ package com.greensock {
 			}
 			
 			//if the timeline has already ended but the inserted tween/timeline extends the duration past the parent timeline's currentTime, we should enable this timeline again so that it renders properly.  
-			if (this.gc && this.cachedStartTime + (tween.cachedStartTime + (tween.cachedTotalDuration / tween.cachedTimeScale)) / this.cachedTimeScale > this.timeline.cachedTime) {
+			if (this.gc && !this.cachedPaused && this.cachedStartTime + (tween.cachedStartTime + (tween.cachedTotalDuration / tween.cachedTimeScale)) / this.cachedTimeScale > this.timeline.cachedTime) {
+				if (this.timeline == TweenLite.rootTimeline || this.timeline == TweenLite.rootFramesTimeline) { //we don't typically want to shift the startTime if this TimelineLite/Max is nested inside of another one, but if it's at the root, we would. For example, if a TimelineLite/Max was created (empty) and then a while later a tween was appended to it and then play() was called, if we don't have this code in place, it would appear to skip ahead however much time has elapsed since the TimelineLite/Max's startTime on the parent timeline (typically not what folks expect).
+					this.setTotalTime(this.cachedTotalTime, true);
+				}
 				this.setEnabled(true, false);
 				//in case any of the anscestors had completed but should now be enabled...
 				var tl:SimpleTimeline = this.timeline;
@@ -546,9 +549,9 @@ package com.greensock {
 					force = true;
 				}
 				if (_rawPrevTime >= 0 && _rawPrevTime != time) {
-					forceChildrenToBeginning(0, suppressEvents);
 					this.cachedTotalTime = 0;
 					this.cachedTime = 0;
+					forceChildrenToBeginning(0, suppressEvents);
 					rendered = true;
 					if (this.cachedReversed) {
 						isComplete = true;
@@ -724,6 +727,7 @@ package com.greensock {
 					}
 					if (nested) {
 						a = a.concat(TimelineLite(tween).getChildren(true, tweens, timelines));
+						cnt = a.length;
 					}
 				}
 				tween = tween.nextNode;

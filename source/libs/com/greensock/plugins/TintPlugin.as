@@ -1,16 +1,16 @@
 /**
- * VERSION: 1.12
- * DATE: 10/2/2009
- * ACTIONSCRIPT VERSION: 3.0 
- * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
+ * VERSION: 1.2
+ * DATE: 2011-06-28
+ * AS3 
+ * UPDATES AND DOCS AT: http://www.TweenMax.com
  **/
 package com.greensock.plugins {
+	import com.greensock.*;
+	import com.greensock.core.*;
+	
 	import flash.display.*;
 	import flash.geom.ColorTransform;
 	import flash.geom.Transform;
-	
-	import com.greensock.*;
-	import com.greensock.core.*;
 /**
  * To change a DisplayObject's tint/color, set this to the hex value of the tint you'd like
  * to end up at (or begin at if you're using <code>TweenMax.from()</code>). An example hex value would be <code>0xFF0000</code>.<br /><br />
@@ -61,20 +61,20 @@ package com.greensock.plugins {
 				end.color = uint(value);
 			}
 			_ignoreAlpha = true;
-			init(target as DisplayObject, end);
+			_transform = DisplayObject(target).transform;
+			init(_transform.colorTransform, end);
 			return true;
 		}
 		
 		/** @private **/
-		public function init(target:DisplayObject, end:ColorTransform):void {
-			_transform = target.transform;
-			_ct = _transform.colorTransform;
+		public function init(start:ColorTransform, end:ColorTransform):void {
+			_ct = start;
 			var i:int = _props.length;
-			var p:String;
+			var p:String, cnt:int = _tweens.length;
 			while (i--) {
 				p = _props[i];
 				if (_ct[p] != end[p]) {
-					_tweens[_tweens.length] = new PropTween(_ct, p, _ct[p], end[p] - _ct[p], "tint", false);
+					_tweens[cnt++] = new PropTween(_ct, p, _ct[p], end[p] - _ct[p], "tint", false);
 				}
 			}
 		}
@@ -82,12 +82,14 @@ package com.greensock.plugins {
 		/** @private **/
 		override public function set changeFactor(n:Number):void {
 			updateTweens(n);
-			if (_ignoreAlpha) {
-				var ct:ColorTransform = _transform.colorTransform;
-				_ct.alphaMultiplier = ct.alphaMultiplier;
-				_ct.alphaOffset = ct.alphaOffset;
+			if (_transform) {
+				if (_ignoreAlpha) {
+					var ct:ColorTransform = _transform.colorTransform;
+					_ct.alphaMultiplier = ct.alphaMultiplier;
+					_ct.alphaOffset = ct.alphaOffset;
+				}
+				_transform.colorTransform = _ct;
 			}
-			_transform.colorTransform = _ct;
 		}
 		
 	}

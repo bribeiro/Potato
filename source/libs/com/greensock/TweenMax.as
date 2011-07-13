@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.641
- * DATE: 2011-01-10
+ * VERSION: 11.68
+ * DATE: 2011-05-09
  * AS3 (AS2 version is also available)
  * UPDATES AND DOCS AT: http://www.greensock.com 
  **/
@@ -296,7 +296,7 @@ package com.greensock {
  */
 	public class TweenMax extends TweenLite implements IEventDispatcher {
 		/** @private **/
-		public static const version:Number = 11.641;
+		public static const version:Number = 11.68;
 		
 		TweenPlugin.activate([
 			
@@ -481,13 +481,20 @@ package com.greensock {
 				this.vars[p] = vars[p];
 			}
 			if (this.initted) {
-				this.initted = false;
-				if (!resetDuration) {
+				if (resetDuration) {
+					this.initted = false;
+				} else {
 					if (_notifyPluginsOfEnabled && this.cachedPT1) {
 						onPluginEvent("onDisable", this); //in case a plugin like MotionBlur must perform some cleanup tasks
 					}
-					init();
-					if (!resetDuration && this.cachedTime > 0 && this.cachedTime < this.cachedDuration) {
+					if (this.cachedTime / this.cachedDuration > 0.998) { //if the tween has finished (or come extremely close to finishing), we just need to rewind it to 0 and then render it again at the end which forces it to re-initialize (parsing the new vars). We allow tweens that are close to finishing (but haven't quite finished) to work this way too because otherwise, the values are so small when determining where to project the starting values that binary math issues creep in and can make the tween appear to render incorrectly when run backwards. 
+						var prevTime:Number = this.cachedTime;
+						this.renderTime(0, true, false);
+						this.initted = false;
+						this.renderTime(prevTime, true, false);
+					} else if (this.cachedTime > 0) {
+						this.initted = false;
+						init();
 						var inv:Number = 1 / (1 - curRatio);
 						var pt:PropTween = this.cachedPT1, endValue:Number;
 						while (pt) {
@@ -497,7 +504,6 @@ package com.greensock {
 							pt = pt.nextNode;
 						}
 					}
-					
 				}
 			}
 		}
@@ -543,7 +549,7 @@ package com.greensock {
 		 * @param force Normally the tween will skip rendering if the time matches the cachedTotalTime (to improve performance), but if force is true, it forces a render. This is primarily used internally for tweens with durations of zero in TimelineLite/Max instances.
 		 */
 		override public function renderTime(time:Number, suppressEvents:Boolean=false, force:Boolean=false):void {
-			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, prevTime:Number = this.cachedTime, isComplete:Boolean, repeated:Boolean, setRatio:Boolean;
+			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, prevTime:Number = this.cachedTotalTime, isComplete:Boolean, repeated:Boolean, setRatio:Boolean;
 			if (time >= totalDur) {
 				this.cachedTotalTime = totalDur;
 				this.cachedTime = this.cachedDuration;
@@ -581,20 +587,20 @@ package com.greensock {
 			if (_repeat != 0) {
 				
 				var cycleDuration:Number = this.cachedDuration + _repeatDelay;
+				var prevCycles:int = _cyclesComplete;
+				_cyclesComplete = (this.cachedTotalTime / cycleDuration) >> 0; //rounds result down, like int()
+				if (_cyclesComplete == this.cachedTotalTime / cycleDuration) {
+					_cyclesComplete--; //otherwise when rendered exactly at the end time, it will act as though it is repeating (at the beginning)
+				}
+				if (prevCycles != _cyclesComplete) {
+					repeated = true;
+				}
+				
 				if (isComplete) {
 					if (this.yoyo && _repeat % 2) {
 						this.cachedTime = this.ratio = 0;
 					}
 				} else if (time > 0) {
-					var prevCycles:int = _cyclesComplete;
-					_cyclesComplete = (this.cachedTotalTime / cycleDuration) >> 0; //rounds result, like int()
-					if (_cyclesComplete == this.cachedTotalTime / cycleDuration) {
-						_cyclesComplete--; //otherwise when rendered exactly at the end time, it will act as though it is repeating (at the beginning)
-					}
-					if (prevCycles != _cyclesComplete) {
-						repeated = true;
-					}
-					
 					this.cachedTime = ((this.cachedTotalTime / cycleDuration) - _cyclesComplete) * cycleDuration; //originally this.cachedTotalTime % cycleDuration but floating point errors caused problems, so I normalized it. (4 % 0.8 should be 0 but Flash reports it as 0.79999999!)
 					
 					if (this.yoyo && _cyclesComplete % 2) {
@@ -615,7 +621,7 @@ package com.greensock {
 				
 			}
 			
-			if (prevTime == this.cachedTime && !force) {
+			if (prevTime == this.cachedTotalTime && !force) {
 				return;
 			} else if (!this.initted) {
 				init();
@@ -681,18 +687,19 @@ package com.greensock {
 			if (_hasUpdateListener && !suppressEvents) {
 				_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.UPDATE));
 			}
-			if (isComplete && !this.gc) { //check gc because there's a chance that kill() could be called in an onUpdate
-				if (_hasPlugins && this.cachedPT1) {
-					onPluginEvent("onComplete", this);
-				}
-				complete(true, suppressEvents);
-			} else if (repeated && !suppressEvents && !this.gc) { 
+			if (repeated && !suppressEvents && !this.gc) { 
 				if (this.vars.onRepeat) {
 					this.vars.onRepeat.apply(null, this.vars.onRepeatParams);
 				}
 				if (_dispatcher) {
 					_dispatcher.dispatchEvent(new TweenEvent(TweenEvent.REPEAT));
 				}
+			}
+			if (isComplete && !this.gc) { //check gc because there's a chance that kill() could be called in an onUpdate
+				if (_hasPlugins && this.cachedPT1) {
+					onPluginEvent("onComplete", this);
+				}
+				complete(true, suppressEvents);
 			}
 		}
 		
@@ -869,6 +876,9 @@ package com.greensock {
 			var i:int, varsDup:Object, p:String;
 			var l:int = targets.length;
 			var a:Array = [];
+			if (vars.isGSVars) { //to accommodate TweenMaxVars instances for strong data typing and code hinting
+				vars = vars.vars;
+			}
 			var curDelay:Number = ("delay" in vars) ? Number(vars.delay) : 0;
 			var onCompleteProxy:Function = vars.onComplete;
 			var onCompleteParamsProxy:Array = vars.onCompleteParams;

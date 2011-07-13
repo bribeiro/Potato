@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.781
- * DATE: 2011-01-18
+ * VERSION: 1.83
+ * DATE: 2011-02-15
  * AS3
  * UPDATES AND DOCS AT: http://www.greensock.com/loadermax/
  **/
@@ -43,7 +43,7 @@ package com.greensock.loading.core {
  */	
 	public class LoaderCore extends EventDispatcher {
 		/** @private **/
-		public static const version:Number = 1.781;
+		public static const version:Number = 1.83;
 		
 		/** @private **/
 		protected static var _loaderCount:uint = 0;
@@ -141,13 +141,13 @@ package com.greensock.loading.core {
 				_rootLoader.skipFailed = false;
 			}
 			
-			_rootLoader.append(this);
-			
 			for (var p:String in _listenerTypes) {
 				if (p in this.vars && this.vars[p] is Function) {
 					this.addEventListener(_listenerTypes[p], this.vars[p], false, 0, true);
 				}
 			}
+			
+			_rootLoader.append(this);
 		}
 		
 		/**
@@ -234,7 +234,7 @@ package com.greensock.loading.core {
 			if (isLoading) {
 				_time = getTimer() - _time;
 			}
-			if (_dispatchProgress && !suppressEvents && _status != LoaderStatus.DISPOSED) {
+			if (_dispatchProgress && !suppressEvents && _status < LoaderStatus.FAILED) {
 				if (this is LoaderMax) {
 					_calculateProgress();
 				} else {
@@ -357,7 +357,9 @@ package com.greensock.loading.core {
 		
 		/** @private **/
 		protected static function _activateClass(type:String, loaderClass:Class, extensions:String):Boolean {
-			_types[type.toLowerCase()] = loaderClass;
+			if (type != "") {
+				_types[type.toLowerCase()] = loaderClass;
+			}
 			var a:Array = extensions.split(",");
 			var i:int = a.length;
 			while (--i > -1) {
@@ -403,8 +405,8 @@ package com.greensock.loading.core {
 			var target:Object = event.target; //trigger the LoaderEvent's target getter once first in order to ensure that it reports properly - see the notes in LoaderEvent.target for more details.
 			target = (event is LoaderEvent && this.hasOwnProperty("getChildren")) ? event.target : this;
 			var text:String = (event as Object).text;
-			trace("Loading error on " + this.toString() + ": " + text);
-			if (event.type != LoaderEvent.ERROR && this.hasEventListener(event.type)) {
+			trace("----\nLoading error on " + this.toString() + ": " + text + "\n----");
+			if (event.type != LoaderEvent.ERROR && event.type != LoaderEvent.FAIL && this.hasEventListener(event.type)) {
 				dispatchEvent(new LoaderEvent(event.type, target, text));
 			}
 			if (this.hasEventListener(LoaderEvent.ERROR)) {
@@ -413,9 +415,13 @@ package com.greensock.loading.core {
 		}
 		
 		/** @private **/
-		protected function _failHandler(event:Event):void {
+		protected function _failHandler(event:Event, dispatchError:Boolean=true):void {
 			_dump(0, LoaderStatus.FAILED);
-			_errorHandler(event);
+			if (dispatchError) {
+				_errorHandler(event);
+			} else {
+				var target:Object = event.target; //trigger the LoaderEvent's target getter once first in order to ensure that it reports properly - see the notes in LoaderEvent.target for more details.
+			}
 			dispatchEvent(new LoaderEvent(LoaderEvent.FAIL, ((event is LoaderEvent && this.hasOwnProperty("getChildren")) ? event.target : this), this.toString() + " > " + (event as Object).text));
 		}
 		
@@ -455,7 +461,7 @@ package com.greensock.loading.core {
 				if (_status == LoaderStatus.LOADING) {
 					_dump(0, LoaderStatus.PAUSED);
 				}
-				_status == LoaderStatus.PAUSED;
+				_status = LoaderStatus.PAUSED;
 				
 			} else if (!value && _status == LoaderStatus.PAUSED) {
 				if (_prePauseStatus == LoaderStatus.LOADING) {
