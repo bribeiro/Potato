@@ -14,9 +14,11 @@ source-path:
 applications:
     - class: source/classes/{project_name}_loader.as
       output: public/{project_name}_loader.swf
+      
     - class: source/classes/{project_name}_main.as
       output: public/{project_name}_main.swf
-      # exclude: source/classes/Other.as
+      exclude:
+        - source/classes/{project_name}_loader.as
 # asdoc:
 #     title: "My ActionScript project"
 #     footer: "My ActionScript project footer"

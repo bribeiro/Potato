@@ -52,7 +52,7 @@ asdoc:
         - potato.core.config:                "Configuration object interface and implementations."
         - potato.debug:                      "Debugging methods and utilities."
         - potato.display:                    "Structures and methods that mimetize the flash.display package."
-        - potato.modules.media:                      "Media managers with audio and video support."
+        - potato.modules.media:              "Media managers with audio and video support."
         - potato.utils:                      "Common utility methods."
         - potato.modules.dependencies:       "Defines and implements dependencies used by the navigation module."
         - potato.modules.i18n:               "Internationalization support."
