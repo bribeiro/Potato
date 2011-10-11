@@ -24,9 +24,10 @@ package dupin.parsers.yaml
 		  ['comment', /^#[^\n]*/],
 		  ['indent', /^\s*\n(\s*)/],
 		  ['space', /^\s+/],
-		  ['true', /^(enabled|true|yes|on)/],
-		  ['false', /^(disabled|false|no|off)/],
-		  ['string', /^["|'](.*?)["|']/], //' Duh, syntax highligthing
+		  ['true', /^(enabled|true|yes|on)\s*$/m],
+		  ['false', /^(disabled|false|no|off)\s*$/m],
+		  ['string', /^'(.*)'/],
+		  ['string', /^"(.*)"/],
 		  ['multilineString', /^\|[^\n]*/],
 		  ['float', /^(\d+\.\d+)/],
 		  ['int', /^(\d+)/],
